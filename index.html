@@ -759,6 +759,7 @@
                         const isPrime = slug.includes('prime') || (p.title && p.title.toLowerCase().includes('prime'));
                         const isOwlKids = slug.includes('owlkids') || slug.includes('calistung') || (p.title && p.title.toLowerCase().includes('owlkids'));
                         const isPrivat = (slug.includes('privat') && !slug.includes('mengaji')) || (p.title && p.title.toLowerCase().includes('education privat'));
+                        const isEnglishKids = slug.includes('english') || (p.title && p.title.toLowerCase().includes('english'));
                         const feats = (p.keunggulan||'').split('\n').filter(x=>x.trim()).map(x=>`
                             <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-start gap-4 hover:shadow-md transition h-full">
                                 <div class="bg-cyan-50 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shrink-0 text-rg-primary mt-1"><svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
@@ -1601,10 +1602,309 @@
                                 </div>
                             </div>`;
                         }
+                       // =========================================================================
+                        // 4. TAMPILAN KHUSUS LANDING PAGE: ENGLISH FOR KIDS (POP-ART BILINGUAL)
                         // =========================================================================
-                        // 4. TAMPILAN DEFAULT UNTUK PRODUK LAINNYA
+                        else if (isEnglishKids) {
+                            const engPopStyles = [
+                                { border: 'border-rose-400', shadow: 'shadow-[0_6px_0_#FB7185]', bgIcon: 'bg-rose-500', badge: 'bg-rose-100 text-rose-700', tag: 'EXPERT TUTOR', icon: '👩‍🏫' },
+                                { border: 'border-sky-400', shadow: 'shadow-[0_6px_0_#38BDF8]', bgIcon: 'bg-sky-500', badge: 'bg-sky-100 text-sky-700', tag: 'FUN & ACTIVE', icon: '🎮' },
+                                { border: 'border-amber-400', shadow: 'shadow-[0_6px_0_#FBBF24]', bgIcon: 'bg-amber-500', badge: 'bg-amber-100 text-amber-800', tag: 'BRAVE SPEAKER', icon: '🎙️' },
+                                { border: 'border-violet-400', shadow: 'shadow-[0_6px_0_#A78BFA]', bgIcon: 'bg-violet-500', badge: 'bg-violet-100 text-violet-700', tag: 'PERSONALIZED', icon: '✨' },
+                                { border: 'border-emerald-400', shadow: 'shadow-[0_6px_0_#34D399]', bgIcon: 'bg-emerald-500', badge: 'bg-emerald-100 text-emerald-700', tag: 'CREATIVE CLASS', icon: '🎨' },
+                                { border: 'border-orange-400', shadow: 'shadow-[0_6px_0_#FB923C]', bgIcon: 'bg-orange-500', badge: 'bg-orange-100 text-orange-800', tag: 'SCHOOL BOOSTER', icon: '🏆' }
+                            ];
+
+                            // Render "Kenapa Memilih Program Ini" dengan gaya 3D Comic Speech/Sticker Cards
+                            const engFeats = (p.keunggulan||'').split('\n').filter(x=>x.trim()).map((x, idx) => {
+                                const st = engPopStyles[idx % engPopStyles.length];
+                                return `
+                                <div class="bg-white rounded-3xl p-5 md:p-6 border-2 ${st.border} ${st.shadow} hover:-translate-y-1.5 transition-all duration-300 flex items-center gap-4 group h-full">
+                                    <div class="${st.bgIcon} w-14 h-14 rounded-2xl flex items-center justify-center text-2xl md:text-3xl text-white shrink-0 shadow-md group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">
+                                        ${st.icon}
+                                    </div>
+                                    <div class="flex-1">
+                                        <span class="text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${st.badge} inline-block mb-1">★ ${st.tag}</span>
+                                        <h4 class="font-black text-slate-800 text-sm md:text-base leading-snug">${x}</h4>
+                                    </div>
+                                </div>`;
+                            }).join('');
+
+                            // Render "Fasilitas yang Didapatkan" dengan gaya Boarding Pass / Activity Passport Cards
+                            const engPassMeta = [
+                                { icon: '🏠', code: 'MODE-01', color: 'bg-sky-500', light: 'bg-sky-50 border-sky-300 text-sky-800' },
+                                { icon: '👥', code: 'CLASS-02', color: 'bg-rose-500', light: 'bg-rose-50 border-rose-300 text-rose-800' },
+                                { icon: '🎯', code: 'LEVEL-03', color: 'bg-amber-500', light: 'bg-amber-50 border-amber-300 text-amber-900' },
+                                { icon: '🗣️', code: 'SKILL-04', color: 'bg-violet-500', light: 'bg-violet-50 border-violet-300 text-violet-800' },
+                                { icon: '📘', code: 'MEDIA-05', color: 'bg-emerald-500', light: 'bg-emerald-50 border-emerald-300 text-emerald-800' },
+                                { icon: '🎵', code: 'FUN-06', color: 'bg-pink-500', light: 'bg-pink-50 border-pink-300 text-pink-800' },
+                                { icon: '⏰', code: 'TIME-07', color: 'bg-cyan-500', light: 'bg-cyan-50 border-cyan-300 text-cyan-800' },
+                                { icon: '📊', code: 'REPORT-08', color: 'bg-orange-500', light: 'bg-orange-50 border-orange-300 text-orange-800' }
+                            ];
+
+                            const engFasil = (p.fasilitas||'').split('\n').filter(x=>x.trim()).map((x, idx) => {
+                                const m = engPassMeta[idx % engPassMeta.length];
+                                return `
+                                <div class="bg-white rounded-3xl border-2 border-dashed border-slate-300 hover:border-sky-500 p-5 md:p-6 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden h-full">
+                                    <div class="flex items-center justify-between border-b border-dashed border-slate-200 pb-3.5 mb-4">
+                                        <span class="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg border ${m.light}">✈️ ${m.code}</span>
+                                        <div class="w-11 h-11 rounded-2xl ${m.color} text-white flex items-center justify-center text-xl shadow-md group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
+                                            ${m.icon}
+                                        </div>
+                                    </div>
+                                    <p class="font-black text-slate-800 text-sm md:text-base leading-snug mb-4 group-hover:text-sky-600 transition">${x}</p>
+                                    <div class="mt-auto bg-slate-50 rounded-xl px-3 py-1.5 flex items-center justify-between text-[10px] font-extrabold text-slate-400">
+                                        <span>KIDS PASSPORT</span>
+                                        <span class="text-emerald-600 font-black">✓ INCLUDED</span>
+                                    </div>
+                                </div>`;
+                            }).join('');
+
+                            h = `
+                            <!-- HERO SECTION: ENGLISH FOR KIDS (BRIGHT BILINGUAL ADVENTURE) -->
+                            <div class="relative pt-20 md:pt-28 pb-28 md:pb-36 px-4 overflow-hidden reveal bg-gradient-to-br from-[#2563EB] via-[#0284C7] to-[#38BDF8] text-white">
+                                <!-- Ornamen Balon Percakapan Bahasa Inggris -->
+                                <div class="absolute inset-0 overflow-hidden pointer-events-none select-none z-0">
+                                    <div class="hidden md:flex absolute top-24 left-[6%] bg-white text-sky-700 font-black text-xs px-4 py-2 rounded-2xl rounded-bl-none shadow-lg -rotate-6 animate-bounce">Hello Friends! 👋</div>
+                                    <div class="hidden md:flex absolute bottom-32 left-[42%] bg-amber-300 text-slate-900 font-black text-xs px-4 py-2 rounded-2xl rounded-br-none shadow-lg rotate-6">Let's Speak English! 🎙️</div>
+                                    <div class="absolute -top-20 -right-20 w-96 h-96 bg-yellow-300/25 rounded-full blur-3xl"></div>
+                                    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-rose-400/25 rounded-full blur-3xl"></div>
+                                </div>
+
+                                <div class="relative z-10 max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                                    <!-- Kolom Kiri -->
+                                    <div class="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start reveal-left active">
+                                        <div class="inline-flex items-center gap-2 bg-white text-sky-700 text-[10px] md:text-xs font-black px-4 py-2 rounded-full mb-5 uppercase tracking-wider shadow-lg border-2 border-amber-300">
+                                            <span>🇬🇧 BILINGUAL KIDS PROGRAM • USIA DINI & SD</span>
+                                        </div>
+
+                                        <h1 class="text-3xl sm:text-5xl lg:text-[54px] font-black text-white mb-5 tracking-tight leading-[1.12] drop-shadow-md">
+                                            Jago Ngobrol <span class="bg-amber-300 text-slate-900 px-3 py-0.5 rounded-2xl inline-block transform -rotate-1 shadow-md">Bahasa Inggris</span> Sejak Kecil dengan Percaya Diri! 🌟
+                                        </h1>
+
+                                        <p class="text-sky-50 text-sm sm:text-base md:text-lg mb-7 max-w-2xl leading-relaxed font-semibold">
+                                            ${p.desc || 'English For Kids by All Education merupakan program pembelajaran bahasa Inggris yang dirancang khusus untuk anak usia dini hingga sekolah dasar melalui metode interaktif Listening, Speaking, Reading, dan Writing.'}
+                                        </p>
+
+                                        <!-- 4 Badges Cepat -->
+                                        <div class="flex flex-wrap justify-center lg:justify-start gap-2.5 mb-8">
+                                            <span class="bg-white/95 text-slate-800 font-black text-xs px-4 py-2 rounded-2xl shadow-md flex items-center gap-1.5 border-b-4 border-rose-400">🎧 Active Listening</span>
+                                            <span class="bg-white/95 text-slate-800 font-black text-xs px-4 py-2 rounded-2xl shadow-md flex items-center gap-1.5 border-b-4 border-amber-400">🗣️ Brave Speaking</span>
+                                            <span class="bg-white/95 text-slate-800 font-black text-xs px-4 py-2 rounded-2xl shadow-md flex items-center gap-1.5 border-b-4 border-emerald-400">📖 Fun Reading</span>
+                                            <span class="bg-white/95 text-slate-800 font-black text-xs px-4 py-2 rounded-2xl shadow-md flex items-center gap-1.5 border-b-4 border-violet-400">✍️ Creative Writing</span>
+                                        </div>
+
+                                        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center lg:justify-start">
+                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-black px-8 md:px-10 py-4 rounded-full text-base md:text-lg shadow-[0_8px_0_#9F1239] hover:translate-y-0.5 transition-all duration-200 border-2 border-white flex items-center justify-center gap-2">
+                                                <span>🚀 Daftar Kelas English Kids</span>
+                                            </button>
+                                            <button onclick="document.getElementById('eng-skills').scrollIntoView({behavior:'smooth'})" class="bg-amber-300 hover:bg-amber-400 text-slate-900 font-black px-7 py-4 rounded-full text-sm md:text-base shadow-[0_6px_0_#B45309] transition flex items-center justify-center gap-2">
+                                                <span>Lihat Metode 4 Skills &darr;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Kolom Kanan: Kartu Interaktif Percakapan Anak -->
+                                    <div class="lg:col-span-5 reveal-right active">
+                                        <div class="bg-white text-slate-800 rounded-[2.5rem] p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.2)] border-4 border-amber-300 relative">
+                                            <div class="flex items-center gap-3.5 border-b-2 border-slate-100 pb-4 mb-5">
+                                                ${p.img ? `<img src="${p.img}" class="w-16 h-16 rounded-2xl object-contain bg-sky-50 p-1.5 border border-sky-200 shadow-sm">` : `<div class="w-16 h-16 rounded-2xl bg-sky-500 text-white font-black flex items-center justify-center text-2xl">EN</div>`}
+                                                <div class="text-left">
+                                                    <span class="bg-rose-100 text-rose-600 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase">💬 Interactive Fun Class</span>
+                                                    <h3 class="font-black text-lg text-slate-900 mt-0.5">Belajar Tanpa Takut Salah!</h3>
+                                                </div>
+                                            </div>
+
+                                            <!-- Simulasi Chat Bahasa Inggris Anak -->
+                                            <div class="space-y-3 mb-6 text-left bg-sky-50/80 p-4 rounded-3xl border border-sky-100">
+                                                <div class="flex items-start gap-2.5">
+                                                    <div class="w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center text-sm shrink-0 shadow">👩‍🏫</div>
+                                                    <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-sky-100 text-xs font-bold text-slate-700">
+                                                        "Good morning! What is your favorite animal?" 🦁
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-start gap-2.5 justify-end">
+                                                    <div class="bg-amber-300 p-3 rounded-2xl rounded-tr-none shadow-sm text-xs font-black text-slate-900">
+                                                        "I love Rabbits! Because they are cute and fast!" 🐰✨
+                                                    </div>
+                                                    <div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center text-sm shrink-0 shadow">🧒</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Metode Aktivitas -->
+                                            <div class="grid grid-cols-3 gap-2.5 text-center">
+                                                <div class="bg-rose-50 border border-rose-200 rounded-2xl p-2.5">
+                                                    <div class="text-xl mb-1">🎲</div>
+                                                    <p class="text-[10px] font-black text-rose-800">Games & Quiz</p>
+                                                </div>
+                                                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-2.5">
+                                                    <div class="text-xl mb-1">📚</div>
+                                                    <p class="text-[10px] font-black text-amber-900">Storytelling</p>
+                                                </div>
+                                                <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-2.5">
+                                                    <div class="text-xl mb-1">🎵</div>
+                                                    <p class="text-[10px] font-black text-emerald-800">Kids Songs</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
+                                    <svg class="relative block w-full h-[45px] md:h-[75px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,120.35,191.56,104.9,236.4,93.68,280.61,72.63,321.39,56.44Z" fill="#FFFBEB"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- MAIN CONTENT: ENGLISH FOR KIDS -->
+                            <div class="bg-[#FFFBEB] relative z-20 pt-10 pb-20">
+                                <div class="max-w-[1200px] mx-auto px-4 md:px-8">
+
+                                    <!-- 4 PILAR UTAMA BAHASA INGGRIS ANAK (LISTENING, SPEAKING, READING, WRITING) -->
+                                    <div id="eng-skills" class="mb-24 pt-4 reveal">
+                                        <div class="text-center max-w-3xl mx-auto mb-12">
+                                            <span class="bg-sky-100 text-sky-700 border-2 border-sky-300 text-[10px] md:text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm">🌟 4 CORE ENGLISH SKILLS</span>
+                                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3 leading-tight">Kuasai 4 Kemampuan Bahasa Inggris Secara <span class="text-sky-600">Bertahap & Menyenangkan!</span></h2>
+                                            <p class="text-slate-600 text-xs md:text-base mt-2 font-medium">Kurikulum kami dirancang agar anak tidak hanya hafal kosakata, tetapi berani mempraktikkannya setiap hari.</p>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                            <!-- Skill 1: Listening -->
+                                            <div class="bg-white rounded-[2rem] p-6 border-2 border-rose-300 shadow-[0_8px_0_#FDA4AF] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between">
+                                                <div>
+                                                    <div class="w-16 h-16 rounded-2xl bg-rose-500 text-white text-3xl flex items-center justify-center mb-4 shadow-md">🎧</div>
+                                                    <span class="bg-rose-100 text-rose-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">SKILL 01</span>
+                                                    <h3 class="text-xl font-black text-slate-900 mt-2 mb-2">Active Listening</h3>
+                                                    <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">Membiasakan telinga anak mendengar pelafalan Bahasa Inggris yang tepat melalui lagu interaktif, cerita audio, dan instruksi permainan.</p>
+                                                </div>
+                                                <div class="bg-rose-50 rounded-xl p-2.5 text-[11px] font-extrabold text-rose-800">🎵 Songs & Audio Stories</div>
+                                            </div>
+
+                                            <!-- Skill 2: Speaking -->
+                                            <div class="bg-white rounded-[2rem] p-6 border-2 border-amber-400 shadow-[0_8px_0_#FCD34D] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between">
+                                                <div>
+                                                    <div class="w-16 h-16 rounded-2xl bg-amber-500 text-white text-3xl flex items-center justify-center mb-4 shadow-md">🗣️</div>
+                                                    <span class="bg-amber-100 text-amber-800 text-[10px] font-black px-3 py-1 rounded-full uppercase">SKILL 02</span>
+                                                    <h3 class="text-xl font-black text-slate-900 mt-2 mb-2">Confident Speaking</h3>
+                                                    <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">Melatih keberanian berbicara kalimat sehari-hari, pengucapan (pronunciation), serta *roleplay* seru bersama tutor tanpa rasa malu.</p>
+                                                </div>
+                                                <div class="bg-amber-50 rounded-xl p-2.5 text-[11px] font-extrabold text-amber-900">🎙️ Daily Talk & Roleplay</div>
+                                            </div>
+
+                                            <!-- Skill 3: Reading -->
+                                            <div class="bg-white rounded-[2rem] p-6 border-2 border-sky-400 shadow-[0_8px_0_#7DD3FC] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between">
+                                                <div>
+                                                    <div class="w-16 h-16 rounded-2xl bg-sky-500 text-white text-3xl flex items-center justify-center mb-4 shadow-md">📖</div>
+                                                    <span class="bg-sky-100 text-sky-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">SKILL 03</span>
+                                                    <h3 class="text-xl font-black text-slate-900 mt-2 mb-2">Phonics & Reading</h3>
+                                                    <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">Mengenal bunyi huruf (English Phonics), membaca kosakata bergambar, hingga memahami buku cerita pendek berbahasa Inggris.</p>
+                                                </div>
+                                                <div class="bg-sky-50 rounded-xl p-2.5 text-[11px] font-extrabold text-sky-800">📚 Phonics & Storybooks</div>
+                                            </div>
+
+                                            <!-- Skill 4: Writing -->
+                                            <div class="bg-white rounded-[2rem] p-6 border-2 border-emerald-400 shadow-[0_8px_0_#6EE7B7] hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between">
+                                                <div>
+                                                    <div class="w-16 h-16 rounded-2xl bg-emerald-500 text-white text-3xl flex items-center justify-center mb-4 shadow-md">✍️</div>
+                                                    <span class="bg-emerald-100 text-emerald-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">SKILL 04</span>
+                                                    <h3 class="text-xl font-black text-slate-900 mt-2 mb-2">Creative Writing</h3>
+                                                    <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">Menyusun kata (spelling), melengkapi worksheet interaktif penuh warna, hingga membuat kalimat sederhana dan tata bahasa dasar.</p>
+                                                </div>
+                                                <div class="bg-emerald-50 rounded-xl p-2.5 text-[11px] font-extrabold text-emerald-800">✏️ Fun Worksheets & Spelling</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LEVELING PETUALANGAN BELAJAR (SESUAI USIA & KEMAMPUAN ANAK) -->
+                                    <div class="mb-24 bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 rounded-[2.5rem] p-6 sm:p-10 md:p-12 text-white shadow-xl reveal relative overflow-hidden">
+                                        <div class="text-center max-w-2xl mx-auto mb-10 relative z-10">
+                                            <span class="bg-amber-300 text-slate-900 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow">🗺️ STEP-BY-STEP ADVENTURE</span>
+                                            <h2 class="text-2xl md:text-3xl font-black mt-3">Materi Disesuaikan dengan Usia & Level Anak</h2>
+                                            <p class="text-sky-100 text-xs md:text-sm mt-1 font-medium">Mulai dari belum tahu kosakata sama sekali hingga lancar bercerita dan juara di sekolah!</p>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                                            <div class="bg-white text-slate-800 rounded-3xl p-6 shadow-lg border-b-8 border-amber-400">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <span class="bg-amber-100 text-amber-800 font-black text-xs px-3 py-1 rounded-full">🐣 Starter Explorer</span>
+                                                    <span class="text-xs font-black text-slate-400">Usia 4 – 6 Tahun</span>
+                                                </div>
+                                                <h4 class="font-black text-lg text-slate-900 mb-2">Phonics & Vocabulary Fun</h4>
+                                                <p class="text-xs text-slate-600 leading-relaxed font-medium">Mengenal warna, angka, hewan, keluarga, dan sapaan dasar lewat lagu, flashcard, serta permainan gerak dan suara.</p>
+                                            </div>
+
+                                            <div class="bg-white text-slate-800 rounded-3xl p-6 shadow-lg border-b-8 border-rose-500">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <span class="bg-rose-100 text-rose-700 font-black text-xs px-3 py-1 rounded-full">🚀 Junior Mover</span>
+                                                    <span class="text-xs font-black text-slate-400">Kelas 1 – 3 SD</span>
+                                                </div>
+                                                <h4 class="font-black text-lg text-slate-900 mb-2">Daily Expressions & Reading</h4>
+                                                <p class="text-xs text-slate-600 leading-relaxed font-medium">Merangkai kalimat tanya-jawab sederhana, membaca cerita pendek bergambar, memperkaya vocabulary, dan pendampingan materi sekolah.</p>
+                                            </div>
+
+                                            <div class="bg-white text-slate-800 rounded-3xl p-6 shadow-lg border-b-8 border-emerald-500">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <span class="bg-emerald-100 text-emerald-700 font-black text-xs px-3 py-1 rounded-full">👑 Fluent Flyer</span>
+                                                    <span class="text-xs font-black text-slate-400">Kelas 4 – 6 SD</span>
+                                                </div>
+                                                <h4 class="font-black text-lg text-slate-900 mb-2">Storytelling & Grammar</h4>
+                                                <p class="text-xs text-slate-600 leading-relaxed font-medium">Percakapan aktif (active conversation), presentasi cerita pendek (show & tell), grammar terapan, serta meraih nilai tertinggi di ujian sekolah.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- KENAPA MEMILIH ENGLISH FOR KIDS (3D COMIC POP CARDS) -->
+                                    ${engFeats ? `
+                                    <div class="mb-24 reveal">
+                                        <div class="text-center max-w-3xl mx-auto mb-12">
+                                            <span class="bg-rose-100 text-rose-700 border-2 border-rose-300 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm">💡 WHY CHOOSE US?</span>
+                                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3 leading-tight">Kenapa Memilih <span class="text-rose-500">English For Kids?</span></h2>
+                                            <p class="text-slate-600 text-xs md:text-sm mt-2 font-medium">Metode belajar yang membuat anak selalu menantikan jadwal les Bahasa Inggris setiap minggunya!</p>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto items-stretch">
+                                            ${engFeats}
+                                        </div>
+                                    </div>` : ''}
+
+                                    <!-- FASILITAS YANG DIDAPATKAN (ACTIVITY PASSPORT TICKETS) -->
+                                    ${engFasil ? `
+                                    <div class="mb-24 reveal">
+                                        <div class="text-center max-w-3xl mx-auto mb-12">
+                                            <span class="bg-amber-100 text-amber-800 border-2 border-amber-300 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm">🎟️ ALL-IN-ONE FACILITIES</span>
+                                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3 leading-tight">Fasilitas Lengkap yang Didapatkan</h2>
+                                            <p class="text-slate-600 text-xs md:text-sm mt-2 font-medium">Bebas pilih kelas Privat (1-on-1) maupun Semi-Privat, tersedia secara Online maupun Home Visit (Guru ke Rumah)!</p>
+                                        </div>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto items-stretch">
+                                            ${engFasil}
+                                        </div>
+                                    </div>` : ''}
+
+                                    ${gals ? `<div class="mb-24 reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Keseruan Kelas English For Kids 📸</h2><div class="flex gap-4 overflow-x-auto hide-scroll snap-x pb-8 px-4 -mx-4">${gals}</div></div>` : ''}
+
+                                    <!-- BANNER CTA PENUTUP -->
+                                    <div class="mb-24 bg-gradient-to-r from-rose-500 via-orange-500 to-amber-400 rounded-[2.5rem] p-8 md:p-14 text-white text-center shadow-2xl relative overflow-hidden reveal border-4 border-white">
+                                        <div class="relative z-10 max-w-3xl mx-auto">
+                                            <span class="bg-white text-rose-600 text-[10px] md:text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow">🌟 LET'S SPEAK ENGLISH CONFIDENTLY!</span>
+                                            <h2 class="text-2xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight drop-shadow-sm">Jadikan Si Kecil Jago Bahasa Inggris Sejak Dini!</h2>
+                                            <p class="text-white/95 text-sm md:text-lg mb-8 leading-relaxed font-semibold">Yuk Ayah & Bunda, jadwalkan sesi belajar pertama buah hati Anda bersama Tutor ramah anak dari All Education sekarang juga.</p>
+                                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                                <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-black px-10 py-4 rounded-full text-base md:text-lg shadow-xl hover:scale-105 transition flex items-center justify-center gap-2 border-2 border-amber-300">
+                                                    <span>🚀 Daftar English For Kids Sekarang</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Rekomendasi Paket Belajar</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll pb-6 snap-x" id="prod-promo-container"></div></div>
+                                    <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Kata Orang Tua Siswa</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll snap-x pb-8" id="prod-testi-container"></div></div>
+                                    <div class="max-w-3xl mx-auto reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-primary mb-10 text-center">Pertanyaan Umum</h2><div class="space-y-4" id="prod-faq-container"></div></div>
+                                </div>
+                            </div>`;
+                        }
                         // =========================================================================
-                            
+                        // 5. TAMPILAN DEFAULT UNTUK PRODUK LAINNYA
+                        // =========================================================================
                         else {
                             h = `
                             <div class="relative pt-28 md:pt-40 pb-32 text-center px-4 overflow-hidden reveal bg-rg-blue-dark flex flex-col items-center justify-center min-h-[60vh] md:min-h-[70vh]">
