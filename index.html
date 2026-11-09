@@ -391,8 +391,8 @@
                     <ul class="space-y-4 text-sm font-medium text-gray-400">
                         <li><a href="javascript:void(0)" onclick="router.navigate('/artikel')" class="hover:text-white transition">Tentang Kami</a></li>
                         <li><a href="javascript:void(0)" onclick="router.navigate('/program')" class="hover:text-white transition">Program Belajar</a></li>
-                        <li><a href="#" class="hover:text-white transition">Syarat & Ketentuan</a></li>
-                        <li><a href="#" class="hover:text-white transition">Kebijakan Privasi</a></li>
+                       <li><a href="javascript:void(0)" onclick="router.navigate('/sk')" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                       <li><a href="javascript:void(0)" onclick="router.navigate('/privasi')" class="hover:text-white transition">Kebijakan Privasi</a></li>
                     </ul>
                 </div>
                 <div>
@@ -837,6 +837,510 @@
                         }, 100); return;
                     }
                 }
+                // === MULAI KODE HALAMAN S&K DAN KEBIJAKAN PRIVASI FULL 17 POIN ===
+                if (path === '/sk' || path === '/privasi') {
+                    const isSK = path === '/sk';
+                    const title = isSK ? 'Syarat dan Ketentuan' : 'Kebijakan Privasi';
+                    const subtitle = isSK ? 'ALL EDUCATION INDONESIA' : 'PRIVACY POLICY - ALL EDUCATION INDONESIA';
+                    
+                    let contentHtml = '';
+                    if (isSK) {
+                        contentHtml = `
+                            <p>Selamat datang di website resmi All Education Indonesia.</p>
+                            <p>Syarat dan Ketentuan ini mengatur penggunaan website, platform, produk, serta layanan yang disediakan oleh PT All Education Indonesia (selanjutnya disebut sebagai "All Education", "Kami", atau "Perusahaan").</p>
+                            <p>Dengan mengakses, mengunjungi, mendaftar, atau menggunakan website dan layanan All Education, Anda dianggap telah membaca, memahami, dan menyetujui seluruh ketentuan yang tercantum dalam dokumen ini.</p>
+                            <p>Apabila Anda tidak menyetujui sebagian atau seluruh ketentuan ini, mohon untuk tidak menggunakan layanan kami.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">1. DEFINISI</h2>
+                            <p>Dalam Syarat dan Ketentuan ini, istilah berikut memiliki pengertian:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-6">
+                                <li><b>All Education</b> adalah PT All Education Indonesia, perusahaan yang bergerak di bidang layanan pendidikan dan pengembangan pembelajaran.</li>
+                                <li><b>Website</b> adalah situs resmi All Education Indonesia yang dapat diakses melalui domain alleducenter.com beserta subdomain dan platform digital terkait.</li>
+                                <li><b>Pengguna</b> adalah setiap individu yang mengakses, mengunjungi, atau menggunakan website dan layanan All Education.</li>
+                                <li><b>Siswa</b> adalah individu yang mengikuti program pembelajaran atau menggunakan produk pendidikan All Education.</li>
+                                <li><b>Orang Tua/Wali</b> adalah pihak yang bertanggung jawab atas siswa yang belum dewasa.</li>
+                                <li><b>Layanan</b> adalah seluruh produk, program, fasilitas, dan kegiatan pendidikan yang disediakan oleh All Education.</li>
+                                <li><b>Platform</b> adalah sistem atau aplikasi digital yang digunakan untuk mendukung kegiatan pembelajaran, administrasi, transaksi, dan operasional All Education.</li>
+                            </ul>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">2. RUANG LINGKUP LAYANAN</h2>
+                            <p>All Education menyediakan berbagai layanan pendidikan yang dapat mencakup:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li><b>All Education Privat</b>, yaitu layanan bimbingan belajar privat secara online maupun offline.</li>
+                                <li><b>PRIME by All Education</b>, yaitu program persiapan TKA, UTBK-SNBT, dan Ujian Mandiri.</li>
+                                <li><b>OwlKids by All Education</b>, yaitu layanan pendidikan anak usia dini dan pembelajaran Calistung.</li>
+                                <li><b>English for Kids by All Education</b>, yaitu program pembelajaran bahasa Inggris untuk anak.</li>
+                                <li><b>Privat Mengaji by All Education</b>, yaitu layanan pembelajaran Al-Qur'an dan pendidikan keislaman.</li>
+                                <li><b>Try Out dan Live Class</b>, yaitu fasilitas latihan soal dan pembelajaran secara daring.</li>
+                                <li><b>Komunitas Belajar</b>, kelas gratis, serta program edukasi lainnya.</li>
+                                <li>Layanan dan produk pendidikan lain yang dikembangkan oleh All Education dari waktu ke waktu.</li>
+                            </ul>
+                            <p>All Education berhak melakukan pengembangan, perubahan, penambahan, maupun penghentian produk dan layanan sesuai dengan kebijakan Perusahaan.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">3. KETENTUAN PENGGUNAAN WEBSITE</h2>
+                            <p>Pengguna wajib:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Menggunakan website sesuai dengan tujuan pendidikan, informasi, dan aktivitas yang disediakan oleh All Education.</li>
+                                <li>Memberikan informasi yang benar, akurat, dan dapat dipertanggungjawabkan ketika mengisi formulir atau melakukan pendaftaran.</li>
+                                <li>Tidak menggunakan website untuk tindakan yang melanggar hukum atau merugikan pihak lain.</li>
+                                <li>Tidak melakukan tindakan yang dapat mengganggu keamanan, stabilitas, maupun operasional website.</li>
+                                <li>Tidak menyebarkan virus, malware, spam, atau kode berbahaya melalui website.</li>
+                                <li>Tidak melakukan akses tanpa izin terhadap sistem, database, akun, maupun informasi internal Perusahaan.</li>
+                                <li>Tidak menggunakan website untuk menyebarkan konten yang mengandung unsur penipuan, diskriminasi, pelecehan, atau tindakan melanggar hukum.</li>
+                            </ul>
+                            <p>All Education berhak membatasi atau menghentikan akses pengguna yang terbukti melanggar ketentuan tersebut.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">4. PENDAFTARAN DAN AKUN PENGGUNA</h2>
+                            <p>Untuk menggunakan layanan tertentu, pengguna dapat diwajibkan membuat akun atau melakukan pendaftaran.</p>
+                            <p>Ketentuan akun meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Pengguna wajib memberikan data identitas yang benar dan sesuai dengan kondisi sebenarnya.</li>
+                                <li>Pengguna bertanggung jawab menjaga kerahasiaan username, password, dan informasi akses akun.</li>
+                                <li>Pengguna tidak diperkenankan memindahtangankan atau memperjualbelikan akun tanpa persetujuan tertulis dari All Education.</li>
+                                <li>Segala aktivitas yang dilakukan melalui akun pengguna menjadi tanggung jawab pemilik akun, sepanjang tidak terbukti terjadi penyalahgunaan oleh pihak lain tanpa kelalaiannya.</li>
+                                <li>Pengguna wajib segera melaporkan kepada All Education apabila mengetahui adanya akses tidak sah terhadap akunnya.</li>
+                            </ul>
+                            <p>All Education berhak melakukan pembatasan, penangguhan, atau penonaktifan akun apabila ditemukan indikasi penyalahgunaan atau pelanggaran ketentuan.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">5. KETENTUAN PROGRAM PEMBELAJARAN</h2>
+                            <p>Setiap program pembelajaran memiliki ketentuan teknis yang dapat berbeda sesuai dengan jenis layanan yang dipilih.</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Jadwal, durasi, metode pembelajaran, fasilitas, dan materi disesuaikan dengan ketentuan masing-masing program.</li>
+                                <li>Siswa diharapkan mengikuti kegiatan pembelajaran sesuai jadwal yang telah disepakati.</li>
+                                <li>Perubahan jadwal, pergantian tutor, atau penyesuaian metode pembelajaran dapat dilakukan berdasarkan kebutuhan operasional dengan pemberitahuan kepada pihak terkait.</li>
+                                <li>Materi pembelajaran yang diberikan hanya boleh digunakan untuk kepentingan belajar pribadi sesuai dengan hak penggunaan yang diberikan.</li>
+                                <li>Hasil pembelajaran dapat dipengaruhi oleh kehadiran, kedisiplinan, partisipasi, dan usaha masing-masing siswa.</li>
+                                <li>All Education tidak menjamin hasil akademik, nilai ujian, kelulusan, maupun penerimaan siswa pada institusi pendidikan tertentu.</li>
+                            </ul>
+                            <p>Ketentuan lebih lanjut mengenai jadwal, kehadiran, penggantian sesi, dan fasilitas dapat diatur dalam kebijakan khusus masing-masing program.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">6. PEMBAYARAN DAN TRANSAKSI</h2>
+                            <p>Untuk layanan berbayar, pengguna wajib melakukan pembayaran sesuai dengan harga dan mekanisme yang telah ditetapkan oleh All Education.</p>
+                            <p>Ketentuan pembayaran:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-6">
+                                <li>Informasi harga, biaya pendaftaran, paket pembelajaran, dan promo disampaikan melalui kanal resmi All Education.</li>
+                                <li>Pembayaran dilakukan melalui metode pembayaran resmi yang disediakan atau ditunjuk oleh Perusahaan.</li>
+                                <li>Pengguna wajib memastikan nominal dan tujuan pembayaran sebelum menyelesaikan transaksi.</li>
+                                <li>Bukti pembayaran wajib disimpan sebagai referensi apabila diperlukan proses verifikasi.</li>
+                                <li>Akses terhadap layanan berbayar dapat diberikan setelah pembayaran berhasil diverifikasi.</li>
+                                <li>Promo, diskon, dan penawaran khusus memiliki periode serta syarat penggunaan masing-masing.</li>
+                                <li>Pengguna tidak diperkenankan melakukan manipulasi bukti pembayaran atau transaksi yang dapat merugikan Perusahaan.</li>
+                            </ul>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">7. PEMBATALAN DAN PENGEMBALIAN DANA</h2>
+                            <p>Ketentuan pembatalan, perubahan layanan, dan pengembalian dana (refund) mengikuti kebijakan masing-masing program atau produk.</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-6">
+                                <li>Permohonan pembatalan wajib disampaikan melalui kanal komunikasi resmi All Education.</li>
+                                <li>Pengajuan refund akan ditinjau berdasarkan jenis layanan, status transaksi, serta ketentuan program yang berlaku.</li>
+                                <li>Biaya yang telah dibayarkan tidak secara otomatis dapat dikembalikan.</li>
+                                <li>Ketentuan refund harus diinformasikan kepada pengguna sebelum transaksi atau pendaftaran dilakukan.</li>
+                                <li>Apabila pembatalan terjadi akibat kesalahan atau kondisi yang menjadi tanggung jawab All Education, penyelesaiannya akan ditangani sesuai kebijakan Perusahaan dan ketentuan hukum yang berlaku.</li>
+                            </ul>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">8. HAK KEKAYAAN INTELEKTUAL</h2>
+                            <p>Seluruh konten yang terdapat dalam website dan platform All Education, termasuk namun tidak terbatas pada:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Logo, merek, dan identitas visual.</li>
+                                <li>Desain grafis, ilustrasi, dan elemen visual.</li>
+                                <li>Artikel, tulisan, dan materi edukasi.</li>
+                                <li>Video, audio, dan rekaman pembelajaran.</li>
+                                <li>Modul, bahan ajar, bank soal, dan latihan ujian.</li>
+                                <li>Sistem, fitur, serta elemen teknologi.</li>
+                            </ul>
+                            <p>Merupakan hak kekayaan intelektual All Education atau pihak lain yang telah memberikan izin penggunaan kepada Perusahaan.</p>
+                            <p>Pengguna dilarang:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Menyalin, memperbanyak, mendistribusikan, atau memperjualbelikan konten tanpa izin.</li>
+                                <li>Menggunakan logo dan identitas All Education untuk kepentingan komersial tanpa persetujuan.</li>
+                                <li>Mengunggah ulang materi berbayar ke platform lain tanpa izin.</li>
+                                <li>Menggunakan materi pembelajaran untuk tujuan yang melanggar hukum atau merugikan pemilik hak cipta.</li>
+                            </ul>
+                            <p>Penggunaan konten di luar kepentingan pribadi dan pembelajaran harus memperoleh persetujuan tertulis dari pemegang hak terkait.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">9. LARANGAN PENGGUNAAN LAYANAN</h2>
+                            <p>Pengguna dilarang melakukan tindakan berikut:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Menyalahgunakan fasilitas dan layanan All Education.</li>
+                                <li>Membagikan akun kepada pihak yang tidak berhak.</li>
+                                <li>Merekam, menyebarkan, atau mendistribusikan kelas berbayar tanpa izin.</li>
+                                <li>Mengambil, menyalin, atau menyebarkan bank soal dan materi internal secara tidak sah.</li>
+                                <li>Melakukan tindakan yang mengganggu tutor, siswa, maupun pengguna lainnya.</li>
+                                <li>Menggunakan layanan untuk tindakan penipuan, pemalsuan, atau pelanggaran hukum.</li>
+                                <li>Melakukan tindakan yang dapat merusak reputasi, sistem, dan operasional Perusahaan secara melawan hukum.</li>
+                            </ul>
+                            <p>Pelanggaran terhadap ketentuan ini dapat mengakibatkan pembatasan akses, penghentian layanan, atau tindakan hukum sesuai tingkat pelanggaran dan peraturan yang berlaku.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">10. PERLINDUNGAN DATA DAN PRIVASI</h2>
+                            <p>All Education berkomitmen menjaga keamanan dan kerahasiaan informasi pribadi pengguna.</p>
+                            <p>Informasi yang dapat dikumpulkan meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Nama dan identitas pengguna.</li>
+                                <li>Alamat email dan nomor telepon.</li>
+                                <li>Informasi pendaftaran dan aktivitas pembelajaran.</li>
+                                <li>Data transaksi dan pembayaran yang diperlukan.</li>
+                                <li>Informasi teknis terkait penggunaan website dan platform.</li>
+                            </ul>
+                            <p>Data pribadi diproses sesuai dengan tujuan layanan, kebutuhan operasional, dan ketentuan peraturan perundang-undangan yang berlaku.</p>
+                            <p>Pengguna dapat membaca informasi lebih lanjut melalui halaman <a href="javascript:void(0)" onclick="router.navigate('/privasi')" class="text-rg-primary font-bold hover:underline">Kebijakan Privasi (Privacy Policy)</a> yang tersedia di website resmi All Education.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">11. PENGGUNA DI BAWAH UMUR</h2>
+                            <p>Beberapa layanan All Education ditujukan untuk anak-anak dan siswa yang belum berusia 18 tahun.</p>
+                            <p>Dalam hal tersebut:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-6">
+                                <li>Pendaftaran dan penggunaan layanan oleh anak harus mendapatkan persetujuan serta pengawasan orang tua atau wali sesuai ketentuan hukum yang berlaku.</li>
+                                <li>Orang tua atau wali bertanggung jawab memastikan informasi yang diberikan dalam proses pendaftaran adalah benar.</li>
+                                <li>Orang tua atau wali diharapkan mendampingi penggunaan layanan digital oleh anak sesuai kebutuhan.</li>
+                                <li>Komunikasi terkait administrasi dan perkembangan pembelajaran dapat dilakukan dengan orang tua atau wali sesuai ketentuan layanan.</li>
+                            </ul>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">12. KETERSEDIAAN WEBSITE DAN LAYANAN</h2>
+                            <p>All Education berupaya menjaga agar website dan seluruh layanan dapat diakses dengan baik. Namun, Perusahaan tidak menjamin bahwa website akan selalu tersedia tanpa gangguan.</p>
+                            <p>Gangguan dapat terjadi karena:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Pemeliharaan dan pembaruan sistem.</li>
+                                <li>Gangguan jaringan internet.</li>
+                                <li>Kendala teknis pada server atau penyedia layanan pihak ketiga.</li>
+                                <li>Keadaan di luar kendali wajar Perusahaan.</li>
+                            </ul>
+                            <p>All Education berhak melakukan pemeliharaan, perubahan, atau pembaruan sistem untuk meningkatkan kualitas dan keamanan layanan.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">13. TAUTAN DAN LAYANAN PIHAK KETIGA</h2>
+                            <p>Website All Education dapat memuat tautan menuju website, aplikasi, atau layanan pihak ketiga. Tautan tersebut disediakan untuk memberikan kemudahan kepada pengguna.</p>
+                            <p>All Education tidak memiliki kendali penuh atas konten, kebijakan privasi, keamanan, maupun operasional layanan pihak ketiga. Penggunaan layanan tersebut mengikuti ketentuan masing-masing penyedia.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">14. BATASAN TANGGUNG JAWAB</h2>
+                            <p>All Education berupaya menyediakan informasi dan layanan pendidikan yang akurat serta berkualitas. Namun, Perusahaan tidak bertanggung jawab atas:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Kesalahan penggunaan layanan oleh pengguna.</li>
+                                <li>Gangguan yang disebabkan oleh perangkat atau jaringan milik pengguna.</li>
+                                <li>Kerugian yang timbul akibat penyalahgunaan akun oleh pengguna.</li>
+                                <li>Perubahan informasi dari pihak ketiga yang berada di luar kendali Perusahaan.</li>
+                                <li>Hasil akademik atau capaian tertentu yang tidak dapat dijamin oleh Perusahaan.</li>
+                            </ul>
+                            <p>Ketentuan ini tidak menghapus tanggung jawab yang berdasarkan hukum wajib menjadi tanggung jawab Perusahaan.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">15. PERUBAHAN SYARAT DAN KETENTUAN</h2>
+                            <p>All Education berhak memperbarui, mengubah, atau menyesuaikan Syarat dan Ketentuan ini dari waktu ke waktu.</p>
+                            <p>Setiap perubahan akan dipublikasikan melalui website resmi All Education dengan mencantumkan tanggal pembaruan terbaru. Pengguna diharapkan memeriksa halaman ini secara berkala agar mengetahui perubahan ketentuan yang berlaku.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">16. HUKUM YANG BERLAKU DAN PENYELESAIAN SENGKETA</h2>
+                            <p>Syarat dan Ketentuan ini ditafsirkan berdasarkan hukum yang berlaku di Republik Indonesia.</p>
+                            <p>Apabila terjadi perselisihan antara pengguna dan All Education, para pihak akan mengutamakan penyelesaian melalui musyawarah untuk mencapai kesepakatan bersama.</p>
+                            <p>Apabila penyelesaian secara musyawarah tidak tercapai, sengketa akan diselesaikan melalui mekanisme hukum yang berlaku di Republik Indonesia.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">17. HUBUNGI KAMI</h2>
+                            <p>Apabila pengguna memiliki pertanyaan, membutuhkan informasi lebih lanjut, atau ingin menyampaikan pengaduan terkait Syarat dan Ketentuan ini, silakan menghubungi All Education melalui kanal komunikasi resmi berikut:</p>
+                            <div class="bg-cyan-50/70 p-6 rounded-2xl border border-cyan-100 my-4 space-y-1.5 text-rg-blue-dark">
+                                <p class="font-black text-lg">PT ALL EDUCATION INDONESIA</p>
+                                <p><b>Website:</b> <a href="https://alleducenter.com" class="text-rg-primary hover:underline">https://alleducenter.com</a></p>
+                                <p><b>Email:</b> info@alleducenter.com</p>
+                                <p><b>Alamat:</b> Jl. Ciherang Blok L2 Dramaga Kabupaten Bogor</p>
+                            </div>
+                            <p>Seluruh pertanyaan, permohonan, dan pengaduan akan ditangani melalui prosedur komunikasi resmi Perusahaan.</p>
+                            <div class="mt-10 pt-6 border-t border-gray-200 text-center">
+                                <p class="font-black text-rg-blue-dark">ALL EDUCATION INDONESIA</p>
+                                <p class="text-sm text-rg-primary font-bold italic">Empowering Education, Inspiring the Future.</p>
+                                <p class="text-xs text-gray-400 mt-1">&copy; 2026 PT All Education Indonesia. All Rights Reserved.</p>
+                            </div>
+                        `;
+                    } else {
+                        contentHtml = `
+                            <p>PT ALL EDUCATION INDONESIA ("All Education", "Kami", atau "Perusahaan") berkomitmen untuk melindungi dan menjaga kerahasiaan data pribadi setiap pengguna yang mengakses website, menggunakan platform, mendaftar program, maupun memanfaatkan layanan pendidikan yang kami sediakan.</p>
+                            <p>Kebijakan Privasi ini menjelaskan bagaimana Kami memperoleh, mengumpulkan, menggunakan, menyimpan, mengelola, melindungi, dan mengungkapkan data pribadi pengguna dalam menjalankan kegiatan operasional dan menyediakan layanan pendidikan.</p>
+                            <p>Dengan mengakses website atau menggunakan layanan All Education, pengguna menyatakan telah membaca dan memahami Kebijakan Privasi ini.</p>
+                            <p>Pemrosesan data pribadi akan dilakukan berdasarkan dasar pemrosesan yang sah sesuai dengan ketentuan peraturan perundang-undangan yang berlaku, termasuk Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">1. IDENTITAS PENGELOLA DATA</h2>
+                            <p>Pihak yang bertanggung jawab atas pengelolaan data pribadi dalam layanan All Education adalah:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li><b>Nama Perusahaan:</b> PT All Education Indonesia</li>
+                                <li><b>Nama Komersial:</b> All Education Indonesia</li>
+                                <li><b>Website Resmi:</b> https://alleducenter.com</li>
+                                <li><b>Email:</b> info@alleducenter.com</li>
+                                <li><b>Alamat Kantor:</b> Jl. Ciherang Blok L2 Dramaga Kabupaten Bogor</li>
+                            </ul>
+                            <p>Dalam menjalankan kegiatan operasionalnya, PT All Education Indonesia bertindak sebagai Pengendali Data Pribadi atas data yang diproses untuk tujuan penyelenggaraan layanan pendidikan dan kegiatan operasional Perusahaan, sesuai dengan peran serta ketentuan hukum yang berlaku.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">2. RUANG LINGKUP KEBIJAKAN PRIVASI</h2>
+                            <p>Kebijakan Privasi ini berlaku bagi seluruh pengguna yang mengakses atau menggunakan ekosistem digital All Education, termasuk:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Website utama All Education Indonesia.</li>
+                                <li>All Education Privat.</li>
+                                <li>PRIME by All Education.</li>
+                                <li>OwlKids by All Education.</li>
+                                <li>English for Kids by All Education.</li>
+                                <li>Privat Mengaji by All Education.</li>
+                                <li>Platform Try Out dan Live Class.</li>
+                                <li>Sistem pembelajaran dan administrasi online.</li>
+                                <li>Komunitas belajar dan program edukasi.</li>
+                                <li>Formulir pendaftaran, formulir layanan, serta kanal komunikasi resmi All Education.</li>
+                            </ul>
+                            <p>Kebijakan ini juga berlaku terhadap interaksi pengguna dengan Perusahaan melalui email, WhatsApp, media sosial, dan saluran komunikasi lainnya sepanjang berkaitan dengan layanan All Education.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">3. JENIS DATA PRIBADI YANG KAMI KUMPULKAN</h2>
+                            <p>Dalam memberikan layanan, All Education dapat mengumpulkan dan memproses beberapa kategori data pribadi sesuai kebutuhan.</p>
+                            
+                            <p class="font-extrabold text-rg-blue-dark mt-4 mb-2">A. Data Identitas</p>
+                            <p class="mb-1">Meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-1 mb-4">
+                                <li>Nama lengkap.</li>
+                                <li>Tempat dan tanggal lahir.</li>
+                                <li>Jenis kelamin, apabila diperlukan.</li>
+                                <li>Identitas siswa atau pengguna.</li>
+                                <li>Informasi orang tua atau wali.</li>
+                            </ul>
+
+                            <p class="font-extrabold text-rg-blue-dark mt-4 mb-2">B. Data Kontak</p>
+                            <p class="mb-1">Meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-1 mb-4">
+                                <li>Alamat email.</li>
+                                <li>Nomor telepon atau WhatsApp.</li>
+                                <li>Alamat tempat tinggal.</li>
+                                <li>Informasi kontak orang tua atau wali.</li>
+                            </ul>
+
+                            <p class="font-extrabold text-rg-blue-dark mt-4 mb-2">C. Data Pendidikan</p>
+                            <p class="mb-1">Meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-1 mb-4">
+                                <li>Nama sekolah atau institusi pendidikan.</li>
+                                <li>Jenjang pendidikan.</li>
+                                <li>Kelas atau tingkat pendidikan.</li>
+                                <li>Mata pelajaran yang diikuti.</li>
+                                <li>Riwayat dan aktivitas pembelajaran.</li>
+                                <li>Nilai, hasil Try Out, dan evaluasi akademik.</li>
+                                <li>Kehadiran dan perkembangan belajar.</li>
+                            </ul>
+
+                            <p class="font-extrabold text-rg-blue-dark mt-4 mb-2">D. Data Akun dan Aktivitas Digital</p>
+                            <p class="mb-1">Meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-1 mb-4">
+                                <li>Username dan informasi akun.</li>
+                                <li>Data autentikasi yang diperlukan.</li>
+                                <li>Riwayat login dan aktivitas penggunaan platform.</li>
+                                <li>Informasi perangkat dan browser.</li>
+                                <li>Alamat IP.</li>
+                                <li>Log aktivitas sistem.</li>
+                                <li>Informasi teknis lainnya yang diperlukan untuk keamanan platform.</li>
+                            </ul>
+
+                            <p class="font-extrabold text-rg-blue-dark mt-4 mb-2">E. Data Transaksi dan Pembayaran</p>
+                            <p class="mb-1">Meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-1 mb-4">
+                                <li>Riwayat transaksi.</li>
+                                <li>Jenis layanan atau program yang dibeli.</li>
+                                <li>Nominal pembayaran.</li>
+                                <li>Status pembayaran.</li>
+                                <li>Bukti transaksi.</li>
+                                <li>Informasi administrasi pembayaran yang diperlukan.</li>
+                            </ul>
+
+                            <p class="font-extrabold text-rg-blue-dark mt-4 mb-2">F. Data Komunikasi</p>
+                            <p class="mb-1">Meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-1 mb-4">
+                                <li>Pesan dan pertanyaan pengguna.</li>
+                                <li>Keluhan atau pengaduan.</li>
+                                <li>Riwayat komunikasi dengan tim All Education.</li>
+                                <li>Informasi yang disampaikan melalui formulir atau kanal layanan pelanggan.</li>
+                            </ul>
+                            <p>All Education hanya mengumpulkan data yang relevan dan diperlukan sesuai dengan tujuan pemrosesan.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">4. TUJUAN PENGUMPULAN DAN PENGGUNAAN DATA</h2>
+                            <p>Data pribadi yang dikumpulkan dapat digunakan untuk tujuan berikut:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Melakukan proses pendaftaran dan administrasi pengguna.</li>
+                                <li>Membuat dan mengelola akun pengguna.</li>
+                                <li>Menyediakan layanan pembelajaran dan pendidikan.</li>
+                                <li>Mengelola jadwal kelas, tutor, dan kegiatan akademik.</li>
+                                <li>Memantau perkembangan serta aktivitas belajar siswa.</li>
+                                <li>Menyelenggarakan Try Out, Live Class, dan evaluasi pembelajaran.</li>
+                                <li>Memproses transaksi, pembayaran, dan administrasi layanan.</li>
+                                <li>Mengirimkan informasi terkait jadwal, program, dan pembaruan layanan.</li>
+                                <li>Memberikan bantuan teknis dan pelayanan pelanggan.</li>
+                                <li>Menangani pertanyaan, keluhan, serta pengaduan pengguna.</li>
+                                <li>Meningkatkan kualitas produk, sistem, dan pengalaman pengguna.</li>
+                                <li>Melakukan analisis dan evaluasi terhadap layanan pendidikan.</li>
+                                <li>Mencegah penipuan, penyalahgunaan akun, dan aktivitas yang melanggar ketentuan.</li>
+                                <li>Memenuhi kewajiban hukum dan permintaan pihak berwenang yang sah.</li>
+                            </ul>
+                            <p>Penggunaan data untuk tujuan pemasaran, promosi, atau komunikasi komersial akan dilakukan dengan memperhatikan dasar pemrosesan yang sah serta hak pengguna untuk menyampaikan keberatan atau menarik persetujuan apabila pemrosesan didasarkan pada persetujuan.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">5. DASAR PEMROSESAN DATA PRIBADI</h2>
+                            <p>All Education melakukan pemrosesan data pribadi berdasarkan satu atau beberapa dasar hukum berikut sesuai dengan tujuan pemrosesannya:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li><b>Persetujuan Pengguna:</b> Persetujuan yang diberikan secara sah dan jelas untuk tujuan pemrosesan tertentu.</li>
+                                <li><b>Pelaksanaan Perjanjian:</b> Pemrosesan yang diperlukan untuk melaksanakan perjanjian layanan atau memenuhi permintaan pengguna sebelum perjanjian dibuat.</li>
+                                <li><b>Kewajiban Hukum:</b> Pemrosesan yang diperlukan untuk memenuhi kewajiban berdasarkan peraturan perundang-undangan.</li>
+                                <li><b>Kepentingan Vital:</b> Pemrosesan yang diperlukan untuk melindungi kepentingan vital subjek data pribadi.</li>
+                                <li><b>Kepentingan Umum:</b> Pemrosesan yang dilaksanakan berdasarkan kewenangan atau ketentuan hukum yang berlaku.</li>
+                                <li><b>Kepentingan yang Sah:</b> Pemrosesan berdasarkan kepentingan sah Perusahaan dengan tetap memperhatikan tujuan, kebutuhan, serta keseimbangan hak pengguna.</li>
+                            </ul>
+                            <p>Pengguna akan memperoleh informasi mengenai tujuan dan jenis data yang diproses sesuai dengan ketentuan yang berlaku.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">6. PENGGUNAAN DATA ANAK DAN SISWA DI BAWAH UMUR</h2>
+                            <p>Sebagian layanan All Education ditujukan kepada anak-anak dan siswa yang belum berusia 18 tahun. Oleh karena itu, Kami memberikan perhatian khusus terhadap perlindungan data pribadi anak.</p>
+                            <p>Ketentuan pengelolaan data anak meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Pengumpulan dan pemrosesan data pribadi anak dilakukan sesuai dengan ketentuan khusus mengenai pelindungan data anak.</li>
+                                <li>Persetujuan orang tua dan/atau wali diperoleh sesuai dengan ketentuan peraturan perundang-undangan.</li>
+                                <li>Informasi anak hanya digunakan untuk tujuan yang berkaitan dengan layanan pendidikan dan kebutuhan operasional yang sah.</li>
+                                <li>Akses terhadap informasi anak dibatasi kepada pihak yang memiliki kepentingan dan kewenangan.</li>
+                                <li>Informasi perkembangan belajar siswa dapat disampaikan kepada orang tua atau wali yang berwenang.</li>
+                            </ul>
+                            <p>All Education tidak dengan sengaja menggunakan data pribadi anak untuk tujuan yang tidak sesuai dengan kepentingan dan perlindungan anak.</p>
+                            <p>Orang tua atau wali dapat menghubungi All Education apabila ingin memperoleh informasi atau mengajukan permohonan terkait data pribadi anak yang berada dalam pengelolaan Kami.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">7. PENGUNGKAPAN DAN PEMBAGIAN DATA KEPADA PIHAK KETIGA</h2>
+                            <p>All Education tidak menjual data pribadi pengguna kepada pihak ketiga. Namun, dalam kondisi tertentu, Kami dapat memberikan akses atau mengungkapkan data pribadi kepada pihak lain sepanjang diperlukan dan memiliki dasar pemrosesan yang sah.</p>
+                            <p>Pihak-pihak tersebut dapat meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li><b>Tutor dan Tenaga Pengajar:</b> Untuk mendukung kegiatan pembelajaran, pengelolaan jadwal, serta pemantauan perkembangan siswa.</li>
+                                <li><b>Penyedia Sistem dan Teknologi:</b> Untuk mendukung operasional website, hosting, server, penyimpanan data, serta pengelolaan platform digital.</li>
+                                <li><b>Penyedia Pembayaran:</b> Untuk memproses transaksi dan melakukan verifikasi pembayaran.</li>
+                                <li><b>Penyedia Komunikasi:</b> Untuk mendukung pengiriman informasi melalui email, pesan, atau layanan komunikasi lainnya.</li>
+                                <li><b>Mitra Operasional:</b> Pihak yang bekerja sama dengan All Education untuk mendukung penyelenggaraan layanan.</li>
+                                <li><b>Pihak Berwenang:</b> Instansi pemerintah atau aparat penegak hukum apabila diwajibkan berdasarkan ketentuan hukum atau permintaan yang sah.</li>
+                            </ul>
+                            <p>All Education akan mengupayakan agar pihak yang memperoleh akses terhadap data pribadi memiliki kewajiban menjaga kerahasiaan dan keamanan data sesuai peran serta ketentuan yang berlaku.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">8. PENYIMPANAN DAN JANGKA WAKTU RETENSI DATA</h2>
+                            <p>All Education menyimpan data pribadi selama diperlukan untuk memenuhi tujuan pengumpulan dan pemrosesan data.</p>
+                            <p>Jangka waktu penyimpanan dapat mempertimbangkan:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Status akun dan keaktifan pengguna.</li>
+                                <li>Keberlangsungan program pembelajaran.</li>
+                                <li>Kebutuhan administrasi dan operasional.</li>
+                                <li>Kewajiban penyimpanan dokumen berdasarkan peraturan perundang-undangan.</li>
+                                <li>Kebutuhan penyelesaian sengketa atau pemeriksaan.</li>
+                                <li>Kepentingan sah Perusahaan sesuai dengan ketentuan hukum.</li>
+                            </ul>
+                            <p>Apabila data pribadi tidak lagi diperlukan untuk tujuan pemrosesannya dan tidak terdapat kewajiban hukum untuk menyimpannya, All Education akan melakukan penghapusan atau pemusnahan data sesuai dengan prosedur yang berlaku.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">9. KEAMANAN DAN PERLINDUNGAN DATA</h2>
+                            <p>All Education berupaya menerapkan langkah-langkah pengamanan yang wajar dan sesuai dengan ketentuan peraturan perundang-undangan untuk melindungi data pribadi pengguna.</p>
+                            <p>Upaya perlindungan dapat mencakup:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Pembatasan akses data berdasarkan kewenangan.</li>
+                                <li>Penggunaan sistem autentikasi dan pengamanan akun.</li>
+                                <li>Pengelolaan hak akses bagi personel yang berwenang.</li>
+                                <li>Pemeliharaan dan pembaruan sistem secara berkala.</li>
+                                <li>Pengawasan terhadap aktivitas sistem.</li>
+                                <li>Upaya pencegahan akses, penggunaan, pengungkapan, atau perubahan data tanpa izin.</li>
+                                <li>Pengelolaan risiko keamanan informasi.</li>
+                            </ul>
+                            <p>Meskipun demikian, tidak ada sistem elektronik yang dapat menjamin keamanan secara mutlak. Pengguna juga bertanggung jawab menjaga kerahasiaan informasi akses akun masing-masing.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">10. PENGGUNAAN COOKIES DAN TEKNOLOGI PELACAKAN</h2>
+                            <p>Website All Education dapat menggunakan cookies atau teknologi serupa untuk mendukung pengalaman pengguna. Cookies merupakan file kecil yang dapat disimpan pada perangkat pengguna ketika mengakses website.</p>
+                            <p>Penggunaan cookies dapat bertujuan untuk:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Mengoptimalkan fungsi dan kinerja website.</li>
+                                <li>Mengingat preferensi pengguna.</li>
+                                <li>Mendukung proses login dan pengelolaan sesi.</li>
+                                <li>Menganalisis penggunaan website.</li>
+                                <li>Meningkatkan kualitas layanan dan pengalaman pengguna.</li>
+                            </ul>
+                            <p>Dalam kondisi tertentu, All Education dapat menggunakan layanan analitik atau teknologi pihak ketiga yang memiliki kebijakan privasi tersendiri. Pengguna dapat mengatur atau membatasi cookies melalui pengaturan browser masing-masing. Namun, penonaktifan cookies tertentu dapat memengaruhi fungsi website.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">11. TRANSFER DATA PRIBADI</h2>
+                            <p>Dalam rangka penyelenggaraan layanan, data pribadi dapat diproses atau disimpan melalui penyedia sistem dan infrastruktur teknologi yang berada di dalam maupun di luar wilayah Indonesia.</p>
+                            <p>Apabila terjadi transfer data pribadi ke luar wilayah Indonesia, All Education akan memastikan pelaksanaannya memenuhi persyaratan dan mekanisme pelindungan data pribadi sesuai dengan peraturan perundang-undangan yang berlaku.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">12. HAK PENGGUNA ATAS DATA PRIBADI</h2>
+                            <p>Sebagai subjek data pribadi, pengguna memiliki hak sesuai dengan ketentuan peraturan perundang-undangan, antara lain:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Memperoleh informasi mengenai identitas pihak yang mengelola data pribadi.</li>
+                                <li>Mengetahui tujuan dan dasar pemrosesan data pribadi.</li>
+                                <li>Meminta akses dan memperoleh salinan data pribadi.</li>
+                                <li>Meminta perbaikan atau pembaruan data yang tidak akurat.</li>
+                                <li>Meminta penghentian atau pembatasan pemrosesan data sesuai ketentuan hukum.</li>
+                                <li>Menarik kembali persetujuan pemrosesan data pribadi apabila pemrosesan didasarkan pada persetujuan.</li>
+                                <li>Meminta penghapusan atau pemusnahan data pribadi sesuai ketentuan hukum.</li>
+                                <li>Mengajukan keberatan terhadap keputusan yang hanya didasarkan pada pemrosesan otomatis apabila menimbulkan akibat hukum atau dampak signifikan.</li>
+                                <li>Mengajukan pengaduan dan memperoleh penyelesaian atas dugaan pelanggaran pelindungan data pribadi.</li>
+                                <li>Menggunakan hak lain yang diberikan berdasarkan peraturan perundang-undangan.</li>
+                            </ul>
+                            <p>Pelaksanaan hak tersebut dapat dibatasi apabila terdapat ketentuan hukum yang mengatur pengecualian atau apabila terdapat alasan sah yang diperbolehkan berdasarkan peraturan perundang-undangan.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">13. PROSEDUR PERMOHONAN DATA PRIBADI</h2>
+                            <p>Pengguna yang ingin menggunakan haknya atas data pribadi dapat mengajukan permohonan melalui kanal komunikasi resmi All Education.</p>
+                            <p>Permohonan dapat mencakup:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Permintaan akses data pribadi.</li>
+                                <li>Perbaikan atau pembaruan data.</li>
+                                <li>Permintaan penghapusan data.</li>
+                                <li>Penarikan persetujuan.</li>
+                                <li>Pembatasan atau penghentian pemrosesan.</li>
+                                <li>Pengajuan keberatan atau pengaduan.</li>
+                            </ul>
+                            <p>Untuk menjaga keamanan informasi, All Education dapat melakukan verifikasi identitas pemohon sebelum memproses permintaan. Permohonan akan ditinjau dan ditangani sesuai dengan prosedur serta batas waktu yang ditetapkan dalam peraturan perundang-undangan.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">14. PENANGANAN INSIDEN KEAMANAN DATA</h2>
+                            <p>Apabila terjadi kegagalan pelindungan data pribadi yang memenuhi kriteria berdasarkan ketentuan hukum, All Education akan melakukan langkah penanganan yang diperlukan.</p>
+                            <p>Langkah tersebut dapat meliputi:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Melakukan identifikasi dan pemeriksaan insiden.</li>
+                                <li>Mengambil tindakan untuk membatasi dampak insiden.</li>
+                                <li>Melakukan pemulihan sistem dan pengamanan data.</li>
+                                <li>Melakukan evaluasi terhadap penyebab kejadian.</li>
+                                <li>Menyampaikan pemberitahuan tertulis kepada pihak yang diwajibkan sesuai ketentuan peraturan perundang-undangan.</li>
+                            </ul>
+                            <p>Pemberitahuan kegagalan pelindungan data pribadi akan dilakukan sesuai dengan mekanisme dan tenggat waktu yang berlaku, termasuk ketentuan pemberitahuan paling lambat 3 x 24 jam apabila diwajibkan oleh UU Pelindungan Data Pribadi.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">15. TAUTAN KE WEBSITE DAN LAYANAN PIHAK KETIGA</h2>
+                            <p>Website All Education dapat menyediakan tautan menuju website, aplikasi, atau layanan milik pihak ketiga. Pengguna perlu memahami bahwa setiap pihak ketiga memiliki kebijakan privasi dan mekanisme pengelolaan data masing-masing.</p>
+                            <p>All Education tidak bertanggung jawab atas kebijakan pemrosesan data yang dilakukan secara mandiri oleh pihak ketiga di luar kendali Perusahaan. Pengguna disarankan membaca kebijakan privasi masing-masing layanan sebelum memberikan informasi pribadi kepada pihak ketiga tersebut.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">16. PERUBAHAN KEBIJAKAN PRIVASI</h2>
+                            <p>All Education dapat memperbarui atau mengubah Kebijakan Privasi ini dari waktu ke waktu untuk menyesuaikan dengan:</p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4">
+                                <li>Perubahan peraturan perundang-undangan.</li>
+                                <li>Pengembangan produk dan layanan.</li>
+                                <li>Perubahan sistem teknologi dan operasional.</li>
+                                <li>Kebutuhan peningkatan keamanan data.</li>
+                                <li>Perubahan kebijakan internal Perusahaan.</li>
+                            </ul>
+                            <p>Setiap perubahan akan dipublikasikan melalui website resmi All Education dengan mencantumkan tanggal pembaruan terbaru. Apabila perubahan tersebut berdampak pada tujuan atau cara pemrosesan data pribadi yang memerlukan pemberitahuan atau persetujuan baru, All Education akan melaksanakannya sesuai dengan ketentuan hukum yang berlaku.</p>
+
+                            <h2 class="text-xl font-black text-rg-blue-dark mt-8 mb-4 border-b border-gray-100 pb-2">17. HUBUNGI KAMI</h2>
+                            <p>Apabila pengguna memiliki pertanyaan, permintaan, atau pengaduan terkait pengelolaan dan perlindungan data pribadi, silakan menghubungi:</p>
+                            <div class="bg-cyan-50/70 p-6 rounded-2xl border border-cyan-100 my-4 space-y-1.5 text-rg-blue-dark">
+                                <p class="font-black text-lg">PT ALL EDUCATION INDONESIA</p>
+                                <p><b>Website:</b> <a href="https://alleducenter.com" class="text-rg-primary hover:underline">https://alleducenter.com</a></p>
+                                <p><b>Email:</b> info@alleducenter.com</p>
+                                <p><b>Alamat:</b> Jl. Ciherang Blok L2 Dramaga Kabupaten Bogor</p>
+                            </div>
+                            <p>All Education akan menindaklanjuti permohonan sesuai dengan prosedur dan ketentuan peraturan perundang-undangan yang berlaku.</p>
+                            <div class="mt-10 pt-6 border-t border-gray-200 text-center">
+                                <p class="font-black text-rg-blue-dark">PT ALL EDUCATION INDONESIA</p>
+                                <p class="text-sm text-rg-primary font-bold italic">Empowering Education, Inspiring the Future.</p>
+                                <p class="text-xs text-gray-400 mt-1">&copy; 2026 All Education Indonesia. All Rights Reserved.</p>
+                            </div>
+                        `;
+                    }
+
+                    h = `
+                    <div class="bg-cyan-50 pt-24 md:pt-32 pb-16 text-center border-b border-cyan-100 px-4 reveal flex flex-col items-center">
+                        <span class="bg-cyan-200/60 text-rg-blue-dark text-[10px] font-black px-4 py-1.5 rounded-full mb-4 inline-block uppercase tracking-widest shadow-sm backdrop-blur-sm">${subtitle}</span>
+                        <h1 class="text-3xl md:text-5xl font-black text-rg-blue-dark mb-4 tracking-tight drop-shadow-sm">${title}</h1>
+                        <p class="text-gray-500 font-bold text-sm">Terakhir diperbarui: 9 November 2026</p>
+                    </div>
+                    <div class="max-w-4xl mx-auto py-12 md:py-16 px-4 md:px-8 reveal-up active">
+                        <div class="mb-6 flex justify-between items-center">
+                            <button onclick="router.navigate('/')" class="text-rg-primary font-bold text-sm flex items-center gap-2 transition bg-cyan-50 border border-cyan-100 px-4 py-2 rounded-full hover:bg-cyan-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Kembali ke Beranda
+                            </button>
+                            <button onclick="router.navigate('${isSK ? '/privasi' : '/sk'}')" class="text-gray-600 font-bold text-xs md:text-sm hover:text-rg-primary underline transition">
+                                Lihat ${isSK ? 'Kebijakan Privasi' : 'Syarat & Ketentuan'} &rarr;
+                            </button>
+                        </div>
+                        <div class="prose-custom space-y-4 text-gray-600 text-sm md:text-base leading-relaxed font-medium bg-white p-6 md:p-12 rounded-[2rem] shadow-lg border border-gray-100">
+                            ${contentHtml}
+                        </div>
+                    </div>`;
+                    c.innerHTML = h;
+                    return;
+                }
+                // === AKHIR KODE HALAMAN S&K DAN KEBIJAKAN PRIVASI ===
 
                 const pages = { 
                     '/artikel': {d:APP_DATA.Articles||[], t:'Artikel & Info Edukasi', sub:'Kumpulan berita terbaru, tips belajar, dan informasi pendaftaran universitas.', type:'art', bg:'bg-cyan-50', badge:'RUANG BACA'}, 
