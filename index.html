@@ -78,6 +78,29 @@
         }
         .flip-card-back { position: absolute; top: 0; left: 0; transform: rotateY(180deg); }
     </style>
+    /* === ANIMASI WELCOME OWL & PROMO BANNER === */
+        @keyframes owlFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+        @keyframes owlFlyUpAway {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            25% { transform: translateY(25px) scale(0.92) rotate(-4deg); opacity: 1; }
+            100% { transform: translateY(-120vh) scale(0.4) rotate(8deg); opacity: 0; }
+        }
+        @keyframes scrollMouse {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(10px); opacity: 0; }
+        }
+        .animate-owl-float {
+            animation: owlFloat 3s ease-in-out infinite;
+        }
+        .animate-owl-fly-up {
+            animation: owlFlyUpAway 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+        }
+        .scroll-dot {
+            animation: scrollMouse 1.4s infinite;
+        }
 </head>
 <body class="font-sans text-gray-800">
 
@@ -93,10 +116,16 @@
 
     <div id="toast-msg" class="fixed top-5 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl shadow-2xl z-[9999] text-white font-bold transition-all duration-300 opacity-0 translate-y-[-20px] pointer-events-none"></div>
 
-    <div class="bg-[#0A192F] text-white text-[10px] md:text-sm py-2 px-4 flex justify-center items-center gap-2 cursor-pointer hover:bg-black transition" onclick="window.open(CONFIG.promoUrl||'#', '_blank')">
-        <span class="bg-red-600 text-white px-2 py-0.5 rounded font-bold animate-pulse">PROMO SPESIAL</span>
-        <span class="font-medium truncate max-w-[200px] md:max-w-full">PENGGUNA BARU | Diskon s.d 60%</span>
-        <button class="bg-accent-orange px-3 py-1 rounded font-bold hover:bg-orange-600 ml-2 shadow-sm">Klaim Sekarang ></button>
+    <!-- TOP BANNER PROMO DENGAN TOMBOL X -->
+    <div id="top-promo-bar" class="bg-gradient-to-r from-[#0A192F] via-[#0C2B5A] to-[#0A192F] text-white text-[10px] md:text-sm py-2.5 px-4 flex justify-between md:justify-center items-center gap-2 relative z-[60] border-b border-cyan-500/20 transition-all duration-300">
+        <div class="flex items-center gap-2 cursor-pointer mx-auto" onclick="window.open(CONFIG.promoUrl||'#', '_blank')">
+            <span class="bg-red-600 text-white px-2.5 py-0.5 rounded-full font-black text-[9px] md:text-xs animate-pulse tracking-wider shadow-sm">🔥 PROMO SPESIAL</span>
+            <span class="font-semibold truncate max-w-[180px] sm:max-w-full">PENGGUNA BARU | Diskon Belajar s.d. <b class="text-yellow-300">60%</b> Semua Program!</span>
+            <button class="bg-accent-orange px-3 py-1 rounded-full font-black text-[10px] md:text-xs hover:bg-orange-600 ml-1 shadow-md transition transform hover:scale-105 whitespace-nowrap">Klaim Sekarang &rarr;</button>
+        </div>
+        <button onclick="document.getElementById('top-promo-bar').style.display='none'" class="text-gray-300 hover:text-white hover:bg-white/10 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs transition shrink-0 md:absolute md:right-4" title="Tutup Promo">
+            &#10005;
+        </button>
     </div>
 
     <nav class="w-full z-50 bg-rg-primary sticky top-0 shadow-lg" id="main-navbar">
@@ -3024,6 +3053,219 @@
                 isDataLoaded = true;
                 uiHelper.hideLoader(500);
             }
+        });
+    </script>
+    <!-- ================================================================= -->
+    <!-- 1. OVERLAY SAMBUTAN MASKOT OWL (TERBANG KE ATAS)                  -->
+    <!-- ================================================================= -->
+    <div id="owl-welcome-overlay" class="fixed inset-0 z-[9995] bg-[#07162c]/80 backdrop-blur-md hidden items-center justify-center p-4 transition-opacity duration-500 opacity-0">
+        <div id="owl-welcome-wrapper" class="max-w-md w-full flex flex-col items-center text-center relative">
+            
+            <!-- Maskot / Logo Owl dengan Efek Melayang -->
+            <div class="relative mb-2 animate-owl-float z-20">
+                <div class="absolute inset-0 bg-cyan-400 rounded-full blur-2xl opacity-50 scale-110"></div>
+                <div class="w-28 h-28 md:w-32 md:h-32 bg-white rounded-full p-3.5 shadow-[0_15px_35px_rgba(12,180,182,0.45)] border-4 border-cyan-300 flex items-center justify-center relative">
+                    <img id="welcome-owl-img" src="https://iili.io/CMttawP.md.png" alt="Owl All Education" class="w-full h-full object-contain drop-shadow-md">
+                    <span class="absolute -bottom-1 -right-1 bg-amber-400 text-slate-900 text-lg w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white">🦉</span>
+                </div>
+            </div>
+
+            <!-- Kartu Ucapan Selamat Datang -->
+            <div class="bg-white rounded-[2rem] p-6 md:p-8 shadow-2xl border-2 border-cyan-100 relative w-full -mt-6 pt-10 z-10">
+                <span class="bg-cyan-50 text-rg-primary border border-cyan-200 text-[10px] font-black px-3.5 py-1 rounded-full uppercase tracking-widest inline-block mb-3">
+                    ✨ OFFICIAL EDUTECH PLATFORM
+                </span>
+                
+                <h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark leading-tight mb-2">
+                    Halo, Selamat Datang di <span class="text-rg-primary">All Education!</span> 👋
+                </h2>
+                
+                <p class="text-gray-600 text-xs md:text-sm font-medium leading-relaxed mb-6">
+                    Siap raih prestasi terbaikmu? Yuk, <b>scroll ke bawah dan cari tahu semua produk unggulan All Education</b> mulai dari Les Privat 1-on-1, Persiapan UTBK PRIME, OwlKids Calistung, English Kids, hingga Privat Mengaji!
+                </p>
+
+                <!-- Indikator Animasi Scroll -->
+                <div class="flex flex-col items-center justify-center mb-5 text-gray-400">
+                    <div class="w-5 h-8 border-2 border-rg-primary rounded-full flex justify-center p-1 mb-1">
+                        <div class="w-1 h-2 bg-rg-primary rounded-full scroll-dot"></div>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-rg-primary">Scroll & Eksplor Produk</span>
+                </div>
+
+                <!-- Tombol CTA Utama (Memicu Owl Terbang ke Atas) -->
+                <button onclick="welcomeFlow.flyOwlAndShowPromo(true)" class="w-full py-3.5 px-6 bg-gradient-to-r from-rg-primary to-rg-blue-dark hover:from-rg-blue-dark hover:to-rg-primary text-white font-black text-sm md:text-base rounded-2xl shadow-[0_10px_25px_rgba(12,180,182,0.35)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2">
+                    <span>🚀 Mulai Jelajahi Semua Produk</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- 2. POPUP BANNER PROMO DISKON S.D 60% (DENGAN TOMBOL X DI ATAS)    -->
+    <!-- ================================================================= -->
+    <div id="promo-popup-modal" class="fixed inset-0 z-[9996] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div id="promo-popup-card" class="relative max-w-lg w-full bg-gradient-to-br from-[#07162c] via-[#0C2B5A] to-[#0CB4B6] rounded-[2.2rem] p-1 shadow-[0_25px_60px_rgba(0,0,0,0.5)] transform scale-90 transition-all duration-300">
+            
+            <!-- Tombol Close (X) di Pojok Kanan Atas -->
+            <button onclick="welcomeFlow.closePromoModal()" aria-label="Tutup Banner Promo" class="absolute -top-3 -right-3 md:top-4 md:right-4 z-30 w-10 h-10 bg-white text-rg-blue-dark hover:bg-red-500 hover:text-white rounded-full font-black text-lg flex items-center justify-center shadow-xl border-2 border-gray-100 transition-all duration-200 hover:scale-110">
+                &#10005;
+            </button>
+
+            <div class="bg-[#081b38]/90 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 text-white relative overflow-hidden border border-white/15">
+                <div class="absolute -top-20 -left-20 w-52 h-52 bg-accent-orange/30 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-20 -right-20 w-52 h-52 bg-cyan-400/30 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 text-center">
+                    <div class="inline-flex items-center gap-1.5 bg-red-500/20 border border-red-400/40 text-red-300 text-[10px] md:text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest mb-4">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                        PENAWARAN TERBATAS PENGUNJUNG BARU
+                    </div>
+
+                    <h3 class="text-xl md:text-2xl font-black text-cyan-200 tracking-wide uppercase mb-1">
+                        SPESIAL PROMO PENDIDIKAN
+                    </h3>
+
+                    <!-- Highlight Diskon 60% -->
+                    <div class="my-4 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 p-4 md:p-5 rounded-3xl shadow-xl border-2 border-amber-200/50 transform -rotate-1">
+                        <p class="text-xs font-black uppercase tracking-widest text-white/90 mb-0.5">HEMAT BIAYA BELAJAR</p>
+                        <p class="text-4xl sm:text-5xl font-black text-white drop-shadow-md leading-none">
+                            DISKON s.d. 60%
+                        </p>
+                    </div>
+
+                    <p class="text-xs md:text-sm text-cyan-100/90 font-medium leading-relaxed mb-6">
+                        Berlaku untuk pendaftaran program <b>All Education Privat, PRIME UTBK-SNBT, OwlKids Calistung, English For Kids,</b> dan <b>Privat Mengaji</b>!
+                    </p>
+
+                    <div class="grid grid-cols-3 gap-2 text-[10px] md:text-xs font-bold text-cyan-200 mb-6 bg-white/5 p-3 rounded-2xl border border-white/10">
+                        <div>✅ Tutor Terbaik</div>
+                        <div>✅ Jadwal Fleksibel</div>
+                        <div>✅ Garansi Cocok</div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button onclick="welcomeFlow.claimPromo()" class="flex-1 py-4 px-6 bg-gradient-to-r from-accent-orange to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-black text-sm md:text-base rounded-2xl shadow-[0_10px_25px_rgba(240,104,34,0.4)] hover:scale-[1.02] transition-all duration-300">
+                            🎁 Klaim Diskon 60% Sekarang
+                        </button>
+                        <button onclick="welcomeFlow.closePromoAndScroll()" class="py-4 px-5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs md:text-sm rounded-2xl border border-white/20 transition">
+                            Lihat Produk Dulu &darr;
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const welcomeFlow = {
+            hasTriggered: false,
+            init: () => {
+                setTimeout(() => {
+                    const navLogo = document.getElementById('dynamic-logo');
+                    const owlImg = document.getElementById('welcome-owl-img');
+                    if (navLogo && owlImg && navLogo.src) {
+                        owlImg.src = navLogo.src;
+                    }
+                }, 600);
+
+                setTimeout(() => {
+                    const overlay = document.getElementById('owl-welcome-overlay');
+                    if (!overlay) return;
+                    overlay.classList.remove('hidden');
+                    overlay.classList.add('flex');
+                    setTimeout(() => {
+                        overlay.classList.remove('opacity-0');
+                        overlay.classList.add('opacity-100');
+                    }, 50);
+                }, 900);
+            },
+
+            flyOwlAndShowPromo: (scrollToProducts = false) => {
+                if (welcomeFlow.hasTriggered) return;
+                welcomeFlow.hasTriggered = true;
+
+                const wrapper = document.getElementById('owl-welcome-wrapper');
+                const overlay = document.getElementById('owl-welcome-overlay');
+
+                if (wrapper) wrapper.classList.add('animate-owl-fly-up');
+                
+                setTimeout(() => {
+                    if (overlay) {
+                        overlay.classList.remove('opacity-100');
+                        overlay.classList.add('opacity-0');
+                    }
+                }, 450);
+
+                setTimeout(() => {
+                    if (overlay) {
+                        overlay.classList.add('hidden');
+                        overlay.classList.remove('flex');
+                    }
+                    
+                    if (scrollToProducts) {
+                        const pillSection = document.getElementById('pill-menu-container');
+                        if (pillSection) {
+                            pillSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+
+                    welcomeFlow.openPromoModal();
+                }, 900);
+            },
+
+            openPromoModal: () => {
+                const modal = document.getElementById('promo-popup-modal');
+                const card = document.getElementById('promo-popup-card');
+                if (!modal || !card) return;
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.classList.add('opacity-100');
+                    card.classList.remove('scale-90');
+                    card.classList.add('scale-100');
+                }, 50);
+            },
+
+            closePromoModal: () => {
+                const modal = document.getElementById('promo-popup-modal');
+                const card = document.getElementById('promo-popup-card');
+                if (!modal || !card) return;
+
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0');
+                card.classList.remove('scale-100');
+                card.classList.add('scale-90');
+
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 300);
+            },
+
+            closePromoAndScroll: () => {
+                welcomeFlow.closePromoModal();
+                const pkgSection = document.getElementById('popular-packages-container');
+                if (pkgSection) {
+                    pkgSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            },
+
+            claimPromo: () => {
+                welcomeFlow.closePromoModal();
+                const targetUrl = (typeof CONFIG !== 'undefined' && (CONFIG.promoUrl || CONFIG.payUrl)) ? (CONFIG.promoUrl || CONFIG.payUrl) : '#';
+                if (targetUrl && targetUrl !== '#') {
+                    window.open(targetUrl, '_blank');
+                } else {
+                    const pkgSection = document.getElementById('popular-packages-container');
+                    if (pkgSection) pkgSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            welcomeFlow.init();
         });
     </script>
 </body>
