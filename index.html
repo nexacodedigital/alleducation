@@ -755,11 +755,12 @@
              if (path.startsWith('/produk/')) {
                     const slug = path.split('/')[2]; 
                     const p = (APP_DATA.Products||[]).find(x => uiHelper.slugify(x.title) === slug);
-                  if(p) {
+                 if(p) {
                         const isPrime = slug.includes('prime') || (p.title && p.title.toLowerCase().includes('prime'));
                         const isOwlKids = slug.includes('owlkids') || slug.includes('calistung') || (p.title && p.title.toLowerCase().includes('owlkids'));
                         const isPrivat = (slug.includes('privat') && !slug.includes('mengaji')) || (p.title && p.title.toLowerCase().includes('education privat'));
                         const isEnglishKids = slug.includes('english') || (p.title && p.title.toLowerCase().includes('english'));
+                        const isMengaji = slug.includes('mengaji') || (p.title && p.title.toLowerCase().includes('mengaji'));
                         const feats = (p.keunggulan||'').split('\n').filter(x=>x.trim()).map(x=>`
                             <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-start gap-4 hover:shadow-md transition h-full">
                                 <div class="bg-cyan-50 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shrink-0 text-rg-primary mt-1"><svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
@@ -1903,7 +1904,297 @@
                             </div>`;
                         }
                         // =========================================================================
-                        // 5. TAMPILAN DEFAULT UNTUK PRODUK LAINNYA
+                        // 5. TAMPILAN KHUSUS LANDING PAGE: PRIVAT MENGAJI (ROYAL EMERALD & GOLD)
+                        // =========================================================================
+                        else if (isMengaji) {
+                            const mengajiBadges = [
+                                { tag: 'ASATIDZ TERSELEKSI', icon: '🕌' },
+                                { tag: 'SESUAI TINGKATAN', icon: '🌱' },
+                                { tag: 'METODE SANTRI CERIA', icon: '✨' },
+                                { tag: 'STANDAR SANAD & TAJWID', icon: '📖' },
+                                { tag: 'ADAB & AKHLAK MULIA', icon: '🤲' },
+                                { tag: 'PEMULA HINGGA MAHIR', icon: '🌙' },
+                                { tag: 'HOME VISIT & ONLINE', icon: '🏡' },
+                                { tag: 'MONITORING AKADEMIK', icon: '📜' }
+                            ];
+
+                            // Render "Kenapa Memilih Program Ini" dengan gaya Emerald & Arabian Gold Ornamental Cards
+                            const mengajiFeats = (p.keunggulan||'').split('\n').filter(x=>x.trim()).map((x, idx) => {
+                                const b = mengajiBadges[idx % mengajiBadges.length];
+                                return `
+                                <div class="bg-white rounded-3xl p-6 md:p-7 border border-emerald-900/10 shadow-[0_10px_30px_rgba(6,78,59,0.05)] hover:shadow-[0_15px_35px_rgba(217,119,6,0.12)] hover:border-amber-400 hover:-translate-y-1.5 transition-all duration-300 flex items-start gap-4 md:gap-5 relative overflow-hidden group h-full">
+                                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-amber-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
+                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#065F46] to-[#042F2E] text-amber-300 border-2 border-amber-400/50 flex flex-col items-center justify-center shrink-0 shadow-md group-hover:scale-110 transition-transform duration-300">
+                                        <span class="text-xl leading-none">${b.icon}</span>
+                                        <span class="text-[9px] font-black text-amber-200 mt-0.5">۞ 0${idx+1}</span>
+                                    </div>
+                                    <div class="flex-1 relative z-10">
+                                        <span class="text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 inline-block mb-1.5">✦ ${b.tag}</span>
+                                        <h4 class="font-black text-slate-800 text-sm md:text-base leading-snug group-hover:text-emerald-900 transition">${x}</h4>
+                                    </div>
+                                </div>`;
+                            }).join('');
+
+                            // Render "Fasilitas yang Didapatkan" dengan gaya Mihrab Arch Cards (Kubah Islami Elegan)
+                            const mengajiFasilIcons = ['🏡', '👨‍👩‍👧', '📖', '📚', '🤲', '🕰️', '📊', '💬'];
+                            const mengajiFasil = (p.fasilitas||'').split('\n').filter(x=>x.trim()).map((x, idx) => {
+                                const ic = mengajiFasilIcons[idx % mengajiFasilIcons.length];
+                                return `
+                                <div class="bg-gradient-to-b from-[#064E3B] to-[#022C22] rounded-t-[3rem] rounded-b-3xl p-6 pt-8 border-2 border-amber-400/30 hover:border-amber-300 shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center text-center justify-between group relative overflow-hidden h-full">
+                                    <div class="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-75"></div>
+                                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-300 to-amber-500 text-emerald-950 flex items-center justify-center text-3xl mb-4 shadow-[0_0_25px_rgba(251,191,36,0.35)] border-4 border-emerald-900 group-hover:scale-110 transition-transform duration-300">
+                                        ${ic}
+                                    </div>
+                                    <p class="font-extrabold text-white text-sm md:text-base leading-relaxed mb-4 group-hover:text-amber-200 transition">${x}</p>
+                                    <div class="w-full pt-3 border-t border-emerald-700/60 flex items-center justify-center gap-1.5 text-[10px] font-black text-amber-300 tracking-wider uppercase">
+                                        <span>۞</span><span>Fasilitas Utama</span><span>۞</span>
+                                    </div>
+                                </div>`;
+                            }).join('');
+
+                            h = `
+                            <!-- HERO SECTION: PRIVAT MENGAJI BY ALL EDUCATION (ISLAMIC EMERALD & GOLD) -->
+                            <div class="relative pt-20 md:pt-28 pb-28 md:pb-36 px-4 overflow-hidden reveal bg-gradient-to-br from-[#022C22] via-[#064E3B] to-[#047857] text-white">
+                                <!-- Ornamen Geometris Islami Halus -->
+                                <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#FBBF24 1.5px, transparent 1.5px), radial-gradient(#FBBF24 1.5px, #022C22 1.5px); background-size: 40px 40px; background-position: 0 0, 20px 20px;"></div>
+                                <div class="absolute -top-24 -right-24 w-96 h-96 bg-amber-400/20 rounded-full blur-[120px] pointer-events-none"></div>
+                                <div class="absolute bottom-0 left-1/4 w-80 h-80 bg-teal-300/15 rounded-full blur-[100px] pointer-events-none"></div>
+
+                                <div class="relative z-10 max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                                    <!-- Kolom Kiri -->
+                                    <div class="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start reveal-left active">
+                                        <!-- Kaligrafi Basmalah -->
+                                        <div class="inline-flex items-center gap-3 bg-emerald-950/70 border border-amber-400/40 text-amber-300 px-5 py-2 rounded-full mb-5 shadow-lg backdrop-blur-md">
+                                            <span class="text-amber-400">🌙</span>
+                                            <span class="text-xs md:text-sm font-bold tracking-wide">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
+                                            <span class="text-[10px] font-black uppercase tracking-widest text-emerald-200 border-l border-emerald-700 pl-3 hidden sm:inline">Generasi Cinta Al-Qur'an</span>
+                                        </div>
+
+                                        <h1 class="text-3xl sm:text-5xl lg:text-[52px] font-black text-white mb-5 tracking-tight leading-[1.15] drop-shadow-md">
+                                            Bimbingan Privat <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-300 to-yellow-400">Mengaji Al-Qur'an</span> & Akhlak Islami Terbaik
+                                        </h1>
+
+                                        <p class="text-emerald-50/90 text-sm sm:text-base md:text-lg mb-7 max-w-2xl leading-relaxed font-medium">
+                                            ${p.desc || 'Privat Mengaji by All Education adalah program pembelajaran Al-Qur’an yang dirancang untuk membantu anak belajar mengaji secara bertahap, mulai dari mengenal huruf hijaiyah hingga membaca Al-Qur’an dengan baik dan benar sesuai kaidah tajwid.'}
+                                        </p>
+
+                                        <!-- 4 Badges Keunggulan Cepat -->
+                                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full max-w-2xl mb-8 text-left">
+                                            <div class="bg-white/10 backdrop-blur-md border border-amber-300/30 rounded-2xl p-3 flex items-center gap-2.5">
+                                                <span class="text-xl">📖</span>
+                                                <div><p class="text-[9px] text-amber-300 font-black uppercase">Metode</p><p class="text-xs font-bold text-white leading-tight">Iqra' & Tilawah</p></div>
+                                            </div>
+                                            <div class="bg-white/10 backdrop-blur-md border border-amber-300/30 rounded-2xl p-3 flex items-center gap-2.5">
+                                                <span class="text-xl">🎙️</span>
+                                                <div><p class="text-[9px] text-amber-300 font-black uppercase">Kaidah</p><p class="text-xs font-bold text-white leading-tight">Tahsin & Tajwid</p></div>
+                                            </div>
+                                            <div class="bg-white/10 backdrop-blur-md border border-amber-300/30 rounded-2xl p-3 flex items-center gap-2.5">
+                                                <span class="text-xl">🌟</span>
+                                                <div><p class="text-[9px] text-amber-300 font-black uppercase">Hafalan</p><p class="text-xs font-bold text-white leading-tight">Tahfidz & Doa</p></div>
+                                            </div>
+                                            <div class="bg-white/10 backdrop-blur-md border border-amber-300/30 rounded-2xl p-3 flex items-center gap-2.5">
+                                                <span class="text-xl">🏡</span>
+                                                <div><p class="text-[9px] text-amber-300 font-black uppercase">Layanan</p><p class="text-xs font-bold text-white leading-tight">Ke Rumah / Online</p></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center lg:justify-start">
+                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-600 text-emerald-950 font-black px-8 md:px-10 py-4 rounded-2xl text-sm md:text-base shadow-[0_10px_30px_rgba(245,158,11,0.4)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 border border-amber-200">
+                                                <span>🕌 Daftar Privat Mengaji Sekarang</span>
+                                            </button>
+                                            <button onclick="document.getElementById('mengaji-kurikulum').scrollIntoView({behavior:'smooth'})" class="bg-emerald-900/60 hover:bg-emerald-900 text-amber-200 border border-amber-400/40 font-bold px-7 py-4 rounded-2xl text-sm md:text-base backdrop-blur-md transition flex items-center justify-center gap-2">
+                                                <span>Lihat Kurikulum Mengaji &darr;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Kolom Kanan: Kartu Mihrab Visual -->
+                                    <div class="lg:col-span-5 reveal-right active">
+                                        <div class="bg-gradient-to-b from-white/15 to-emerald-950/80 backdrop-blur-xl border-2 border-amber-400/40 rounded-t-[4rem] rounded-b-[2rem] p-6 md:p-8 shadow-2xl relative">
+                                            <div class="flex items-center gap-3.5 border-b border-white/15 pb-5 mb-5">
+                                                ${p.img ? `<img src="${p.img}" class="w-16 h-16 rounded-2xl bg-white p-1.5 object-contain shadow-md border-2 border-amber-300">` : `<div class="w-16 h-16 rounded-2xl bg-amber-400 text-emerald-950 font-black flex items-center justify-center text-2xl">🕌</div>`}
+                                                <div class="text-left">
+                                                    <span class="bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase">۞ USTADZ & USTADZAH RAMAH ANAK</span>
+                                                    <h3 class="font-black text-lg text-white mt-1">Kurikulum Cinta Al-Qur'an</h3>
+                                                </div>
+                                            </div>
+
+                                            <div class="space-y-3 text-left mb-6">
+                                                <div class="bg-emerald-950/70 border border-emerald-700/60 rounded-2xl p-3.5 flex items-center gap-3.5">
+                                                    <div class="w-10 h-10 rounded-xl bg-amber-400 text-emerald-950 flex items-center justify-center font-black text-base shrink-0 shadow">أ ب</div>
+                                                    <div><p class="text-xs font-black text-amber-200">Tahap 1: Pra-Tahsin (Iqra' 1–6)</p><p class="text-[11px] text-emerald-100/80">Pengenalan huruf hijaiyah, tanda baca (harakat), dan makharijul huruf dasar dengan lagu ceria.</p></div>
+                                                </div>
+                                                <div class="bg-emerald-950/70 border border-emerald-700/60 rounded-2xl p-3.5 flex items-center gap-3.5">
+                                                    <div class="w-10 h-10 rounded-xl bg-emerald-400 text-emerald-950 flex items-center justify-center font-black text-base shrink-0 shadow">📖</div>
+                                                    <div><p class="text-xs font-black text-emerald-200">Tahap 2: Tahsinul Qur'an & Tajwid</p><p class="text-[11px] text-emerald-100/80">Kelancaran membaca mushaf Al-Qur'an, hukum bacaan tajwid, mad, serta sifat huruf dengan tartil.</p></div>
+                                                </div>
+                                                <div class="bg-emerald-950/70 border border-emerald-700/60 rounded-2xl p-3.5 flex items-center gap-3.5">
+                                                    <div class="w-10 h-10 rounded-xl bg-sky-400 text-emerald-950 flex items-center justify-center font-black text-base shrink-0 shadow">🤲</div>
+                                                    <div><p class="text-xs font-black text-sky-200">Tahap 3: Tahfidz & Adab Harian</p><p class="text-[11px] text-emerald-100/80">Setoran hafalan surat pendek (Juz 30), doa harian, praktik wudhu/shalat, dan kisah teladan Nabi.</p></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="bg-gradient-to-r from-amber-400/20 to-emerald-500/20 border border-amber-300/40 rounded-2xl p-3.5 text-center">
+                                                <p class="text-xs font-bold text-amber-200">✨ Dilengkapi Buku/Lembar Mutaba'ah (Laporan Perkembangan Mengaji Berkala)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
+                                    <svg class="relative block w-full h-[45px] md:h-[75px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,120.35,191.56,104.9,236.4,93.68,280.61,72.63,321.39,56.44Z" fill="#FDFBF7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- MAIN CONTENT: PRIVAT MENGAJI -->
+                            <div class="bg-[#FDFBF7] relative z-20 pt-10 pb-20">
+                                <div class="max-w-[1200px] mx-auto px-4 md:px-8">
+
+                                    <!-- 4 PILAR KURIKULUM MENGAJI & PENDIDIKAN ISLAMI -->
+                                    <div id="mengaji-kurikulum" class="mb-24 pt-4 reveal">
+                                        <div class="text-center max-w-3xl mx-auto mb-12">
+                                            <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] md:text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm">۞ 4 PILAR PEMBELAJARAN ISLAMI ۞</span>
+                                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3 leading-tight">Materi Lengkap Membentuk Generasi <span class="text-emerald-700">Qur'ani & Berakhlak Mulia</span></h2>
+                                            <p class="text-slate-600 text-xs md:text-base mt-2 font-medium">Tidak hanya lancar membaca Al-Qur'an, siswa juga dibimbing memahami adab dan ibadah sehari-hari dengan suasana menyenangkan.</p>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                            <!-- Pilar 1 -->
+                                            <div class="bg-white rounded-t-[2.5rem] rounded-b-3xl p-6 shadow-md border-2 border-emerald-100 hover:border-emerald-500 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between text-center">
+                                                <div>
+                                                    <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-800 font-black text-2xl flex items-center justify-center mx-auto mb-4 border-2 border-emerald-200 shadow-sm">أ ب ت</div>
+                                                    <span class="bg-emerald-50 text-emerald-700 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-emerald-200">PILAR 01 • DASAR</span>
+                                                    <h3 class="text-lg font-black text-slate-900 mt-2.5 mb-2">Program Iqra' & Hijaiyah</h3>
+                                                    <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">Pengenalan huruf hijaiyah dari nol, tempat keluarnya huruf (makhraj), dan menyambung huruf dengan metode praktis yang mudah diingat anak.</p>
+                                                </div>
+                                                <div class="bg-emerald-50/80 rounded-xl py-2 px-3 text-[11px] font-extrabold text-emerald-800">✓ Cocok untuk Anak & Pemula</div>
+                                            </div>
+
+                                            <!-- Pilar 2 -->
+                                            <div class="bg-white rounded-t-[2.5rem] rounded-b-3xl p-6 shadow-md border-2 border-amber-200 hover:border-amber-500 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between text-center">
+                                                <div>
+                                                    <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-800 font-black text-3xl flex items-center justify-center mx-auto mb-4 border-2 border-amber-300 shadow-sm">📖</div>
+                                                    <span class="bg-amber-50 text-amber-800 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-amber-200">PILAR 02 • TARTIL</span>
+                                                    <h3 class="text-lg font-black text-slate-900 mt-2.5 mb-2">Tahsin & Kaidah Tajwid</h3>
+                                                    <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">Perbaikan kualitas bacaan Al-Qur'an sesuai hukum tajwid (Nun/Mim Sukun, Mad, Waqaf) serta latihan irama murattal yang indah.</p>
+                                                </div>
+                                                <div class="bg-amber-50/80 rounded-xl py-2 px-3 text-[11px] font-extrabold text-amber-900">✓ Bacaan Benar & Tartil</div>
+                                            </div>
+
+                                            <!-- Pilar 3 -->
+                                            <div class="bg-white rounded-t-[2.5rem] rounded-b-3xl p-6 shadow-md border-2 border-teal-100 hover:border-teal-500 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between text-center">
+                                                <div>
+                                                    <div class="w-16 h-16 rounded-2xl bg-teal-100 text-teal-800 font-black text-3xl flex items-center justify-center mx-auto mb-4 border-2 border-teal-200 shadow-sm">🌟</div>
+                                                    <span class="bg-teal-50 text-teal-800 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-teal-200">PILAR 03 • HAFALAN</span>
+                                                    <h3 class="text-lg font-black text-slate-900 mt-2.5 mb-2">Tahfidz Juz 30 & Pilihan</h3>
+                                                    <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">Bimbingan menghafal surat-surat pendek (Juz 'Amma) dan surat pilihan dengan metode talaqqi & muraja'ah agar hafalan kuat melekat.</p>
+                                                </div>
+                                                <div class="bg-teal-50/80 rounded-xl py-2 px-3 text-[11px] font-extrabold text-teal-800">✓ Hafalan Kuat Tanpa Beban</div>
+                                            </div>
+
+                                            <!-- Pilar 4 -->
+                                            <div class="bg-white rounded-t-[2.5rem] rounded-b-3xl p-6 shadow-md border-2 border-sky-100 hover:border-sky-500 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between text-center">
+                                                <div>
+                                                    <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-800 font-black text-3xl flex items-center justify-center mx-auto mb-4 border-2 border-sky-200 shadow-sm">🤲</div>
+                                                    <span class="bg-sky-50 text-sky-800 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-sky-200">PILAR 04 • KARAKTER</span>
+                                                    <h3 class="text-lg font-black text-slate-900 mt-2.5 mb-2">Doa Harian, Ibadah & Adab</h3>
+                                                    <p class="text-xs text-slate-600 leading-relaxed font-medium mb-4">Hafalan doa sehari-hari, tata cara wudhu & bacaan shalat, kisah teladan Nabi & Rasul, serta penanaman adab kepada orang tua.</p>
+                                                </div>
+                                                <div class="bg-sky-50/80 rounded-xl py-2 px-3 text-[11px] font-extrabold text-sky-800">✓ Akhlak Mulia Sejak Dini</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- TINGKATAN PROGRAM (PEMULA HINGGA MAHIR) -->
+                                    <div class="mb-24 bg-gradient-to-r from-[#042F2E] via-[#065F46] to-[#047857] rounded-[2.5rem] p-6 sm:p-10 md:p-12 text-white shadow-xl reveal relative overflow-hidden border-2 border-amber-400/30">
+                                        <div class="text-center max-w-2xl mx-auto mb-10 relative z-10">
+                                            <span class="bg-amber-400 text-emerald-950 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow">🌙 TERSEDIA UNTUK PEMULA HINGGA MAHIR</span>
+                                            <h2 class="text-2xl md:text-3xl font-black mt-3">Tahapan Belajar Sesuai Usia & Kemampuan</h2>
+                                            <p class="text-emerald-100 text-xs md:text-sm mt-1 font-medium">Setiap peserta didik mendapatkan pendekatan personal yang sabar, interaktif, dan tidak menghakimi.</p>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                                            <div class="bg-white text-slate-800 rounded-3xl p-6 shadow-lg border-t-8 border-emerald-500">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <span class="bg-emerald-100 text-emerald-800 font-black text-xs px-3 py-1 rounded-full">🌱 Tingkat Pemula (Asasi)</span>
+                                                    <span class="text-xl">📘</span>
+                                                </div>
+                                                <h4 class="font-black text-lg text-slate-900 mb-2">Pengenalan Huruf & Iqra'</h4>
+                                                <p class="text-xs text-slate-600 leading-relaxed font-medium">Khusus untuk anak usia dini atau pemula yang baru mulai mengenal huruf hijaiyah, tanda baca fathah/kasrah/dhammah, serta hafalan doa pendek harian.</p>
+                                            </div>
+
+                                            <div class="bg-white text-slate-800 rounded-3xl p-6 shadow-lg border-t-8 border-amber-500">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <span class="bg-amber-100 text-amber-900 font-black text-xs px-3 py-1 rounded-full">🌿 Tingkat Menengah (Tilawah)</span>
+                                                    <span class="text-xl">📖</span>
+                                                </div>
+                                                <h4 class="font-black text-lg text-slate-900 mb-2">Kelancaran Mushaf & Tajwid</h4>
+                                                <p class="text-xs text-slate-600 leading-relaxed font-medium">Transisi dari Iqra' ke Al-Qur'an, melancarkan bacaan panjang-pendek (Mad), dengung (Ghunnah), praktik shalat lengkap, serta hafalan surat pendek Juz 30.</p>
+                                            </div>
+
+                                            <div class="bg-white text-slate-800 rounded-3xl p-6 shadow-lg border-t-8 border-teal-600">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <span class="bg-teal-100 text-teal-900 font-black text-xs px-3 py-1 rounded-full">🌳 Tingkat Mahir (Tahfidz)</span>
+                                                    <span class="text-xl">👑</span>
+                                                </div>
+                                                <h4 class="font-black text-lg text-slate-900 mb-2">Tahsin Lanjutan & Tahfidz</h4>
+                                                <p class="text-xs text-slate-600 leading-relaxed font-medium">Pemantapan makharijul huruf & sifatul huruf secara detail, irama bacaan murattal, target hafalan Juz 30 / Juz pilihan, serta pemahaman kandungan ayat.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- KENAPA MEMILIH PRIVAT MENGAJI (EMERALD & GOLD ORNAMENTAL CARDS) -->
+                                    ${mengajiFeats ? `
+                                    <div class="mb-24 reveal">
+                                        <div class="text-center max-w-3xl mx-auto mb-12">
+                                            <span class="bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm">🌟 KEUNGGULAN PROGRAM</span>
+                                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3 leading-tight">Kenapa Memilih <span class="text-emerald-700">Privat Mengaji by All Education?</span></h2>
+                                            <p class="text-slate-600 text-xs md:text-sm mt-2 font-medium">Pendampingan mengaji privat terbaik untuk ketenangan hati Ayah & Bunda dalam membekali ilmu agama buah hati.</p>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-5xl mx-auto items-stretch">
+                                            ${mengajiFeats}
+                                        </div>
+                                    </div>` : ''}
+
+                                    <!-- FASILITAS YANG DIDAPATKAN (MIHRAB ARCH LUXURY CARDS) -->
+                                    ${mengajiFasil ? `
+                                    <div class="mb-24 reveal">
+                                        <div class="text-center max-w-3xl mx-auto mb-12">
+                                            <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-sm">🕌 FASILITAS LENGKAP & NYAMAN</span>
+                                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3 leading-tight">Fasilitas yang Didapatkan Peserta</h2>
+                                            <p class="text-slate-600 text-xs md:text-sm mt-2 font-medium">Tersedia pilihan kelas Privat (1-on-1) maupun Semi-Privat, baik secara Online maupun Guru Mengaji Datang ke Rumah (Home Visit).</p>
+                                        </div>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto items-stretch">
+                                            ${mengajiFasil}
+                                        </div>
+                                    </div>` : ''}
+
+                                    ${gals ? `<div class="mb-24 reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Dokumentasi Belajar Mengaji 📸</h2><div class="flex gap-4 overflow-x-auto hide-scroll snap-x pb-8 px-4 -mx-4">${gals}</div></div>` : ''}
+
+                                    <!-- BANNER CTA PENUTUP ISLAMI -->
+                                    <div class="mb-24 bg-gradient-to-r from-[#022C22] via-[#065F46] to-[#047857] rounded-[2.5rem] p-8 md:p-14 text-white text-center shadow-2xl relative overflow-hidden reveal border-2 border-amber-400/50">
+                                        <div class="relative z-10 max-w-3xl mx-auto">
+                                            <span class="bg-amber-400 text-emerald-950 text-[10px] md:text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block shadow">🌙 INVESTASI TERBAIK DUNIA & AKHIRAT</span>
+                                            <h2 class="text-2xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">Mari Bimbing Buah Hati Mencintai Al-Qur'an Sejak Dini!</h2>
+                                            <p class="text-emerald-100 text-sm md:text-lg mb-8 leading-relaxed font-medium">Konsultasikan jadwal dan kebutuhan belajar mengaji putra-putri Anda bersama Tim Academic All Education sekarang juga.</p>
+                                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                                <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-600 text-emerald-950 font-black px-10 py-4 rounded-full text-base md:text-lg shadow-xl hover:scale-105 transition flex items-center justify-center gap-2">
+                                                    <span>🕌 Daftar Privat Mengaji Sekarang</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Rekomendasi Paket Belajar</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll pb-6 snap-x" id="prod-promo-container"></div></div>
+                                    <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Kesan Orang Tua & Santri</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll snap-x pb-8" id="prod-testi-container"></div></div>
+                                    <div class="max-w-3xl mx-auto reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-primary mb-10 text-center">Pertanyaan Umum</h2><div class="space-y-4" id="prod-faq-container"></div></div>
+                                </div>
+                            </div>`;
+                        }
+                        // =========================================================================
+                        // 6. TAMPILAN DEFAULT UNTUK PRODUK LAINNYA
                         // =========================================================================
                         else {
                             h = `
