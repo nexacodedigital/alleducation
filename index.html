@@ -752,9 +752,12 @@
                     }
                 }
                 
-                if (path.startsWith('/produk/')) {
-                    const slug = path.split('/')[2]; const p = (APP_DATA.Products||[]).find(x => uiHelper.slugify(x.title) === slug);
+               if (path.startsWith('/produk/')) {
+                    const slug = path.split('/')[2]; 
+                    const p = (APP_DATA.Products||[]).find(x => uiHelper.slugify(x.title) === slug);
                     if(p) {
+                        const isPrime = slug.includes('prime') || (p.title && p.title.toLowerCase().includes('prime'));
+
                         const feats = (p.keunggulan||'').split('\n').filter(x=>x.trim()).map(x=>`
                             <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-start gap-4 hover:shadow-md transition h-full">
                                 <div class="bg-cyan-50 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shrink-0 text-rg-primary mt-1"><svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
@@ -773,37 +776,336 @@
                             </div>`).join('');
                             
                         const bgImg = p.bgImg || 'https://placehold.co/1200x600/0C2B5A/0C2B5A';
-                        
-                        h = `
-                        <div class="relative pt-28 md:pt-40 pb-32 text-center px-4 overflow-hidden reveal bg-rg-blue-dark flex flex-col items-center justify-center min-h-[60vh] md:min-h-[70vh]">
-                            <div class="absolute inset-0 z-0">
-                                <img src="${bgImg}" class="w-full h-full object-cover opacity-30 mix-blend-overlay">
-                                <div class="absolute inset-0 bg-gradient-to-b from-rg-blue-dark/60 via-rg-blue-dark/80 to-rg-blue-dark"></div>
+
+                        // === TAMPILAN KHUSUS LANDING PAGE PRIME BY ALL EDUCATION ===
+                        if (isPrime) {
+                            h = `
+                            <!-- HERO SECTION PRIME -->
+                            <div class="relative pt-24 md:pt-36 pb-32 text-center px-4 overflow-hidden reveal bg-[#07162c] flex flex-col items-center justify-center min-h-[75vh]">
+                                <div class="absolute inset-0 z-0">
+                                    <img src="${bgImg}" class="w-full h-full object-cover opacity-15 mix-blend-overlay">
+                                    <div class="absolute inset-0 bg-gradient-to-b from-[#07162c]/80 via-[#0C2B5A]/90 to-[#07162c]"></div>
+                                    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+                                </div>
+                                
+                                <div class="relative z-10 max-w-4xl mx-auto reveal-up active flex flex-col items-center w-full">
+                                    ${p.img ? `<div class="bg-white p-3 rounded-3xl shadow-[0_0_40px_rgba(240,104,34,0.3)] mb-6 border-2 border-orange-400/30 inline-block hover:scale-105 transition-transform duration-300"><img src="${p.img}" class="h-16 md:h-24 w-auto object-contain rounded-2xl"></div>` : ''}
+                                    
+                                    <div class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-400/40 text-orange-300 text-[10px] md:text-xs font-black px-4 py-1.5 rounded-full mb-6 uppercase tracking-widest shadow-sm backdrop-blur-md">
+                                        <span>⚡ CBT IRT SYSTEM RESMI</span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-orange-400 animate-ping"></span>
+                                    </div>
+
+                                    <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-lg leading-tight">
+                                        Platform Belajar Online <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-orange-400">Masa Depan</span>
+                                    </h1>
+                                    
+                                    <p class="text-cyan-100/90 text-sm sm:text-base md:text-xl mb-6 max-w-3xl mx-auto leading-relaxed font-medium px-2">
+                                        Lolos PTN impian & kuasai ujian dengan sistem <b>CBT IRT paling akurat</b>, <b>Kelas Online Interaktif</b>, dan modul <b>Bank Soal terlengkap</b> se-Indonesia. Dirancang dengan konsep <i>Prepare, Practice, Perform</i>! 🎯
+                                    </p>
+
+                                    <!-- Highlighted Free Trial Banner Box -->
+                                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-4 md:p-6 mb-8 max-w-2xl w-full shadow-2xl">
+                                        <span class="bg-green-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-sm">🔥 PENAWARAN SPESIAL SISWA BARU</span>
+                                        <h3 class="text-white font-black text-lg md:text-2xl mb-1">Mau Coba Kelas Gratis & Try Out Gratis?</h3>
+                                        <p class="text-cyan-100 text-xs md:text-sm mb-5">Rasakan langsung simulasi CBT IRT asli, cek peluang lolos PTN, dan ikuti Live Class bersama tutor terbaik tanpa biaya!</p>
+                                        
+                                        <div class="flex flex-col sm:flex-row gap-3.5 justify-center items-center w-full">
+                                            <a href="https://prime.alleducenter.com/" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto bg-gradient-to-r from-accent-orange to-orange-500 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-4 rounded-2xl font-black text-sm md:text-base shadow-[0_10px_25px_rgba(240,104,34,0.4)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 ring-4 ring-orange-500/20">
+                                                <span>🚀 Klik di Sini Coba GRATIS Sekarang</span>
+                                            </a>
+                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'https://prime.alleducenter.com/'}', '_blank')" class="w-full sm:w-auto bg-white text-rg-blue-dark hover:bg-cyan-50 px-7 py-4 rounded-2xl font-black text-sm md:text-base shadow-lg hover:scale-105 transition-all duration-300">
+                                                Beli / Daftar Paket Penuh
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-wrap justify-center gap-4 md:gap-8 text-xs md:text-sm font-bold text-cyan-200/80">
+                                        <span class="flex items-center gap-1.5">✅ Analisis Skor IRT Tanpa Minus</span>
+                                        <span class="flex items-center gap-1.5">✅ Leaderboard Nasional Real-Time</span>
+                                        <span class="flex items-center gap-1.5">✅ Pembahasan Lengkap & Video</span>
+                                    </div>
+                                </div>
+
+                                <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
+                                    <svg class="relative block w-full h-[40px] md:h-[70px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,120.35,191.56,104.9,236.4,93.68,280.61,72.63,321.39,56.44Z" fill="#F4F7F9"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            <div class="relative z-10 max-w-4xl mx-auto reveal-up active flex flex-col items-center w-full">
-                                ${p.img ? `<div class="bg-white p-2 rounded-2xl shadow-xl mb-8 border border-gray-100 inline-block hover:scale-105 transition-transform duration-300"><img src="${p.img}" class="h-16 md:h-20 w-auto object-contain rounded-xl"></div>` : ''}
-                                <span class="bg-accent-orange text-white text-[10px] md:text-xs font-black px-5 py-2 rounded-full mb-6 inline-block uppercase tracking-widest shadow-[0_0_15px_rgba(240,104,34,0.5)]">Layanan Unggulan AE</span>
-                                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 md:mb-8 tracking-tight drop-shadow-lg leading-tight px-2">${p.title}</h1>
-                                <p class="text-cyan-50 text-sm sm:text-base md:text-lg lg:text-xl mb-10 md:mb-14 max-w-3xl mx-auto leading-relaxed font-medium drop-shadow-md px-4">${p.desc||''}</p>
-                                <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-white text-rg-blue-dark px-10 md:px-14 py-4 md:py-5 rounded-full font-black text-base md:text-lg shadow-[0_10px_25px_rgba(0,0,0,0.2)] hover:bg-cyan-50 hover:scale-105 transition-all duration-300 ring-4 ring-white/20 hover:ring-white/40">Beli / Daftar Program Ini</button>
+
+                            <div class="bg-bg-soft relative z-20 pt-10 pb-20">
+                                <div class="max-w-[1200px] mx-auto px-4 md:px-8">
+
+                                    <!-- 3 PILAR UTAMA PRIME -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 -mt-20 mb-20 relative z-30 reveal-up active">
+                                        <div class="bg-white rounded-3xl p-7 shadow-xl border border-gray-100 hover:-translate-y-2 transition duration-300">
+                                            <div class="w-14 h-14 rounded-2xl bg-orange-50 text-accent-orange flex items-center justify-center text-2xl mb-5 shadow-inner">📊</div>
+                                            <h3 class="text-xl font-black text-rg-blue-dark mb-2">Sistem Penilaian IRT</h3>
+                                            <p class="text-sm text-gray-600 leading-relaxed font-medium">Sistem penilaian Tryout kami menggunakan <i>Item Response Theory</i>, mensimulasikan sistem penilaian UTBK SNBT asli secara akurat tanpa nilai minus.</p>
+                                        </div>
+                                        <div class="bg-white rounded-3xl p-7 shadow-xl border border-gray-100 hover:-translate-y-2 transition duration-300">
+                                            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-5 shadow-inner">🎥</div>
+                                            <h3 class="text-xl font-black text-rg-blue-dark mb-2">Kelas Online Interaktif</h3>
+                                            <p class="text-sm text-gray-600 leading-relaxed font-medium">Belajar langsung bersama tutor terbaik secara live melalui Zoom. Rekaman juga tersedia untuk diulang kapan saja dan di mana saja.</p>
+                                        </div>
+                                        <div class="bg-white rounded-3xl p-7 shadow-xl border border-gray-100 hover:-translate-y-2 transition duration-300">
+                                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-5 shadow-inner">🎯</div>
+                                            <h3 class="text-xl font-black text-rg-blue-dark mb-2">Cek Peluang PTN</h3>
+                                            <p class="text-sm text-gray-600 leading-relaxed font-medium">Pantau rasio keketatan, daya tampung, dan probabilitas Anda lolos ke PTN Impian berdasarkan rekam jejak skor Tryout secara real-time.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- 4 FITUR UNGGULAN VISUAL (MOCKUP KARTU BIRU) -->
+                                    <div class="mb-24 reveal">
+                                        <div class="text-center max-w-3xl mx-auto mb-12">
+                                            <span class="bg-blue-100 text-blue-700 text-[10px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest">TEKNOLOGI EDUKASI TERDEPAN</span>
+                                            <h2 class="text-2xl md:text-4xl font-black text-rg-blue-dark mt-3 leading-tight">Susun strategi efektif hadapi UTBK-SNBT & TKA dengan fitur unggulan kami</h2>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                            <!-- Card 1 -->
+                                            <div class="bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] rounded-3xl p-6 text-white flex flex-col justify-between shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300 overflow-hidden">
+                                                <div class="text-center mb-6">
+                                                    <h3 class="font-black text-lg mb-2 leading-snug">Penilaian yang akurat dan mendetail</h3>
+                                                    <p class="text-xs text-blue-100 leading-relaxed">Bandingkan nilai dan peringkatmu dengan seluruh peserta tryout atau peminat prodi kamu.</p>
+                                                </div>
+                                                <div class="bg-white rounded-2xl p-4 text-left text-gray-800 shadow-inner mt-auto">
+                                                    <div class="flex items-center gap-2.5 mb-3">
+                                                        <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-black text-xs flex items-center justify-center">SM</div>
+                                                        <div>
+                                                            <p class="text-xs font-black text-gray-900">Ryan Saputra</p>
+                                                            <p class="text-[10px] text-gray-400 font-bold">Ranking 2 / 1.500</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 flex justify-between items-center">
+                                                        <span class="text-[11px] font-extrabold text-emerald-800">Skor IRT Anda</span>
+                                                        <span class="text-lg font-black text-emerald-600">750</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Card 2 -->
+                                            <div class="bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] rounded-3xl p-6 text-white flex flex-col justify-between shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300 overflow-hidden">
+                                                <div class="text-center mb-6">
+                                                    <h3 class="font-black text-lg mb-2 leading-snug">Analisis Materi Terlengkap</h3>
+                                                    <p class="text-xs text-blue-100 leading-relaxed">Lihat materi prioritas untuk dipelajari dan uji kemampuanmu di setiap materinya.</p>
+                                                </div>
+                                                <div class="bg-white rounded-2xl p-4 text-left text-gray-800 shadow-inner mt-auto space-y-2.5">
+                                                    <div class="bg-orange-50/70 p-2.5 rounded-xl border border-orange-100">
+                                                        <div class="flex justify-between text-[10px] font-black mb-1"><span class="text-gray-700">P. Kuantitatif</span><span class="text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded">Kurang</span></div>
+                                                        <div class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden"><div class="w-2/5 h-full bg-orange-500 rounded-full"></div></div>
+                                                    </div>
+                                                    <div class="bg-blue-50/70 p-2.5 rounded-xl border border-blue-100">
+                                                        <div class="flex justify-between text-[10px] font-black mb-1"><span class="text-gray-700">P. Umum</span><span class="text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">Sangat Baik</span></div>
+                                                        <div class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden"><div class="w-4/5 h-full bg-blue-600 rounded-full"></div></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Card 3 -->
+                                            <div class="bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] rounded-3xl p-6 text-white flex flex-col justify-between shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300 overflow-hidden">
+                                                <div class="text-center mb-6">
+                                                    <h3 class="font-black text-lg mb-2 leading-snug">Analisis Peluang Masuk Kampus</h3>
+                                                    <p class="text-xs text-blue-100 leading-relaxed">Ketahui prediksi peluang lolos untuk masuk ke universitas dan prodi impianmu.</p>
+                                                </div>
+                                                <div class="bg-white rounded-2xl p-4 text-left text-gray-800 shadow-inner mt-auto">
+                                                    <div class="flex items-center gap-2 border border-gray-100 p-2 rounded-xl mb-3 bg-gray-50">
+                                                        <span class="text-base">🏛️</span>
+                                                        <div>
+                                                            <p class="text-[11px] font-black text-gray-900 leading-none">Universitas Indonesia</p>
+                                                            <p class="text-[9px] text-gray-500 font-bold mt-0.5">Pendidikan Dokter</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex justify-between text-[10px] font-black mb-1">
+                                                        <span class="text-emerald-600">Peluang: 85% (Aman)</span>
+                                                        <span class="text-gray-500">Target: 740</span>
+                                                    </div>
+                                                    <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden"><div class="w-[85%] h-full bg-emerald-500 rounded-full"></div></div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Card 4 -->
+                                            <div class="bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] rounded-3xl p-6 text-white flex flex-col justify-between shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300 overflow-hidden">
+                                                <div class="text-center mb-6">
+                                                    <h3 class="font-black text-lg mb-2 leading-snug">Statistik Soal Akurat</h3>
+                                                    <p class="text-xs text-blue-100 leading-relaxed">Ketahui persentase siswa yang menjawab benar dan salah di setiap butir soal HOTS.</p>
+                                                </div>
+                                                <div class="bg-white rounded-2xl p-4 text-center text-gray-800 shadow-inner mt-auto">
+                                                    <p class="text-[10px] font-black text-gray-700 mb-2">Soal No. 15 (Kategori HOTS)</p>
+                                                    <div class="flex justify-center gap-2 mb-2.5">
+                                                        <span class="w-7 h-7 rounded-full bg-emerald-500 text-white font-black text-xs flex items-center justify-center shadow-sm">A</span>
+                                                        <span class="w-7 h-7 rounded-full bg-red-500 text-white font-black text-xs flex items-center justify-center shadow-sm">B</span>
+                                                        <span class="w-7 h-7 rounded-full bg-gray-200 text-gray-600 font-black text-xs flex items-center justify-center">C</span>
+                                                    </div>
+                                                    <div class="bg-blue-50 text-blue-700 text-[9px] font-black py-1.5 px-2 rounded-lg">
+                                                        65% Siswa terkecoh menjawab opsi B
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SIMULASI UJIAN, KATEGORI PROGRAM & KALKULATOR PTN -->
+                                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-24 items-stretch reveal">
+                                        <!-- Left: Simulasi Ujian & Kategori -->
+                                        <div class="lg:col-span-7 bg-white rounded-[2rem] p-6 md:p-10 shadow-md border border-gray-100 flex flex-col justify-between">
+                                            <div>
+                                                <div class="bg-gradient-to-r from-[#0A192F] via-[#1E3A8A] to-[#2563EB] rounded-3xl p-6 md:p-8 text-white mb-8 relative overflow-hidden shadow-lg">
+                                                    <span class="bg-white/10 border border-white/20 text-orange-300 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">⚡ CBT IRT SYSTEM RESMI</span>
+                                                    <h3 class="text-2xl md:text-3xl font-black mb-2 leading-tight">Simulasi Ujian & <span class="text-orange-400">Tryout Akbar</span></h3>
+                                                    <p class="text-xs md:text-sm text-blue-100 mb-5 max-w-md leading-relaxed">Uji kesiapan belajarmu dengan soal standar terbaru, sistem penilaian IRT akurat, dan analisis peluang lolos kampus impian secara real-time!</p>
+                                                    <div class="flex flex-wrap gap-2">
+                                                        <span class="bg-white/15 text-[10px] font-bold px-3 py-1 rounded-full">📊 Analisis Skor IRT</span>
+                                                        <span class="bg-white/15 text-[10px] font-bold px-3 py-1 rounded-full">🏆 Leaderboard Nasional</span>
+                                                        <span class="bg-white/15 text-[10px] font-bold px-3 py-1 rounded-full">📝 Pembahasan Lengkap</span>
+                                                    </div>
+                                                </div>
+
+                                                <h4 class="font-black text-lg text-rg-blue-dark mb-1">Kategori Tryout & Live Class Tersedia</h4>
+                                                <p class="text-xs text-gray-500 font-medium mb-4">Tersedia lengkap untuk seluruh jenjang pendidikan:</p>
+                                                
+                                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                                                    <div onclick="window.open('https://prime.alleducenter.com/', '_blank')" class="bg-orange-50/70 hover:bg-orange-100 border border-orange-200/60 rounded-2xl p-4 text-center cursor-pointer transition group">
+                                                        <div class="w-10 h-10 rounded-xl bg-white text-orange-500 flex items-center justify-center mx-auto mb-2 shadow-sm text-lg group-hover:scale-110 transition">📄</div>
+                                                        <p class="font-black text-xs text-rg-blue-dark">SNBT & Mandiri</p>
+                                                        <p class="text-[10px] text-orange-600 font-bold mt-0.5">UTBK PTN</p>
+                                                    </div>
+                                                    <div onclick="window.open('https://prime.alleducenter.com/', '_blank')" class="bg-blue-50/70 hover:bg-blue-100 border border-blue-200/60 rounded-2xl p-4 text-center cursor-pointer transition group">
+                                                        <div class="w-10 h-10 rounded-xl bg-white text-blue-600 flex items-center justify-center mx-auto mb-2 shadow-sm text-lg group-hover:scale-110 transition">🏛️</div>
+                                                        <p class="font-black text-xs text-rg-blue-dark">TKA SMA</p>
+                                                        <p class="text-[10px] text-blue-600 font-bold mt-0.5">Kelas 10 - 12</p>
+                                                    </div>
+                                                    <div onclick="window.open('https://prime.alleducenter.com/', '_blank')" class="bg-purple-50/70 hover:bg-purple-100 border border-purple-200/60 rounded-2xl p-4 text-center cursor-pointer transition group">
+                                                        <div class="w-10 h-10 rounded-xl bg-white text-purple-600 flex items-center justify-center mx-auto mb-2 shadow-sm text-lg group-hover:scale-110 transition">🎓</div>
+                                                        <p class="font-black text-xs text-rg-blue-dark">TKA SMP</p>
+                                                        <p class="text-[10px] text-purple-600 font-bold mt-0.5">Kelas 7 - 9</p>
+                                                    </div>
+                                                    <div onclick="window.open('https://prime.alleducenter.com/', '_blank')" class="bg-emerald-50/70 hover:bg-emerald-100 border border-emerald-200/60 rounded-2xl p-4 text-center cursor-pointer transition group">
+                                                        <div class="w-10 h-10 rounded-xl bg-white text-emerald-600 flex items-center justify-center mx-auto mb-2 shadow-sm text-lg group-hover:scale-110 transition">🏅</div>
+                                                        <p class="font-black text-xs text-rg-blue-dark">TKA SD</p>
+                                                        <p class="text-[10px] text-emerald-600 font-bold mt-0.5">Kelas 1 - 6</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="bg-cyan-50/80 border border-cyan-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                                <div class="text-center sm:text-left">
+                                                    <p class="font-black text-rg-blue-dark text-sm">Jadwal Live Class & Tryout Terintegrasi</p>
+                                                    <p class="text-xs text-gray-600">Dilengkapi fitur pengingat jadwal & arsip rekaman kelas penuh.</p>
+                                                </div>
+                                                <a href="https://prime.alleducenter.com/" target="_blank" rel="noopener noreferrer" class="bg-rg-primary hover:bg-rg-blue-dark text-white font-black text-xs px-5 py-3 rounded-xl transition shrink-0 shadow-sm">
+                                                    Buka Aplikasi PRIME &rarr;
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- Right: Kalkulator Keketatan PTN -->
+                                        <div class="lg:col-span-5 bg-white rounded-[2rem] p-6 md:p-8 shadow-md border border-gray-100 flex flex-col justify-between">
+                                            <div>
+                                                <span class="bg-orange-100 text-accent-orange text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">FITUR FAVORIT SISWA</span>
+                                                <h3 class="text-2xl font-black text-rg-blue-dark mt-2 mb-4">Kalkulator Keketatan PTN</h3>
+                                                
+                                                <div class="space-y-3 mb-5">
+                                                    <div>
+                                                        <label class="block text-[11px] font-extrabold text-gray-400 uppercase mb-1">Cari Universitas</label>
+                                                        <div class="w-full px-4 py-2.5 rounded-xl bg-blue-50/60 border border-blue-100 font-bold text-sm text-rg-blue-dark">Universitas Indonesia</div>
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-[11px] font-extrabold text-gray-400 uppercase mb-1">Cari Program Studi</label>
+                                                        <div class="w-full px-4 py-2.5 rounded-xl bg-blue-50/60 border border-blue-100 font-bold text-sm text-rg-blue-dark">Pendidikan Dokter</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="bg-[#07162c] text-white rounded-3xl p-6 text-center shadow-xl">
+                                                <p class="text-xs text-gray-300 font-bold mb-1">Rasio Keketatan Persaingan</p>
+                                                <p class="text-4xl font-black text-accent-orange mb-2">1 : 50</p>
+                                                <span class="bg-red-500/20 border border-red-500/40 text-red-300 text-[10px] font-black px-3 py-1 rounded-full inline-block mb-5">🔥 Keketatan Tinggi</span>
+                                                
+                                                <div class="grid grid-cols-2 gap-3 text-left mb-4">
+                                                    <div class="bg-white/5 border border-white/10 p-3 rounded-xl">
+                                                        <p class="text-[10px] text-gray-400 font-bold">Daya Tampung</p>
+                                                        <p class="text-lg font-black text-white">80</p>
+                                                    </div>
+                                                    <div class="bg-white/5 border border-white/10 p-3 rounded-xl">
+                                                        <p class="text-[10px] text-gray-400 font-bold">Peminat</p>
+                                                        <p class="text-lg font-black text-white">4.000</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-[11px] text-cyan-200 italic mb-5">
+                                                    🔥 Saingan berat bro! Waktunya gaspol, all-out, dan buktikan kamu pantes masuk sini!
+                                                </div>
+
+                                                <a href="https://prime.alleducenter.com/" target="_blank" rel="noopener noreferrer" class="block w-full py-3.5 bg-accent-orange hover:bg-orange-600 text-white font-black text-sm rounded-xl shadow-lg transition">
+                                                    Cek Kampus Impianmu Sekarang &rarr;
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- KEUNGGULAN & FASILITAS DARI DATABASE -->
+                                    ${feats ? `<div class="mb-20 reveal"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Kenapa Memilih PRIME by All Education?</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto items-start px-2">${feats}</div></div>` : ''}
+                                    ${fasil ? `<div class="mb-20 reveal"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Fasilitas Eksklusif yang Didapatkan</h2><div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 items-stretch max-w-6xl mx-auto px-2">${fasil}</div></div>` : ''}
+                                    ${gals ? `<div class="mb-24 reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Galeri Kegiatan</h2><div class="flex gap-4 overflow-x-auto hide-scroll snap-x pb-8 px-4 -mx-4">${gals}</div></div>` : ''}
+
+                                    <!-- BANNER CTA BAWAH (CLOSING) -->
+                                    <div class="mb-24 bg-gradient-to-r from-rg-blue-dark via-[#113a75] to-rg-primary rounded-[2.5rem] p-8 md:p-14 text-white text-center shadow-2xl relative overflow-hidden reveal">
+                                        <div class="relative z-10 max-w-3xl mx-auto">
+                                            <span class="bg-white/20 text-cyan-200 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4 inline-block">SIAP JADI MAHASISWA PTN IMPIAN?</span>
+                                            <h2 class="text-3xl md:text-5xl font-black mb-4 leading-tight">Jangan Tunggu Sampai Ujian Semakin Dekat!</h2>
+                                            <p class="text-cyan-100 text-sm md:text-lg mb-8 leading-relaxed">Gabung sekarang di platform <b>PRIME by All Education</b>. Klaim akses <b>Kelas Gratis & Tryout CBT IRT Gratis</b> hari ini juga!</p>
+                                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                                <a href="https://prime.alleducenter.com/" target="_blank" rel="noopener noreferrer" class="bg-accent-orange hover:bg-orange-600 text-white font-black px-10 py-4 rounded-full text-base md:text-lg shadow-xl hover:scale-105 transition flex items-center justify-center gap-2">
+                                                    <span>🎁 Coba Kelas & Tryout GRATIS</span>
+                                                </a>
+                                                <button onclick="window.open('${p.extLink||CONFIG.payUrl||'https://prime.alleducenter.com/'}', '_blank')" class="bg-white text-rg-blue-dark hover:bg-gray-100 font-black px-10 py-4 rounded-full text-base md:text-lg shadow-xl hover:scale-105 transition">
+                                                    Daftar Member Premium
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Rekomendasi Paket Belajar</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll pb-6 snap-x" id="prod-promo-container"></div></div>
+                                    <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Kata Mereka yang Sudah Lolos</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll snap-x pb-8" id="prod-testi-container"></div></div>
+                                    <div class="max-w-3xl mx-auto reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-primary mb-10 text-center">Pertanyaan Umum</h2><div class="space-y-4" id="prod-faq-container"></div></div>
+                                </div>
+                            </div>`;
+                        } else {
+                            // === TAMPILAN DEFAULT UNTUK PRODUK LAINNYA ===
+                            h = `
+                            <div class="relative pt-28 md:pt-40 pb-32 text-center px-4 overflow-hidden reveal bg-rg-blue-dark flex flex-col items-center justify-center min-h-[60vh] md:min-h-[70vh]">
+                                <div class="absolute inset-0 z-0">
+                                    <img src="${bgImg}" class="w-full h-full object-cover opacity-30 mix-blend-overlay">
+                                    <div class="absolute inset-0 bg-gradient-to-b from-rg-blue-dark/60 via-rg-blue-dark/80 to-rg-blue-dark"></div>
+                                </div>
+                                <div class="relative z-10 max-w-4xl mx-auto reveal-up active flex flex-col items-center w-full">
+                                    ${p.img ? `<div class="bg-white p-2 rounded-2xl shadow-xl mb-8 border border-gray-100 inline-block hover:scale-105 transition-transform duration-300"><img src="${p.img}" class="h-16 md:h-20 w-auto object-contain rounded-xl"></div>` : ''}
+                                    <span class="bg-accent-orange text-white text-[10px] md:text-xs font-black px-5 py-2 rounded-full mb-6 inline-block uppercase tracking-widest shadow-[0_0_15px_rgba(240,104,34,0.5)]">Layanan Unggulan AE</span>
+                                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 md:mb-8 tracking-tight drop-shadow-lg leading-tight px-2">${p.title}</h1>
+                                    <p class="text-cyan-50 text-sm sm:text-base md:text-lg lg:text-xl mb-10 md:mb-14 max-w-3xl mx-auto leading-relaxed font-medium drop-shadow-md px-4">${p.desc||''}</p>
+                                    <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-white text-rg-blue-dark px-10 md:px-14 py-4 md:py-5 rounded-full font-black text-base md:text-lg shadow-[0_10px_25px_rgba(0,0,0,0.2)] hover:bg-cyan-50 hover:scale-105 transition-all duration-300 ring-4 ring-white/20 hover:ring-white/40">Beli / Daftar Program Ini</button>
+                                </div>
+                                
+                                <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
+                                    <svg class="relative block w-full h-[50px] md:h-[80px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,120.35,191.56,104.9,236.4,93.68,280.61,72.63,321.39,56.44Z" fill="#F4F7F9"></path>
+                                    </svg>
+                                </div>
                             </div>
-                            
-                            <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none z-10">
-                                <svg class="relative block w-full h-[50px] md:h-[80px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,120.35,191.56,104.9,236.4,93.68,280.61,72.63,321.39,56.44Z" fill="#F4F7F9"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="bg-bg-soft relative z-20 pt-16 pb-20 reveal">
-                            <div class="max-w-[1200px] mx-auto px-4 md:px-8">
-                                ${feats ? `<div class="mb-20"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Kenapa Memilih Program Ini?</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto items-start px-2">${feats}</div></div>` : ''}
-                                ${fasil ? `<div class="mb-20"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Fasilitas yang Didapatkan</h2><div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 items-stretch max-w-6xl mx-auto px-2">${fasil}</div></div>` : ''}
-                                ${gals ? `<div class="mb-24 reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Galeri Kegiatan</h2><div class="flex gap-4 overflow-x-auto hide-scroll snap-x pb-8 px-4 -mx-4">${gals}</div></div>` : ''}
-                                <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Rekomendasi Paket</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll pb-6 snap-x" id="prod-promo-container"></div></div>
-                                <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Kata Mereka</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll snap-x pb-8" id="prod-testi-container"></div></div>
-                                <div class="max-w-3xl mx-auto reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-primary mb-10 text-center">Pertanyaan Umum</h2><div class="space-y-4" id="prod-faq-container"></div></div>
-                            </div>
-                        </div>`;
+                            <div class="bg-bg-soft relative z-20 pt-16 pb-20 reveal">
+                                <div class="max-w-[1200px] mx-auto px-4 md:px-8">
+                                    ${feats ? `<div class="mb-20"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Kenapa Memilih Program Ini?</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto items-start px-2">${feats}</div></div>` : ''}
+                                    ${fasil ? `<div class="mb-20"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Fasilitas yang Didapatkan</h2><div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 items-stretch max-w-6xl mx-auto px-2">${fasil}</div></div>` : ''}
+                                    ${gals ? `<div class="mb-24 reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark mb-10 text-center">Galeri Kegiatan</h2><div class="flex gap-4 overflow-x-auto hide-scroll snap-x pb-8 px-4 -mx-4">${gals}</div></div>` : ''}
+                                    <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Rekomendasi Paket</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll pb-6 snap-x" id="prod-promo-container"></div></div>
+                                    <div class="mb-24 reveal-up"><div class="flex justify-between items-end mb-8"><h2 class="text-2xl md:text-3xl font-black text-rg-blue-dark">Kata Mereka</h2></div><div class="flex gap-6 overflow-x-auto hide-scroll snap-x pb-8" id="prod-testi-container"></div></div>
+                                    <div class="max-w-3xl mx-auto reveal-up"><h2 class="text-2xl md:text-3xl font-black text-rg-primary mb-10 text-center">Pertanyaan Umum</h2><div class="space-y-4" id="prod-faq-container"></div></div>
+                                </div>
+                            </div>`;
+                        }
+
                         c.innerHTML = h; 
                         
                         setTimeout(() => {
