@@ -740,9 +740,9 @@
             }
         };
 
-        const router = {
-            init: () => { window.addEventListener('popstate', () => router.loadRoute(window.location.hash.replace('#', '') || '/')); router.loadRoute(window.location.hash.replace('#', '') || '/'); },
-            navigate: (path) => { window.history.pushState({}, '', `#${path}`); router.loadRoute(path); window.scrollTo(0,0); },
+       const router = {
+            init: () => { window.addEventListener('popstate', () => router.loadRoute(window.location.pathname || '/')); router.loadRoute(window.location.pathname || '/'); },
+            navigate: (path) => { window.history.pushState({}, '', path); router.loadRoute(path); window.scrollTo(0,0); },
             loadRoute: (path) => {
                 document.querySelectorAll('.view-section').forEach(el => { el.classList.remove('active'); el.classList.add('hidden'); });
                 if(path === '/' || path === '') { 
@@ -3026,7 +3026,7 @@
                                 uiHelper.hideLoader(50); 
                             } else if (isChanged) {
                                 uiHelper.applyDataToUI(); 
-                                const currentPath = window.location.hash.replace('#', '') || '/';
+                                const currentPath = window.location.pathname || '/';
                                 router.loadRoute(currentPath);
                             }
                         } else {
