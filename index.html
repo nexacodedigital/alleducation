@@ -463,7 +463,7 @@
                 <div>
                     <h4 class="font-black text-lg mb-6 text-white tracking-wide">Bantuan & Panduan</h4>
                     <ul class="space-y-4 text-sm font-medium text-gray-400">
-                        <li><a href="javascript:void(0)" onclick="router.navigate('/artikel')" class="hover:text-white transition">Tentang Kami</a></li>
+                       <li><a href="javascript:void(0)" onclick="router.navigate('/company')" class="hover:text-white transition">Tentang Kami (Company Profile)</a></li>
                         <li><a href="javascript:void(0)" onclick="router.navigate('/program')" class="hover:text-white transition">Program Belajar</a></li>
                        <li><a href="javascript:void(0)" onclick="router.navigate('/sk')" class="hover:text-white transition">Syarat & Ketentuan</a></li>
                        <li><a href="javascript:void(0)" onclick="router.navigate('/privasi')" class="hover:text-white transition">Kebijakan Privasi</a></li>
@@ -972,7 +972,7 @@
             renderDynamicPage: (path) => {
                 const c = document.getElementById('dynamic-page-content'); let h = '';
                 
-               const staticRoutes = ['/', '/admin', '/daftar', '/artikel', '/testimoni', '/event', '/program', '/sk', '/privasi'];
+             const staticRoutes = ['/', '/admin', '/daftar', '/artikel', '/testimoni', '/event', '/program', '/sk', '/privasi', '/company'];
 if (!isDataLoaded && (!staticRoutes.includes(path) || path.startsWith('/baca/'))) {
     c.innerHTML = `<div class="min-h-[60vh]"></div>`;
     return;
@@ -2651,6 +2651,592 @@ if (p) {
                             
                             uiHelper.renderFAQ(APP_DATA.FAQ||[], 'prod-faq-container', 'faq-prod');
                         }, 100); return;
+    // === MULAI KODE HALAMAN COMPANY PROFILE (alleducenter.com/company) ===
+                if (path === '/company') {
+                    // 1. Update SEO Metadata & Schema Organization sesuai dokumen Company Profile
+                    document.title = "About All Education Indonesia | Company Profile";
+                    const descMeta = document.querySelector('meta[name="description"]');
+                    if (descMeta) descMeta.setAttribute('content', 'Kenali All Education Indonesia, perusahaan pendidikan dan teknologi pendidikan yang menghadirkan berbagai solusi pembelajaran, layanan pendidikan, dan inovasi untuk mendukung masa depan.');
+
+                    const mainLogo = CONFIG.logoUrl || "https://iili.io/CMttawP.md.png";
+                    const karierLink = CONFIG.karierUrl || "https://alleducenter.com/";
+                    const waLink = CONFIG.waUrl || "https://wa.me/628123456789";
+
+                    // Helper pengambil logo produk otomatis dari CMS (jika ada di tabel Products)
+                    const getProdLogo = (key, fallbackEmoji) => {
+                        const found = (APP_DATA.Products || []).find(p => (p.title || '').toLowerCase().includes(key));
+                        if (found && found.img) {
+                            return `<img src="${found.img}" alt="${found.title}" class="w-12 h-12 object-contain">`;
+                        }
+                        return `<span class="text-2xl">${fallbackEmoji}</span>`;
+                    };
+
+                    // Data 6 Produk & Layanan Ekosistem (Bagian 08)
+                    const ecoProducts = [
+                        { cat: 'exam', catLabel: 'Academic & Exam Prep', title: 'PRIME by All Education', slug: '/prime', key: 'prime', emoji: '🎯', badge: 'TKA • UTBK-SNBT • MANDIRI', desc: 'Program persiapan akademik untuk membantu peserta didik menghadapi TKA, UTBK-SNBT, dan Ujian Mandiri melalui pembelajaran terstruktur, kelas intensif, latihan soal, serta try out.' },
+                        { cat: 'private', catLabel: 'Private Learning', title: 'All Education Privat', slug: '/privat', key: 'privat', emoji: '👨‍🏫', badge: 'ONLINE & OFFLINE 1-ON-1', desc: 'Layanan bimbingan belajar privat secara online dan offline dengan pendekatan pembelajaran yang menyesuaikan kebutuhan serta perkembangan peserta didik.' },
+                        { cat: 'kids', catLabel: 'Kids Education', title: 'OwlKids by All Education', slug: '/owlkids', key: 'owlkids', emoji: '🦉', badge: 'CALISTUNG ANAK', desc: 'Program pendidikan anak yang berfokus pada pengembangan kemampuan dasar, termasuk membaca, menulis, dan berhitung (Calistung).' },
+                        { cat: 'kids', catLabel: 'Kids Education', title: 'English for Kids by All Education', slug: '/englishforkids', key: 'english', emoji: '🇬🇧', badge: 'BILINGUAL KIDS', desc: 'Program pembelajaran bahasa Inggris untuk anak dengan pendekatan yang dirancang agar proses belajar lebih menyenangkan dan sesuai tahap perkembangan.' },
+                        { cat: 'religious', catLabel: 'Religious Education', title: 'Mengaji by All Education', slug: '/mengaji', key: 'mengaji', emoji: '🕌', badge: 'AL-QUR’AN & KEISLAMAN', desc: 'Layanan pembelajaran Al-Qur\'an dan pendidikan keislaman dengan pendampingan yang disesuaikan dengan kebutuhan peserta didik.' },
+                        { cat: 'community', catLabel: 'Learning Community', title: 'All Edu Study Club', slug: '/program', key: 'study', emoji: '🤝', badge: 'KOMUNITAS & KELAS GRATIS', desc: 'Komunitas belajar yang menyediakan ruang bagi peserta didik untuk berdiskusi, mengikuti kelas gratis, berlatih soal, dan mengembangkan persiapan akademik.' }
+                    ];
+
+                    const renderEcoCards = () => ecoProducts.map(item => `
+                        <div data-ecocat="${item.cat}" onclick="router.navigate('${item.slug}')" class="eco-prod-card bg-white rounded-3xl p-7 border border-slate-200/80 shadow-sm hover:shadow-2xl hover:border-[#0CB4B6] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col justify-between group relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-28 h-28 bg-gradient-to-bl from-cyan-50 to-transparent rounded-bl-full pointer-events-none"></div>
+                            <div>
+                                <div class="flex items-center justify-between gap-3 mb-5 relative z-10">
+                                    <div class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 shadow-inner flex items-center justify-center p-2 group-hover:scale-110 transition-transform duration-300">
+                                        ${getProdLogo(item.key, item.emoji)}
+                                    </div>
+                                    <span class="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200/70">${item.badge}</span>
+                                </div>
+                                <p class="text-[11px] font-extrabold uppercase tracking-wider text-[#0CB4B6] mb-1">${item.catLabel}</p>
+                                <h3 class="text-xl font-black text-[#0C2B5A] mb-2.5 group-hover:text-[#0CB4B6] transition">${item.title}</h3>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium mb-6">${item.desc}</p>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-black text-[#0C2B5A] group-hover:text-[#0CB4B6] transition">
+                                <span>Jelajahi Layanan</span>
+                                <span class="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-[#0CB4B6] group-hover:text-white flex items-center justify-center transition">&rarr;</span>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Fungsi filter interaktif untuk tab produk di halaman Company
+                    window.filterCompanyEco = (cat, btnEl) => {
+                        document.querySelectorAll('.comp-eco-tab').forEach(b => {
+                            b.className = "comp-eco-tab px-4 py-2 rounded-full text-xs font-black transition whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:border-[#0CB4B6]";
+                        });
+                        if (btnEl) btnEl.className = "comp-eco-tab px-4 py-2 rounded-full text-xs font-black transition whitespace-nowrap bg-[#0C2B5A] text-amber-300 shadow-md border border-[#0C2B5A]";
+                        document.querySelectorAll('.eco-prod-card').forEach(card => {
+                            if (cat === 'all' || card.getAttribute('data-ecocat') === cat) {
+                                card.style.display = 'flex';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    };
+
+                    h = `
+                    <!-- 00. HERO & BRAND INTRODUCTION -->
+                    <section id="comp-hero" class="relative bg-gradient-to-br from-[#06152d] via-[#0C2B5A] to-[#09425a] text-white pt-16 md:pt-24 pb-24 md:pb-32 px-4 overflow-hidden">
+                        <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#0CB4B6]/20 rounded-full blur-[120px] pointer-events-none"></div>
+                        <div class="absolute bottom-0 left-1/4 w-80 h-80 bg-amber-400/15 rounded-full blur-[110px] pointer-events-none"></div>
+
+                        <div class="max-w-[1200px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                            <div class="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start reveal-left active">
+                                <div class="inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-md border border-amber-300/40 px-4 py-1.5 rounded-full mb-6 shadow-sm">
+                                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                    <span class="text-[10px] md:text-xs font-black tracking-widest uppercase text-amber-300">OFFICIAL COMPANY PROFILE • PT ALL EDUCATION INDONESIA</span>
+                                </div>
+
+                                <h1 class="text-3xl sm:text-5xl lg:text-[52px] font-black leading-[1.12] tracking-tight mb-4">
+                                    Empowering Education,<br/>
+                                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-300 to-cyan-300">Building the Future.</span>
+                                </h1>
+                                <p class="text-base sm:text-lg md:text-xl font-bold text-cyan-200 mb-5">
+                                    Membangun Ekosistem Pendidikan, Membuka Peluang Masa Depan.
+                                </p>
+                                <p class="text-xs sm:text-sm md:text-base text-slate-200 leading-relaxed mb-4 max-w-2xl font-medium">
+                                    All Education Indonesia adalah perusahaan yang bergerak di bidang pendidikan dan teknologi pendidikan (EdTech), dengan fokus menghadirkan layanan pembelajaran yang inovatif, adaptif, dan mudah diakses.
+                                </p>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-8 max-w-2xl">
+                                    Kami percaya bahwa setiap individu memiliki potensi untuk berkembang. Melalui pendekatan pembelajaran yang tepat, tenaga pendidik berkualitas, serta pemanfaatan teknologi, kami berkomitmen untuk membantu setiap peserta didik mencapai potensi terbaiknya. Kami tidak hanya menghadirkan layanan pendidikan, tetapi juga membangun ekosistem yang menghubungkan peserta didik, orang tua, tenaga pendidik, dan berbagai peluang pengembangan diri.
+                                </p>
+
+                                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                                    <button onclick="document.getElementById('comp-ecosystem').scrollIntoView({behavior:'smooth'})" class="px-8 py-4 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-sm md:text-base rounded-2xl shadow-[0_10px_30px_rgba(245,158,11,0.35)] hover:scale-105 transition flex items-center justify-center gap-2">
+                                        <span>Explore Our Ecosystem</span>
+                                        <span>&darr;</span>
+                                    </button>
+                                    <button onclick="document.getElementById('comp-products').scrollIntoView({behavior:'smooth'})" class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/25 font-bold text-sm md:text-base rounded-2xl backdrop-blur-md transition flex items-center justify-center gap-2">
+                                        <span>Discover Our Programs</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Kartu Identitas Visual & Showcase Logo Brand -->
+                            <div class="lg:col-span-5 reveal-right active">
+                                <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2.5rem] p-6 md:p-8 shadow-2xl relative">
+                                    <div class="bg-white rounded-3xl p-6 text-center shadow-lg border-2 border-amber-300/60 mb-6">
+                                        <img src="${mainLogo}" alt="All Education Logo" class="h-20 md:h-24 w-auto object-contain mx-auto mb-3 drop-shadow-sm">
+                                        <h3 class="font-black text-[#0C2B5A] text-lg">PT All Education Indonesia</h3>
+                                        <p class="text-[11px] font-bold text-[#0CB4B6] uppercase tracking-widest mt-0.5">EdTech & Learning Ecosystem</p>
+                                    </div>
+                                    <p class="text-[11px] font-black uppercase tracking-widest text-amber-300 text-center mb-3">Unit Layanan dalam Ekosistem Kami</p>
+                                    <div class="grid grid-cols-3 gap-2.5 text-center">
+                                        <div onclick="router.navigate('/prime')" class="bg-slate-900/60 hover:bg-slate-900 border border-white/15 rounded-2xl p-3 cursor-pointer transition group">
+                                            <div class="w-10 h-10 mx-auto mb-1.5 bg-white rounded-xl p-1 flex items-center justify-center">${getProdLogo('prime', '🎯')}</div>
+                                            <p class="text-[10px] font-bold text-white group-hover:text-amber-300">PRIME</p>
+                                        </div>
+                                        <div onclick="router.navigate('/privat')" class="bg-slate-900/60 hover:bg-slate-900 border border-white/15 rounded-2xl p-3 cursor-pointer transition group">
+                                            <div class="w-10 h-10 mx-auto mb-1.5 bg-white rounded-xl p-1 flex items-center justify-center">${getProdLogo('privat', '👨‍🏫')}</div>
+                                            <p class="text-[10px] font-bold text-white group-hover:text-amber-300">AE Privat</p>
+                                        </div>
+                                        <div onclick="router.navigate('/owlkids')" class="bg-slate-900/60 hover:bg-slate-900 border border-white/15 rounded-2xl p-3 cursor-pointer transition group">
+                                            <div class="w-10 h-10 mx-auto mb-1.5 bg-white rounded-xl p-1 flex items-center justify-center">${getProdLogo('owlkids', '🦉')}</div>
+                                            <p class="text-[10px] font-bold text-white group-hover:text-amber-300">OwlKids</p>
+                                        </div>
+                                        <div onclick="router.navigate('/englishforkids')" class="bg-slate-900/60 hover:bg-slate-900 border border-white/15 rounded-2xl p-3 cursor-pointer transition group">
+                                            <div class="w-10 h-10 mx-auto mb-1.5 bg-white rounded-xl p-1 flex items-center justify-center">${getProdLogo('english', '🇬🇧')}</div>
+                                            <p class="text-[10px] font-bold text-white group-hover:text-amber-300">English Kids</p>
+                                        </div>
+                                        <div onclick="router.navigate('/mengaji')" class="bg-slate-900/60 hover:bg-slate-900 border border-white/15 rounded-2xl p-3 cursor-pointer transition group">
+                                            <div class="w-10 h-10 mx-auto mb-1.5 bg-white rounded-xl p-1 flex items-center justify-center">${getProdLogo('mengaji', '🕌')}</div>
+                                            <p class="text-[10px] font-bold text-white group-hover:text-amber-300">Mengaji</p>
+                                        </div>
+                                        <div onclick="router.navigate('/program')" class="bg-slate-900/60 hover:bg-slate-900 border border-white/15 rounded-2xl p-3 cursor-pointer transition group">
+                                            <div class="w-10 h-10 mx-auto mb-1.5 bg-white rounded-xl p-1 flex items-center justify-center"><span class="text-xl">🤝</span></div>
+                                            <p class="text-[10px] font-bold text-white group-hover:text-amber-300">Study Club</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- STICKY TABLE OF CONTENTS (NAVIGASI ANTARBAGIAN INTERAKTIF) -->
+                    <div class="sticky top-[70px] md:top-[90px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+                        <div class="max-w-[1200px] mx-auto px-4 py-3 flex items-center gap-2 overflow-x-auto hide-scroll text-xs font-extrabold text-slate-600">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-md shrink-0">Navigasi Cepat:</span>
+                            <button onclick="document.getElementById('comp-about').scrollIntoView({behavior:'smooth'})" class="px-3.5 py-1.5 rounded-full hover:bg-cyan-50 hover:text-[#0CB4B6] transition shrink-0">01. About & Story</button>
+                            <button onclick="document.getElementById('comp-vision').scrollIntoView({behavior:'smooth'})" class="px-3.5 py-1.5 rounded-full hover:bg-cyan-50 hover:text-[#0CB4B6] transition shrink-0">03. Vision & Mission</button>
+                            <button onclick="document.getElementById('comp-values').scrollIntoView({behavior:'smooth'})" class="px-3.5 py-1.5 rounded-full hover:bg-cyan-50 hover:text-[#0CB4B6] transition shrink-0">05. Core Values</button>
+                            <button onclick="document.getElementById('comp-culture').scrollIntoView({behavior:'smooth'})" class="px-3.5 py-1.5 rounded-full hover:bg-cyan-50 hover:text-[#0CB4B6] transition shrink-0">06. Work Culture</button>
+                            <button onclick="document.getElementById('comp-ecosystem').scrollIntoView({behavior:'smooth'})" class="px-3.5 py-1.5 rounded-full hover:bg-cyan-50 hover:text-[#0CB4B6] transition shrink-0">07. Ecosystem</button>
+                            <button onclick="document.getElementById('comp-products').scrollIntoView({behavior:'smooth'})" class="px-3.5 py-1.5 rounded-full hover:bg-cyan-50 hover:text-[#0CB4B6] transition shrink-0">08. Products</button>
+                            <button onclick="document.getElementById('comp-tech').scrollIntoView({behavior:'smooth'})" class="px-3.5 py-1.5 rounded-full hover:bg-cyan-50 hover:text-[#0CB4B6] transition shrink-0">09. Tech & Approach</button>
+                            <button onclick="document.getElementById('comp-career').scrollIntoView({behavior:'smooth'})" class="px-3.5 py-1.5 rounded-full hover:bg-cyan-50 hover:text-[#0CB4B6] transition shrink-0">13. Career & Partner</button>
+                            <button onclick="document.getElementById('comp-contact').scrollIntoView({behavior:'smooth'})" class="px-3.5 py-1.5 rounded-full hover:bg-cyan-50 hover:text-[#0CB4B6] transition shrink-0">16. Contact</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#F8FAFC] py-16 md:py-24 space-y-24">
+
+                        <!-- 01. ABOUT ALL EDUCATION & 02. OUR STORY -->
+                        <section id="comp-about" class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                                <!-- 01. About -->
+                                <div class="lg:col-span-6 bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-slate-200/80 flex flex-col justify-between">
+                                    <div>
+                                        <span class="text-[11px] font-black uppercase tracking-widest text-[#0CB4B6] bg-cyan-50 border border-cyan-100 px-3.5 py-1 rounded-full">01 • ABOUT ALL EDUCATION</span>
+                                        <h2 class="text-2xl md:text-3xl font-black text-[#0C2B5A] mt-4 mb-4">Mengenal All Education Indonesia</h2>
+                                        <p class="text-sm md:text-base text-slate-600 leading-relaxed mb-4 font-medium">
+                                            <b>PT All Education Indonesia</b> merupakan perusahaan yang berfokus pada pengembangan layanan pendidikan melalui integrasi pembelajaran, teknologi, dan sumber daya manusia.
+                                        </p>
+                                        <p class="text-sm md:text-base text-slate-600 leading-relaxed mb-4">
+                                            Kami menghadirkan berbagai solusi pendidikan untuk mendukung kebutuhan belajar dari berbagai jenjang dan usia, mulai dari pendidikan anak, pendampingan akademik, persiapan ujian, hingga pengembangan kemampuan peserta didik.
+                                        </p>
+                                        <p class="text-sm md:text-base text-slate-600 leading-relaxed mb-6">
+                                            Dengan semangat untuk terus berinovasi, All Education mengembangkan ekosistem pendidikan yang mengutamakan kualitas pembelajaran, aksesibilitas, pengalaman pengguna, dan keberlanjutan.
+                                        </p>
+                                    </div>
+                                    <div class="bg-gradient-to-r from-[#0C2B5A] to-[#113a75] text-white p-6 rounded-3xl border-l-4 border-amber-400 shadow-md">
+                                        <p class="text-[10px] font-black uppercase tracking-widest text-amber-300 mb-1">✦ OUR PURPOSE</p>
+                                        <p class="text-sm md:text-base font-bold leading-relaxed">
+                                            "Menjadikan pendidikan sebagai ruang bagi setiap individu untuk tumbuh, berkembang, dan mempersiapkan masa depan yang lebih baik."
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- 02. Our Story -->
+                                <div class="lg:col-span-6 bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-slate-200/80 flex flex-col justify-between relative overflow-hidden">
+                                    <div>
+                                        <span class="text-[11px] font-black uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-200 px-3.5 py-1 rounded-full">02 • OUR STORY</span>
+                                        <h2 class="text-2xl md:text-3xl font-black text-[#0C2B5A] mt-4 mb-4">Perjalanan yang Dibangun dari Pendidikan</h2>
+                                        <div class="space-y-4 text-sm md:text-base text-slate-600 leading-relaxed">
+                                            <p>All Education lahir dari semangat untuk menghadirkan pengalaman belajar yang lebih baik dan relevan dengan kebutuhan masyarakat.</p>
+                                            <p>Kami memahami bahwa kebutuhan pendidikan terus berkembang. Setiap peserta didik memiliki karakteristik, kemampuan, dan tujuan belajar yang berbeda.</p>
+                                            <p>Karena itu, kami terus mengembangkan layanan pendidikan yang tidak hanya berorientasi pada hasil akademik, tetapi juga memperhatikan proses, pengalaman, dan perkembangan setiap individu.</p>
+                                            <p>Seiring perkembangan teknologi, All Education memperluas pendekatan layanan melalui integrasi platform digital, sistem pembelajaran, dan pengelolaan operasional pendidikan.</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 pt-5 border-t border-slate-100 flex items-center gap-3 text-xs font-extrabold text-[#0C2B5A]">
+                                        <span class="w-8 h-8 rounded-xl bg-cyan-50 text-[#0CB4B6] flex items-center justify-center text-base">🚀</span>
+                                        <span>Hari ini, All Education terus bertumbuh menghubungkan pembelajaran berkualitas dengan teknologi dan inovasi.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 03. OUR VISION & 04. OUR MISSION -->
+                        <section id="comp-vision" class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="bg-gradient-to-br from-[#07162c] via-[#0C2B5A] to-[#0d3b66] rounded-[2.5rem] p-8 md:p-14 text-white shadow-2xl relative overflow-hidden">
+                                <div class="absolute -right-20 -top-20 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl pointer-events-none"></div>
+                                
+                                <!-- 03. Visi -->
+                                <div class="max-w-3xl mx-auto text-center mb-14 pb-12 border-b border-white/15">
+                                    <span class="bg-amber-400/20 border border-amber-300/40 text-amber-300 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">03 • OUR VISION (VISI KAMI)</span>
+                                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black mt-4 leading-snug text-white">
+                                        "Menjadi perusahaan pendidikan dan teknologi pendidikan yang inovatif, terpercaya, dan berdampak luas dalam membangun ekosistem pembelajaran berkualitas untuk menciptakan generasi yang unggul dan berdaya saing."
+                                    </h2>
+                                </div>
+
+                                <!-- 04. Misi (5 Poin) -->
+                                <div>
+                                    <div class="text-center mb-8">
+                                        <span class="bg-cyan-400/20 border border-cyan-300/40 text-cyan-200 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">04 • OUR MISSION (MISI KAMI)</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                                        <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 hover:bg-white/15 transition">
+                                            <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 font-black flex items-center justify-center mb-3">01</div>
+                                            <h4 class="font-black text-base text-amber-300 mb-1.5">Menghadirkan Pendidikan Berkualitas</h4>
+                                            <p class="text-xs text-slate-200 leading-relaxed">Menyediakan layanan pembelajaran yang berkualitas, relevan, dan sesuai dengan kebutuhan setiap peserta didik.</p>
+                                        </div>
+                                        <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 hover:bg-white/15 transition">
+                                            <div class="w-10 h-10 rounded-xl bg-cyan-400 text-slate-950 font-black flex items-center justify-center mb-3">02</div>
+                                            <h4 class="font-black text-base text-cyan-200 mb-1.5">Mengembangkan Inovasi Pendidikan</h4>
+                                            <p class="text-xs text-slate-200 leading-relaxed">Mengintegrasikan teknologi dan inovasi untuk menciptakan pengalaman belajar yang efektif, adaptif, dan mudah diakses.</p>
+                                        </div>
+                                        <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 hover:bg-white/15 transition">
+                                            <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 font-black flex items-center justify-center mb-3">03</div>
+                                            <h4 class="font-black text-base text-amber-300 mb-1.5">Memberdayakan Tenaga Pendidik</h4>
+                                            <p class="text-xs text-slate-200 leading-relaxed">Membangun lingkungan yang mendukung pertumbuhan, profesionalisme, dan pengembangan kompetensi tenaga pendidik.</p>
+                                        </div>
+                                        <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 hover:bg-white/15 transition">
+                                            <div class="w-10 h-10 rounded-xl bg-cyan-400 text-slate-950 font-black flex items-center justify-center mb-3">04</div>
+                                            <h4 class="font-black text-base text-cyan-200 mb-1.5">Membangun Ekosistem Pendidikan</h4>
+                                            <p class="text-xs text-slate-200 leading-relaxed">Menghubungkan peserta didik, orang tua, tutor, dan mitra dalam ekosistem pendidikan yang saling mendukung.</p>
+                                        </div>
+                                        <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 hover:bg-white/15 transition">
+                                            <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 font-black flex items-center justify-center mb-3">05</div>
+                                            <h4 class="font-black text-base text-amber-300 mb-1.5">Menciptakan Dampak Berkelanjutan</h4>
+                                            <p class="text-xs text-slate-200 leading-relaxed">Mengembangkan layanan dan program pendidikan yang memberikan manfaat nyata bagi masyarakat.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 05. OUR CORE VALUES -->
+                        <section id="comp-values" class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="text-center max-w-3xl mx-auto mb-12">
+                                <span class="text-[11px] font-black uppercase tracking-widest text-[#0CB4B6] bg-cyan-50 border border-cyan-100 px-4 py-1.5 rounded-full">05 • OUR CORE VALUES</span>
+                                <h2 class="text-3xl md:text-4xl font-black text-[#0C2B5A] mt-3">Nilai yang Menjadi Fondasi Kami</h2>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                ${[
+                                    { no: '01', title: 'Integrity', icon: '🛡️', desc: 'Menjunjung tinggi kejujuran, tanggung jawab, transparansi, dan profesionalisme dalam setiap tindakan dan keputusan.' },
+                                    { no: '02', title: 'Growth Mindset', icon: '🌱', desc: 'Terus belajar, terbuka terhadap perubahan, dan menjadikan setiap tantangan sebagai kesempatan untuk berkembang.' },
+                                    { no: '03', title: 'Innovation', icon: '💡', desc: 'Mendorong kreativitas dan menghadirkan solusi baru untuk menjawab kebutuhan pendidikan yang terus berkembang.' },
+                                    { no: '04', title: 'Collaboration', icon: '🤝', desc: 'Membangun kerja sama, saling menghargai, dan menciptakan lingkungan yang mendukung pencapaian bersama.' },
+                                    { no: '05', title: 'Excellence', icon: '🏆', desc: 'Memberikan usaha terbaik dengan memperhatikan kualitas, ketelitian, dan hasil dalam setiap pekerjaan.' },
+                                    { no: '06', title: 'Impact', icon: '🌍', desc: 'Berorientasi pada manfaat dan dampak positif yang dapat dirasakan oleh peserta didik, masyarakat, serta lingkungan sekitar.' }
+                                ].map(v => `
+                                    <div class="bg-white rounded-3xl p-7 border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-amber-400 hover:-translate-y-1.5 transition-all duration-300 group">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <span class="text-xs font-black text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1 rounded-lg">${v.no} — CORE VALUE</span>
+                                            <span class="text-2xl group-hover:scale-125 transition-transform">${v.icon}</span>
+                                        </div>
+                                        <h3 class="text-xl font-black text-[#0C2B5A] mb-2">${v.title}</h3>
+                                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">${v.desc}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </section>
+
+                        <!-- 06. OUR WORK CULTURE -->
+                        <section id="comp-culture" class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="bg-white rounded-[2.5rem] p-8 md:p-12 border border-slate-200/80 shadow-sm">
+                                <div class="max-w-3xl mb-10">
+                                    <span class="text-[11px] font-black uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-200 px-4 py-1.5 rounded-full">06 • OUR WORK CULTURE</span>
+                                    <h2 class="text-3xl md:text-4xl font-black text-[#0C2B5A] mt-3 mb-3">Budaya Kerja All Education</h2>
+                                    <p class="text-sm md:text-base text-slate-600 leading-relaxed font-medium">
+                                        Kami percaya bahwa perusahaan yang bertumbuh dibangun oleh orang-orang yang terus berkembang. Di All Education, budaya kerja bukan hanya tentang menyelesaikan pekerjaan, tetapi juga tentang bagaimana setiap individu berkontribusi, berkolaborasi, dan menciptakan nilai.
+                                    </p>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    ${[
+                                        { t: 'Learn & Grow', d: 'Kami mendorong setiap anggota tim untuk terus meningkatkan kemampuan dan mengembangkan potensi diri.' },
+                                        { t: 'Ownership & Responsibility', d: 'Setiap individu memiliki tanggung jawab terhadap pekerjaan, keputusan, dan hasil yang menjadi bagiannya.' },
+                                        { t: 'Open Communication', d: 'Kami membangun komunikasi yang terbuka, saling menghargai, dan konstruktif.' },
+                                        { t: 'Teamwork & Collaboration', d: 'Kami percaya bahwa tujuan besar dapat dicapai melalui kerja sama dan kontribusi setiap individu.' },
+                                        { t: 'Adaptability', d: 'Kami terbuka terhadap perubahan, perkembangan teknologi, dan cara kerja yang lebih efektif.' },
+                                        { t: 'Result-Oriented', d: 'Kami menghargai proses sekaligus berorientasi pada hasil, kualitas, dan dampak pekerjaan.' },
+                                        { t: 'Continuous Improvement', d: 'Kami tidak berhenti pada apa yang sudah dicapai. Selalu ada ruang untuk memperbaiki dan mengembangkan sesuatu menjadi lebih baik.' }
+                                    ].map((c, i) => `
+                                        <div class="bg-slate-50 hover:bg-cyan-50/60 border border-slate-200/70 hover:border-[#0CB4B6] rounded-2xl p-5 transition">
+                                            <span class="text-[10px] font-black text-[#0CB4B6]">CULTURE #0${i+1}</span>
+                                            <h4 class="font-black text-[#0C2B5A] text-base mt-1 mb-1.5">${c.t}</h4>
+                                            <p class="text-xs text-slate-600 leading-relaxed">${c.d}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 07. OUR EDUCATION ECOSYSTEM -->
+                        <section id="comp-ecosystem" class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="text-center max-w-3xl mx-auto mb-10">
+                                <span class="text-[11px] font-black uppercase tracking-widest text-[#0CB4B6] bg-cyan-50 border border-cyan-100 px-4 py-1.5 rounded-full">07 • OUR EDUCATION ECOSYSTEM</span>
+                                <h2 class="text-3xl md:text-4xl font-black text-[#0C2B5A] mt-3 mb-3">Satu Ekosistem, Berbagai Kebutuhan Pendidikan</h2>
+                                <p class="text-sm md:text-base text-slate-600 font-medium">
+                                    All Education mengembangkan ekosistem pendidikan yang dirancang untuk menjawab kebutuhan belajar dari berbagai tahap perkembangan.
+                                </p>
+                            </div>
+                            <div class="flex flex-wrap justify-center gap-3 md:gap-4 max-w-4xl mx-auto mb-6">
+                                ${[
+                                    '👶 Early Learning & Kids Education',
+                                    '📚 Academic Tutoring',
+                                    '👨‍🏫 Private Learning',
+                                    '🕌 Religious Education',
+                                    '🎯 Examination Preparation',
+                                    '💻 Digital Learning & Assessment',
+                                    '🤝 Learning Community'
+                                ].map(e => `
+                                    <div class="bg-white border-2 border-slate-200 hover:border-[#0CB4B6] px-5 py-3.5 rounded-2xl shadow-sm font-black text-xs sm:text-sm text-[#0C2B5A] flex items-center gap-2 hover:-translate-y-1 transition">
+                                        <span>${e}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <p class="text-center text-xs sm:text-sm text-slate-500 font-semibold italic">
+                                Setiap layanan memiliki fokus dan karakteristik tersendiri, tetapi tetap berada dalam satu tujuan: menghadirkan pengalaman pendidikan yang lebih baik.
+                            </p>
+                        </section>
+
+                        <!-- 08. OUR PRODUCTS & SERVICES (INTERACTIVE FILTERABLE) -->
+                        <section id="comp-products" class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                                <div>
+                                    <span class="text-[11px] font-black uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-200 px-4 py-1.5 rounded-full">08 • OUR PRODUCTS & SERVICES</span>
+                                    <h2 class="text-3xl md:text-4xl font-black text-[#0C2B5A] mt-3">Solusi Pendidikan dalam Satu Ekosistem</h2>
+                                </div>
+                                <!-- Filter Tab Interaktif -->
+                                <div class="flex gap-2 overflow-x-auto hide-scroll pb-2">
+                                    <button onclick="filterCompanyEco('all', this)" class="comp-eco-tab px-4 py-2 rounded-full text-xs font-black transition whitespace-nowrap bg-[#0C2B5A] text-amber-300 shadow-md border border-[#0C2B5A]">Semua Layanan (6)</button>
+                                    <button onclick="filterCompanyEco('exam', this)" class="comp-eco-tab px-4 py-2 rounded-full text-xs font-black transition whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:border-[#0CB4B6]">A. Exam Prep</button>
+                                    <button onclick="filterCompanyEco('private', this)" class="comp-eco-tab px-4 py-2 rounded-full text-xs font-black transition whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:border-[#0CB4B6]">B. Private Learning</button>
+                                    <button onclick="filterCompanyEco('kids', this)" class="comp-eco-tab px-4 py-2 rounded-full text-xs font-black transition whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:border-[#0CB4B6]">C. Kids Education</button>
+                                    <button onclick="filterCompanyEco('religious', this)" class="comp-eco-tab px-4 py-2 rounded-full text-xs font-black transition whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:border-[#0CB4B6]">D. Religious</button>
+                                    <button onclick="filterCompanyEco('community', this)" class="comp-eco-tab px-4 py-2 rounded-full text-xs font-black transition whitespace-nowrap bg-white text-slate-600 border border-slate-200 hover:border-[#0CB4B6]">E. Community</button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                ${renderEcoCards()}
+                            </div>
+                        </section>
+
+                        <!-- 09. TECHNOLOGY & INNOVATION & 10. OUR LEARNING APPROACH -->
+                        <section id="comp-tech" class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                                <!-- 09. Technology -->
+                                <div class="lg:col-span-6 bg-gradient-to-br from-[#0C2B5A] to-[#081d3d] text-white rounded-[2.5rem] p-8 md:p-10 shadow-xl flex flex-col justify-between">
+                                    <div>
+                                        <span class="bg-cyan-400/20 border border-cyan-300/30 text-cyan-200 text-[10px] font-black px-3.5 py-1 rounded-full uppercase tracking-widest">09 • TECHNOLOGY & INNOVATION</span>
+                                        <h3 class="text-2xl md:text-3xl font-black mt-4 mb-3">Technology That Supports Better Learning</h3>
+                                        <p class="text-xs sm:text-sm text-slate-200 leading-relaxed mb-6">
+                                            Kami memandang teknologi sebagai salah satu elemen penting dalam pengembangan pendidikan modern. All Education memanfaatkan teknologi untuk mendukung proses pembelajaran, pengelolaan layanan, administrasi akademik, dan pengalaman pengguna.
+                                        </p>
+                                        <p class="text-xs font-black uppercase tracking-wider text-amber-300 mb-3">Pengembangan teknologi kami diarahkan untuk:</p>
+                                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-100 font-medium">
+                                            <li class="flex items-center gap-2.5"><span class="text-amber-400">✔</span> Mempermudah akses terhadap layanan pendidikan.</li>
+                                            <li class="flex items-center gap-2.5"><span class="text-amber-400">✔</span> Mendukung pengelolaan pembelajaran secara digital.</li>
+                                            <li class="flex items-center gap-2.5"><span class="text-amber-400">✔</span> Meningkatkan efektivitas operasional akademik.</li>
+                                            <li class="flex items-center gap-2.5"><span class="text-amber-400">✔</span> Menghadirkan pengalaman belajar yang lebih terstruktur.</li>
+                                            <li class="flex items-center gap-2.5"><span class="text-amber-400">✔</span> Mendukung evaluasi dan perkembangan peserta didik.</li>
+                                        </ul>
+                                    </div>
+                                    <p class="text-xs text-cyan-200 italic mt-6 pt-4 border-t border-white/10">
+                                        Kami terus mendorong pemanfaatan teknologi sebagai bagian dari transformasi pendidikan yang lebih adaptif dan berkelanjutan.
+                                    </p>
+                                </div>
+
+                                <!-- 10. Learning Approach -->
+                                <div class="lg:col-span-6 bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                                    <div>
+                                        <span class="text-[11px] font-black uppercase tracking-widest text-[#0CB4B6] bg-cyan-50 border border-cyan-100 px-3.5 py-1 rounded-full">10 • OUR LEARNING APPROACH</span>
+                                        <h3 class="text-2xl md:text-3xl font-black text-[#0C2B5A] mt-4 mb-3">Pembelajaran yang Berorientasi pada Perkembangan</h3>
+                                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
+                                            Kami percaya bahwa pembelajaran yang baik tidak hanya berfokus pada penyampaian materi, tetapi juga pada bagaimana peserta didik memahami, menerapkan, dan mengembangkan pengetahuannya.
+                                        </p>
+                                        <div class="space-y-3">
+                                            ${[
+                                                { t: 'Personalized Learning', d: 'Memperhatikan kebutuhan dan kemampuan setiap peserta didik.' },
+                                                { t: 'Structured Learning', d: 'Mengembangkan proses belajar dengan tujuan dan tahapan yang jelas.' },
+                                                { t: 'Qualified Educators', d: 'Menghadirkan tenaga pendidik yang memiliki kompetensi sesuai bidangnya.' },
+                                                { t: 'Progress Evaluation', d: 'Mendukung pemantauan perkembangan belajar secara berkala.' },
+                                                { t: 'Continuous Development', d: 'Mendorong peserta didik untuk terus meningkatkan kemampuan dan kepercayaan diri.' }
+                                            ].map((a, idx) => `
+                                                <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                                                    <span class="w-7 h-7 rounded-lg bg-[#0C2B5A] text-amber-300 font-black text-xs flex items-center justify-center shrink-0 mt-0.5">${idx+1}</span>
+                                                    <div>
+                                                        <h4 class="font-black text-[#0C2B5A] text-sm">${a.t}</h4>
+                                                        <p class="text-xs text-slate-600">${a.d}</p>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 11. WHO WE SERVE & 12. OUR PEOPLE -->
+                        <section class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="text-center max-w-3xl mx-auto mb-10">
+                                <span class="text-[11px] font-black uppercase tracking-widest text-[#0CB4B6] bg-cyan-50 border border-cyan-100 px-4 py-1.5 rounded-full">11 • WHO WE SERVE</span>
+                                <h2 class="text-3xl md:text-4xl font-black text-[#0C2B5A] mt-3">Pendidikan untuk Berbagai Tahap Kehidupan</h2>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-16">
+                                ${[
+                                    { icon: '🧒', t: 'Children', d: 'Mendukung perkembangan kemampuan dasar dan pembelajaran anak.' },
+                                    { icon: '🎒', t: 'School Students', d: 'Membantu peserta didik mengembangkan kemampuan akademik.' },
+                                    { icon: '📝', t: 'Exam Candidates', d: 'Mendampingi persiapan menghadapi ujian dan seleksi pendidikan.' },
+                                    { icon: '👨‍👩‍👧', t: 'Parents & Families', d: 'Memberikan alternatif layanan pendidikan dan pendampingan belajar.' },
+                                    { icon: '👩‍🏫', t: 'Educators & Tutors', d: 'Menyediakan ruang untuk berkontribusi dan berkembang dalam dunia pendidikan.' }
+                                ].map(w => `
+                                    <div class="bg-white rounded-3xl p-6 border border-slate-200/80 text-center shadow-sm hover:shadow-lg transition">
+                                        <div class="w-14 h-14 rounded-2xl bg-cyan-50 text-2xl flex items-center justify-center mx-auto mb-4">${w.icon}</div>
+                                        <h4 class="font-black text-[#0C2B5A] text-base mb-1.5">${w.t}</h4>
+                                        <p class="text-xs text-slate-600 leading-relaxed">${w.d}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <!-- 12. Our People -->
+                            <div class="bg-gradient-to-r from-cyan-50 via-white to-amber-50 rounded-[2.5rem] p-8 md:p-12 border border-slate-200/80 text-center max-w-4xl mx-auto">
+                                <span class="text-[11px] font-black uppercase tracking-widest text-[#0C2B5A] bg-white border border-slate-200 px-4 py-1.5 rounded-full">12 • OUR PEOPLE</span>
+                                <h3 class="text-2xl md:text-3xl font-black text-[#0C2B5A] mt-4 mb-3">People Behind the Progress</h3>
+                                <p class="text-sm md:text-base text-slate-600 leading-relaxed mb-3 font-medium">
+                                    Di balik setiap layanan dan inovasi All Education, terdapat individu-individu yang memiliki semangat untuk berkembang dan memberikan kontribusi terbaik.
+                                </p>
+                                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                    Kami percaya bahwa kualitas pendidikan juga dibangun melalui kualitas sumber daya manusia. Karena itu, kami terus mendorong kolaborasi antara tim manajemen, tenaga pendidik, tutor, dan seluruh anggota organisasi untuk menciptakan lingkungan kerja yang produktif, suportif, dan berorientasi pada perkembangan.
+                                </p>
+                            </div>
+                        </section>
+
+                        <!-- 13. CAREER & OPPORTUNITIES & 14. PARTNERSHIP & COLLABORATION -->
+                        <section id="comp-career" class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                                <!-- 13. Career -->
+                                <div class="lg:col-span-6 bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                                    <div>
+                                        <span class="text-[11px] font-black uppercase tracking-widest text-[#0CB4B6] bg-cyan-50 border border-cyan-100 px-3.5 py-1 rounded-full">13 • CAREER & OPPORTUNITIES</span>
+                                        <h3 class="text-2xl md:text-3xl font-black text-[#0C2B5A] mt-4 mb-3">Grow Your Career With All Education</h3>
+                                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                                            Kami percaya bahwa setiap individu memiliki kesempatan untuk bertumbuh dan memberikan dampak melalui pendidikan. All Education membuka peluang kolaborasi bagi individu yang memiliki semangat belajar, profesionalisme, kreativitas, dan kepedulian terhadap perkembangan pendidikan.
+                                        </p>
+                                        <p class="text-xs font-black uppercase text-slate-400 tracking-wider mb-3">Peluang Kontribusi Meliputi:</p>
+                                        <div class="flex flex-wrap gap-2 mb-6">
+                                            ${[
+                                                'Education & Academic Operations',
+                                                'Teaching & Tutoring',
+                                                'Human Resources',
+                                                'Marketing & Social Media',
+                                                'Business Development',
+                                                'Technology & Digital Development',
+                                                'Administration & Support'
+                                            ].map(job => `<span class="bg-slate-100 text-[#0C2B5A] text-xs font-bold px-3.5 py-1.5 rounded-xl">${job}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                    <div class="pt-5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                        <div>
+                                            <p class="font-black text-[#0C2B5A] text-sm">Be Part of Our Journey.</p>
+                                            <p class="text-xs text-slate-500">Bergabunglah membangun masa depan pendidikan.</p>
+                                        </div>
+                                        <button onclick="window.open('${karierLink}', '_blank')" class="px-6 py-3.5 bg-[#0C2B5A] hover:bg-[#0CB4B6] text-white font-black text-xs rounded-xl shadow-md transition shrink-0">
+                                            Explore Career Opportunities &rarr;
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 14. Partnership -->
+                                <div class="lg:col-span-6 bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                                    <div>
+                                        <span class="text-[11px] font-black uppercase tracking-widest text-amber-700 bg-amber-50 border border-amber-200 px-3.5 py-1 rounded-full">14 • PARTNERSHIP & COLLABORATION</span>
+                                        <h3 class="text-2xl md:text-3xl font-black text-[#0C2B5A] mt-4 mb-3">Growing Together Through Collaboration</h3>
+                                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                                            Kami percaya bahwa kolaborasi merupakan salah satu kunci untuk memperluas akses dan meningkatkan kualitas pendidikan. All Education terbuka terhadap peluang kerja sama dengan:
+                                        </p>
+                                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700 font-bold mb-6">
+                                            <li class="flex items-center gap-2.5"><span class="text-[#0CB4B6]">▸</span> Institusi pendidikan.</li>
+                                            <li class="flex items-center gap-2.5"><span class="text-[#0CB4B6]">▸</span> Sekolah dan komunitas belajar.</li>
+                                            <li class="flex items-center gap-2.5"><span class="text-[#0CB4B6]">▸</span> Organisasi dan perusahaan.</li>
+                                            <li class="flex items-center gap-2.5"><span class="text-[#0CB4B6]">▸</span> Tenaga profesional dan pendidik.</li>
+                                            <li class="flex items-center gap-2.5"><span class="text-[#0CB4B6]">▸</span> Mitra strategis di bidang teknologi dan pendidikan.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="pt-5 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                        <p class="text-xs text-slate-600 font-medium">Mari membangun kolaborasi yang memberikan nilai dan dampak positif bagi dunia pendidikan.</p>
+                                        <button onclick="window.open('${waLink}', '_blank')" class="px-6 py-3.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs rounded-xl shadow-md transition shrink-0">
+                                            Become Our Partner &rarr;
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 15. OUR COMMITMENT -->
+                        <section class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="bg-white rounded-[2.5rem] p-8 md:p-12 border border-slate-200/80 shadow-sm text-center">
+                                <span class="text-[11px] font-black uppercase tracking-widest text-[#0CB4B6] bg-cyan-50 border border-cyan-100 px-4 py-1.5 rounded-full">15 • OUR COMMITMENT</span>
+                                <h2 class="text-3xl md:text-4xl font-black text-[#0C2B5A] mt-3 mb-3">Our Commitment to Better Education</h2>
+                                <p class="text-sm md:text-base text-slate-600 max-w-2xl mx-auto mb-8 font-medium">
+                                    All Education berkomitmen untuk terus mengembangkan layanan pendidikan yang mengutamakan kualitas, integritas, inovasi, dan kebutuhan peserta didik.
+                                </p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left max-w-5xl mx-auto mb-8">
+                                    ${[
+                                        'Menjaga kualitas layanan pendidikan.',
+                                        'Mengembangkan tenaga pendidik yang kompeten.',
+                                        'Mendorong penggunaan teknologi secara bertanggung jawab.',
+                                        'Menghadirkan informasi layanan yang transparan.',
+                                        'Membangun hubungan yang baik dengan peserta didik dan orang tua.',
+                                        'Melakukan evaluasi dan pengembangan secara berkelanjutan.'
+                                    ].map(cm => `
+                                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center gap-3">
+                                            <span class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 font-black text-xs flex items-center justify-center shrink-0">✓</span>
+                                            <span class="text-xs sm:text-sm font-bold text-[#0C2B5A]">${cm}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <p class="text-sm md:text-base font-black text-[#0C2B5A] italic">
+                                    "Bagi kami, pendidikan bukan hanya tentang hari ini, tetapi juga tentang masa depan yang sedang dibangun."
+                                </p>
+                            </div>
+                        </section>
+
+                        <!-- 16. CONTACT & CONNECT -->
+                        <section id="comp-contact" class="max-w-[1200px] mx-auto px-4 md:px-8 reveal">
+                            <div class="bg-gradient-to-br from-[#06152d] via-[#0C2B5A] to-[#0CB4B6] rounded-[2.5rem] p-8 md:p-14 text-white text-center shadow-2xl relative overflow-hidden">
+                                <span class="bg-white/15 text-amber-300 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">16 • CONTACT & CONNECT</span>
+                                <h2 class="text-3xl md:text-5xl font-black mt-4 mb-4">Let's Build a Better Future Through Education</h2>
+                                <p class="text-sm md:text-lg text-cyan-100 max-w-2xl mx-auto mb-10">
+                                    Pendidikan adalah perjalanan yang membutuhkan kolaborasi, kesempatan, dan komitmen untuk terus berkembang. Mari menjadi bagian dari ekosistem All Education Indonesia.
+                                </p>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto mb-10 text-left">
+                                    <div onclick="router.navigate('/program')" class="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 p-6 rounded-3xl cursor-pointer transition">
+                                        <span class="text-2xl">🚀</span>
+                                        <h4 class="font-black text-lg mt-2 mb-1 text-amber-300">Explore Our Programs</h4>
+                                        <p class="text-xs text-slate-200">Temukan layanan pendidikan yang sesuai dengan kebutuhanmu.</p>
+                                    </div>
+                                    <div onclick="window.open('${karierLink}', '_blank')" class="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 p-6 rounded-3xl cursor-pointer transition">
+                                        <span class="text-2xl">💼</span>
+                                        <h4 class="font-black text-lg mt-2 mb-1 text-cyan-200">Join Our Team</h4>
+                                        <p class="text-xs text-slate-200">Kembangkan potensi dan karier bersama All Education.</p>
+                                    </div>
+                                    <div onclick="window.open('${waLink}', '_blank')" class="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 p-6 rounded-3xl cursor-pointer transition">
+                                        <span class="text-2xl">🤝</span>
+                                        <h4 class="font-black text-lg mt-2 mb-1 text-amber-300">Become Our Partner</h4>
+                                        <p class="text-xs text-slate-200">Bangun kolaborasi untuk menghadirkan dampak yang lebih luas.</p>
+                                    </div>
+                                </div>
+
+                                <div class="pt-6 border-t border-white/15 text-xs text-cyan-100 flex flex-col sm:flex-row items-center justify-center gap-4 font-bold">
+                                    <span>🌐 Website: alleducenter.com</span>
+                                    <span class="hidden sm:inline">•</span>
+                                    <span>💳 Program & Registration: <a href="${CONFIG.payUrl||'https://pay.alleducenter.com'}" target="_blank" class="underline text-amber-300">pay.alleducenter.com</a></span>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>`;
+                    c.innerHTML = h;
+                    return;
+                }
+                // === AKHIR KODE HALAMAN COMPANY PROFILE ===
                 }
                 // === MULAI KODE HALAMAN S&K DAN KEBIJAKAN PRIVASI FULL 17 POIN ===
                 if (path === '/sk' || path === '/privasi') {
