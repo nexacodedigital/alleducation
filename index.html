@@ -542,7 +542,23 @@
                 } catch(e) { return dStr; }
             },
             slugify: (text) => (text || '').toString().toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-'),
-            
+            getProductSlug: (title) => {
+    const t = (title || '').toLowerCase().trim();
+    // Mapping khusus produk yang sudah ada
+    if (t.includes('education privat')) return 'privat';
+    if (t.includes('english for kids')) return 'englishforkids';
+    if (t.includes('owlkids')) return 'owlkids';
+    if (t.includes('mengaji')) return 'mengaji';
+    if (t.includes('prime')) return 'prime';
+    
+    // Otomatisasi untuk produk baru ke depannya:
+    // Hapus kata "by all education", "all education", "program", lalu gabungkan tanpa spasi
+    return t
+        .replace(/by all education/g, '')
+        .replace(/all education/g, '')
+        .replace(/program/g, '')
+        .replace(/[^a-z0-9]/g, '') || uiHelper.slugify(title);
+},
             forceFaviconUpdate: (url) => {
                 let link = document.querySelector("link[rel~='icon']");
                 if (!link) {
@@ -605,17 +621,17 @@
                     return; 
                 }
                 const html = data.map(p => `
-                    <div onclick="router.navigate('/produk/${uiHelper.slugify(p.title)}'); document.getElementById('mobile-menu').classList.add('hidden')" class="flex items-start gap-4 cursor-pointer p-3 rounded-2xl hover:bg-cyan-50 transition border border-transparent hover:border-cyan-100 group">
+    <div onclick="router.navigate('/${uiHelper.getProductSlug(p.title)}'); document.getElementById('mobile-menu').classList.add('hidden')" ...
                         ${p.img ? `<div class="w-12 h-12 rounded-xl bg-white shadow-sm border border-gray-100 p-1.5 flex items-center justify-center shrink-0 group-hover:scale-105 transition"><img src="${p.img}" class="w-full h-full object-contain"></div>` : `<div class="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center shrink-0 text-xl group-hover:scale-105 transition">🚀</div>`}
                         <div><h4 class="font-extrabold text-rg-blue-dark text-sm group-hover:text-rg-primary transition">${p.title||'Produk AE'}</h4><p class="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed font-medium">${p.desc||'Deskripsi produk edutech terbaik.'}</p></div>
                     </div>`).join('');
                 if(c) c.innerHTML = html;
                 if(cm) cm.innerHTML = html;
 
-                if(fp) {
-                    fp.innerHTML = data.map(p => `
-                        <li>
-                            <a href="javascript:void(0)" onclick="router.navigate('/produk/${uiHelper.slugify(p.title)}')" class="hover:text-white transition flex items-center gap-2">
+               if(fp) {
+    fp.innerHTML = data.map(p => `
+        <li>
+            <a href="javascript:void(0)" onclick="router.navigate('/${uiHelper.getProductSlug(p.title)}')" ...
                                 <span class="text-rg-primary">▸</span> ${p.title||'Produk AE'}
                             </a>
                         </li>`).join('');
@@ -764,7 +780,8 @@
             renderDynamicPage: (path) => {
                 const c = document.getElementById('dynamic-page-content'); let h = '';
                 
-                if (!isDataLoaded && (path.startsWith('/produk/') || path.startsWith('/baca/'))) {
+               const staticRoutes = ['/', '/admin', '/daftar', '/artikel', '/testimoni', '/event', '/program', '/sk', '/privasi'];
+if (!isDataLoaded && (!staticRoutes.includes(path) || path.startsWith('/baca/'))) {
                     uiHelper.showLoader();
                     c.innerHTML = `<div class="min-h-[60vh]"></div>`;
                     return;
@@ -802,10 +819,11 @@
                     }
                 }
                 
-             if (path.startsWith('/produk/')) {
-                    const slug = path.split('/')[2]; 
-                    const p = (APP_DATA.Products||[]).find(x => uiHelper.slugify(x.title) === slug);
-                 if(p) {
+             const cleanSlug = path.startsWith('/produk/') ? path.split('/')[2] : path.replace(/^\/+|\/+$/g, '');
+const p = (APP_DATA.Products||[]).find(x => uiHelper.getProductSlug(x.title) === cleanSlug || uiHelper.slugify(x.title) === cleanSlug);
+
+if (p) {
+    const slug = uiHelper.getProductSlug(p.title);
                         const isPrime = slug.includes('prime') || (p.title && p.title.toLowerCase().includes('prime'));
                         const isOwlKids = slug.includes('owlkids') || slug.includes('calistung') || (p.title && p.title.toLowerCase().includes('owlkids'));
                         const isPrivat = (slug.includes('privat') && !slug.includes('mengaji')) || (p.title && p.title.toLowerCase().includes('education privat'));
