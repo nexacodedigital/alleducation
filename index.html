@@ -133,6 +133,18 @@
         .scroll-dot {
             animation: scrollMouse 1.4s infinite;
         }
+        @keyframes marqueeSlide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-product-marquee {
+            display: flex;
+            width: max-content;
+            animation: marqueeSlide 28s linear infinite;
+        }
+        .animate-product-marquee:hover, .animate-product-marquee:active {
+            animation-play-state: paused;
+        }
     </style>
 </head>
 <body class="font-sans text-gray-800">
@@ -640,6 +652,43 @@
                     "mainEntityOfPage": { "@type": "WebPage", "@id": url }
                 });
             },
+           renderProductSliderHTML: (titleText = 'Eksplor Produk & Layanan Unggulan All Education') => {
+                const prods = APP_DATA.Products || [];
+                if (!prods.length) return '';
+                const loopProds = [...prods, ...prods];
+                const cards = loopProds.map(p => `
+                    <div onclick="router.navigate('/${uiHelper.getProductSlug(p.title)}')" class="w-[250px] sm:w-[290px] shrink-0 bg-white hover:bg-gradient-to-br hover:from-white hover:to-cyan-50/70 rounded-2xl p-3.5 sm:p-4 shadow-sm hover:shadow-xl border border-gray-100 hover:border-rg-primary transition-all duration-300 cursor-pointer flex items-center gap-3.5 group mx-2 my-1">
+                        ${p.img 
+                            ? `<div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-cyan-50/60 border border-cyan-100 p-1.5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-inner"><img src="${p.img}" alt="${p.title}" class="w-full h-full object-contain"></div>` 
+                            : `<div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-rg-primary to-rg-blue-dark text-white flex items-center justify-center shrink-0 text-xl font-black group-hover:scale-110 transition-transform duration-300">🚀</div>`
+                        }
+                        <div class="flex-1 min-w-0 text-left">
+                            <span class="inline-block text-[9px] font-black uppercase tracking-wider text-rg-primary bg-cyan-50 px-2 py-0.5 rounded-md mb-1 border border-cyan-100/80">Layanan AE</span>
+                            <h4 class="font-extrabold text-rg-blue-dark text-xs sm:text-sm truncate group-hover:text-rg-primary transition">${p.title || 'Program AE'}</h4>
+                            <p class="text-[11px] text-gray-500 line-clamp-1 font-medium mt-0.5">${p.desc || 'Klik untuk lihat detail program'}</p>
+                        </div>
+                        <div class="w-7 h-7 rounded-full bg-gray-50 group-hover:bg-rg-primary text-gray-400 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                    </div>
+                `).join('');
+
+                return `
+                <div class="w-full overflow-hidden py-4 relative select-none">
+                    <div class="max-w-[1200px] mx-auto px-4 mb-3 flex items-center justify-between">
+                        <p class="text-xs sm:text-sm font-black text-rg-blue-dark uppercase tracking-wider flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-accent-orange animate-ping"></span>
+                            ${titleText}
+                        </p>
+                        <span class="text-[11px] font-bold text-gray-400 hidden sm:inline">Klik kartu untuk melihat program &rarr;</span>
+                    </div>
+                    <div class="relative w-full overflow-hidden before:absolute before:left-0 before:top-0 before:z-10 before:h-full before:w-8 sm:before:w-20 before:bg-gradient-to-r before:from-[#F4F7F9] before:to-transparent after:absolute after:right-0 after:top-0 after:z-10 after:h-full after:w-8 sm:after:w-20 after:bg-gradient-to-l after:from-[#F4F7F9] after:to-transparent">
+                        <div class="animate-product-marquee">
+                            ${cards}
+                        </div>
+                    </div>
+                </div>`;
+            },
             forceFaviconUpdate: (url) => {
                 let link = document.querySelector("link[rel~='icon']");
                 if (!link) {
@@ -1014,6 +1063,9 @@ if (!isDataLoaded && (!staticRoutes.includes(path) || path.startsWith('/baca/'))
                                 </aside>
 
                             </div>
+                            <div class="my-10 bg-[#F4F7F9] rounded-3xl p-4 border border-gray-200/80">
+    ${uiHelper.renderProductSliderHTML('🚀 Tingkatkan Prestasimu Bersama Program All Education')}
+</div>
 
                             <!-- BAGIAN BAWAH: ARTIKEL LAINNYA (3 KOLOM SEPERTI RUANGGURU) -->
                             <div class="mt-14 pt-10 border-t border-gray-200">
@@ -3050,15 +3102,18 @@ if (p) {
                     '/program': {d:APP_DATA.Packages||[], t:'Program', sub:'Selamat datang di portal informasi resmi untuk program program.', type:'prog', bg:'bg-cyan-50', badge:'HALAMAN LAYANAN'} 
                 };
                 
-                const pg = pages[path];
-                if(pg) {
-                    h = `
-                    <div class="${pg.bg} pt-28 md:pt-36 pb-20 text-center border-b border-white/50 px-4 reveal flex flex-col items-center">
-                        <span class="bg-cyan-200/50 text-rg-primary text-[10px] font-black px-4 py-1.5 rounded-full mb-6 inline-block uppercase tracking-widest shadow-sm backdrop-blur-sm">${pg.badge}</span>
-                        <h1 class="text-4xl md:text-6xl font-black text-rg-blue-dark mb-6 tracking-tight drop-shadow-sm">${pg.t}</h1>
-                        <p class="text-gray-600 max-w-2xl mx-auto text-base md:text-lg font-medium leading-relaxed">${pg.sub}</p>
-                    </div>
-                    <div class="max-w-[1200px] mx-auto py-20 px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal">`;
+              const pg = pages[path];
+             if(pg) {
+                 h = `
+                 <div class="${pg.bg} pt-24 md:pt-32 pb-12 text-center border-b border-cyan-100/60 px-4 reveal flex flex-col items-center">
+                     <span class="bg-cyan-200/50 text-rg-primary text-[10px] font-black px-4 py-1.5 rounded-full mb-4 inline-block uppercase tracking-widest shadow-sm backdrop-blur-sm">${pg.badge}</span>
+                     <h1 class="text-3xl sm:text-4xl md:text-6xl font-black text-rg-blue-dark mb-4 tracking-tight drop-shadow-sm">${pg.t}</h1>
+                     <p class="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base md:text-lg font-medium leading-relaxed">${pg.sub}</p>
+                 </div>
+                 <div class="bg-[#F4F7F9] border-b border-gray-200/70 py-3">
+                     ${uiHelper.renderProductSliderHTML('🔥 Pilih Program Belajar Unggulan All Education')}
+                 </div>
+                 <div class="max-w-[1200px] mx-auto py-14 px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal">`;
                     
                     if(!pg.d.length) h+= '<div class="col-span-full text-center py-24 bg-gray-50 rounded-3xl border border-gray-100"><p class="text-gray-400 font-bold text-lg">Belum ada data di kategori ini.</p></div>';
                     
