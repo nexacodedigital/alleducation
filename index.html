@@ -805,15 +805,77 @@
                         </div>
                     </div>`).join('');
             },
-            renderBanners: (data) => {
+           renderBanners: (data) => {
                 const c = document.getElementById('promo-banners-container');
                 if(!c) return;
-                if(!data||!data.length) { c.innerHTML='<div class="w-full text-center py-10"><p class="text-gray-400 font-bold">Belum ada banner promo.</p></div>'; return; }
-                
-                c.innerHTML = data.map(b => `
-                    <div onclick="window.open('${b.link||'#'}', '_blank')" class="flex-shrink-0 w-[90vw] md:w-[700px] lg:w-[900px] h-auto cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 snap-start group relative bg-transparent flex items-center justify-center rounded-2xl md:rounded-[2rem]">
-                        <img src="${b.img||'https://placehold.co/1200x400'}" class="w-full h-auto object-contain rounded-2xl md:rounded-[2rem] block transition duration-700 group-hover:scale-[1.02]">
-                    </div>`).join('');
+
+                // JIKA ADA BANNER PROMO YANG DIUPLOAD DI CMS, TAMPILKAN BANNER + CARD PRODUK DI SAMPINGNYA
+                // JIKA BELUM ADA BANNER, OTOMATIS TAMPILKAN DERETAN CARD PRODUK & LAYANAN ALL EDUCATION
+                const defaultProds = [
+                    { title: 'All Education Privat', desc: 'Les privat 1-on-1 eksklusif ke rumah & online untuk SD, SMP, SMA, UTBK hingga Mahasiswa.', icon: '👨‍🏫' },
+                    { title: 'PRIME by All Education', desc: 'Platform Tryout CBT IRT akurat, Live Class interaktif & analisis peluang lolos PTN impian.', icon: '🎯' },
+                    { title: 'OwlKids Calistung', desc: 'Program belajar Membaca, Menulis & Berhitung ceria tanpa paksaan untuk anak usia 4–6 tahun.', icon: '🦉' },
+                    { title: 'English For Kids', desc: 'Kursus Bahasa Inggris anak interaktif dengan metode Active Speaking, Phonics & Storytelling.', icon: '🇬🇧' },
+                    { title: 'Privat Mengaji', desc: 'Bimbingan mengaji Iqra, Tahsin Tajwid, Tahfidz Juz 30 & adab Islami bersama Ustadz/ah ramah anak.', icon: '🕌' }
+                ];
+
+                const prods = (APP_DATA.Products && APP_DATA.Products.length > 0) ? APP_DATA.Products : defaultProds;
+
+                // Palet tema pastel modern (ATM Modifikasi: Gradasi lembut + aksen khas All Education)
+                const cardThemes = [
+                    { bg: 'from-[#E0F7FA] via-[#F0FDFA] to-[#CCFBF1]', border: 'border-cyan-200/80', badge: 'bg-cyan-600 text-white', btnText: 'text-cyan-900 group-hover:bg-cyan-600 group-hover:text-white', glow: 'bg-cyan-300/30', watermark: '🎓', tag: '1-ON-1 TUTORING' },
+                    { bg: 'from-[#FFEDD5] via-[#FFF7ED] to-[#FEF3C7]', border: 'border-orange-200/80', badge: 'bg-accent-orange text-white', btnText: 'text-orange-900 group-hover:bg-accent-orange group-hover:text-white', glow: 'bg-orange-300/30', watermark: '🚀', tag: 'CBT IRT SYSTEM' },
+                    { bg: 'from-[#FCE7F3] via-[#FDF2F8] to-[#FFE4E6]', border: 'border-pink-200/80', badge: 'bg-rose-500 text-white', btnText: 'text-rose-900 group-hover:bg-rose-500 group-hover:text-white', glow: 'bg-pink-300/30', watermark: '🎨', tag: 'USIA 4-6 TAHUN' },
+                    { bg: 'from-[#EDE9FE] via-[#F5F3FF] to-[#E0E7FF]', border: 'border-purple-200/80', badge: 'bg-indigo-600 text-white', btnText: 'text-indigo-900 group-hover:bg-indigo-600 group-hover:text-white', glow: 'bg-purple-300/30', watermark: '💬', tag: 'BILINGUAL KIDS' },
+                    { bg: 'from-[#D1FAE5] via-[#ECFDF5] to-[#DCFCE7]', border: 'border-emerald-200/80', badge: 'bg-emerald-600 text-white', btnText: 'text-emerald-900 group-hover:bg-emerald-600 group-hover:text-white', glow: 'bg-emerald-300/30', watermark: '🌙', tag: 'TAHSIN & TAHFIDZ' }
+                ];
+
+                const productCardsHtml = prods.map((p, i) => {
+                    const t = cardThemes[i % cardThemes.length];
+                    const slug = uiHelper.getProductSlug ? uiHelper.getProductSlug(p.title) : uiHelper.slugify(p.title);
+                    return `
+                    <div onclick="router.navigate('/${slug}')" class="flex-shrink-0 w-[250px] sm:w-[270px] bg-gradient-to-br ${t.bg} border-2 ${t.border} rounded-[2rem] p-6 cursor-pointer shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 snap-start flex flex-col justify-between relative overflow-hidden group">
+                        <!-- Efek Ilustrasi Watermark & Cahaya Halus di Belakang -->
+                        <div class="absolute -top-10 -right-10 w-32 h-32 ${t.glow} rounded-full blur-2xl pointer-events-none transition duration-500 group-hover:scale-150"></div>
+                        <div class="absolute right-3 top-12 text-6xl opacity-[0.08] pointer-events-none select-none transform rotate-12 group-hover:rotate-0 group-hover:scale-110 transition duration-500">${t.watermark}</div>
+
+                        <div class="relative z-10">
+                            <!-- Header Card: Bulatan Logo Produk & Badge Kecil -->
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-14 h-14 rounded-2xl bg-white/90 backdrop-blur-md shadow-md border border-white p-2 flex items-center justify-center group-hover:scale-110 group-hover:-rotate-3 transition duration-300">
+                                    ${p.img 
+                                        ? `<img src="${p.img}" alt="${p.title}" class="w-full h-full object-contain">` 
+                                        : `<span class="text-2xl">${p.icon || '✨'}</span>`
+                                    }
+                                </div>
+                                <span class="${t.badge} text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm">${t.tag}</span>
+                            </div>
+
+                            <!-- Judul & Deskripsi Singkat Produk -->
+                            <h3 class="font-black text-rg-blue-dark text-lg sm:text-xl mb-2 leading-snug group-hover:text-rg-primary transition">${p.title || 'Program Unggulan'}</h3>
+                            <p class="text-xs sm:text-sm text-gray-600 font-medium line-clamp-3 leading-relaxed mb-6">${p.desc || 'Program belajar interaktif terbaik bersama tutor berpengalaman All Education.'}</p>
+                        </div>
+
+                        <!-- Tombol Pill Putih ala Super App (Dimodifikasi dengan Animasi Panah) -->
+                        <div class="relative z-10 mt-auto">
+                            <div class="w-full py-3 px-4 bg-white ${t.btnText} font-extrabold text-xs sm:text-sm rounded-full shadow-md flex items-center justify-center gap-2 transition-all duration-300 border border-white/80">
+                                <span>Lihat Detail</span>
+                                <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+
+                // Jika admin mengupload gambar banner di CMS, tampilkan banner terlebih dahulu lalu diikuti deretan card produk
+                if (data && data.length > 0) {
+                    const bannerHtml = data.map(b => `
+                        <div onclick="window.open('${b.link||'#'}', '_blank')" class="flex-shrink-0 w-[88vw] md:w-[650px] lg:w-[780px] h-auto cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 snap-start group relative bg-transparent flex items-center justify-center rounded-[2rem]">
+                            <img src="${b.img||'https://placehold.co/1200x400'}" class="w-full h-full object-cover rounded-[2rem] block transition duration-700 group-hover:scale-[1.02]">
+                        </div>`).join('');
+                    c.innerHTML = bannerHtml + productCardsHtml;
+                } else {
+                    c.innerHTML = productCardsHtml;
+                }
             },
             renderTestimonials: (data) => {
                 const c = document.getElementById('testimoni-container');
