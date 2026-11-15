@@ -105,7 +105,7 @@
 </head>
 <body class="font-sans text-gray-800">
 
-    <div id="app-loader" class="fixed inset-0 bg-white/95 backdrop-blur-md z-[9998] flex flex-col items-center justify-center transition-opacity duration-300">
+    <div id="app-loader" class="fixed inset-0 bg-white/95 backdrop-blur-md z-[9998] hidden pointer-events-none flex-col items-center justify-center transition-opacity duration-300">
         <div class="relative flex items-center justify-center p-6">
             <div class="absolute w-28 h-28 md:w-36 md:h-36 rounded-full bg-rg-primary/15 animate-ping"></div>
             <img id="loader-logo" src="https://iili.io/CMttawP.md.png" alt="Memuat..." class="h-16 md:h-20 w-auto object-contain animate-logo-pulse relative z-10 drop-shadow-xl">
@@ -782,10 +782,9 @@
                 
                const staticRoutes = ['/', '/admin', '/daftar', '/artikel', '/testimoni', '/event', '/program', '/sk', '/privasi'];
 if (!isDataLoaded && (!staticRoutes.includes(path) || path.startsWith('/baca/'))) {
-                    uiHelper.showLoader();
-                    c.innerHTML = `<div class="min-h-[60vh]"></div>`;
-                    return;
-                }
+    c.innerHTML = `<div class="min-h-[60vh]"></div>`;
+    return;
+}
                 
                 if (path.startsWith('/baca/')) {
                     const slug = path.split('/')[2]; const art = (APP_DATA.Articles||[]).find(a => uiHelper.slugify(a.title) === slug);
@@ -3007,33 +3006,23 @@ if (p) {
             const cache = localStorage.getItem('AE_CACHE');
             let hasCache = false;
 
+            // Langsung sembunyikan loader sejak detik ke-0 (TANPA LOADING)
+            uiHelper.hideLoader(0);
             cookieManager.init();
 
-            // 1. Jika ada cache di browser, langsung buka web dalam 0.1 detik (Instan!)
             if (cache) {
                 try {
                     APP_DATA = JSON.parse(cache);
-                    if (APP_DATA?.Config?.logoUrl) {
-                        const lLogo = document.getElementById('loader-logo');
-                        if(lLogo) lLogo.src = APP_DATA.Config.logoUrl;
-                    }
                     hasCache = true;
                     isDataLoaded = true;
                     uiHelper.applyDataToUI();
-                    router.init();
-                    uiHelper.hideLoader(100);
                 } catch (e) {}
-            } else {
-                // 2. PAKSA BUKA LOADING MAKSIMAL 1,5 DETIK untuk pengunjung baru
-                // Halaman Beranda langsung tampil tanpa nunggu Google Script yang lambat
-                uiHelper.showLoader();
-                router.init();
-                setTimeout(() => {
-                    uiHelper.hideLoader(0);
-                }, 1500);
             }
 
-            // 3. Ambil data terbaru di belakang layar (Background Sync)
+            // Langsung buka halaman saat itu juga tanpa menunggu server
+            router.init();
+
+            // Ambil data Google Sheet secara diam-diam di belakang layar
             if (GAS_URL !== "URL_DEPLOY_GAS_ANDA_DISINI") {
                 fetch(GAS_URL + '?action=getAll')
                 .then(r => r.json())
@@ -3046,28 +3035,16 @@ if (p) {
 
                         if (!hasCache || isChanged) {
                             uiHelper.applyDataToUI();
-                            const currentPath = window.location.pathname || '/';
-                            if (currentPath !== '/') router.loadRoute(currentPath);
+                            router.loadRoute(window.location.pathname || '/');
                         }
                     }
-                    uiHelper.hideLoader(0);
                 })
                 .catch(e => {
                     console.error("Background sync error:", e);
                     isDataLoaded = true;
-                    uiHelper.hideLoader(0);
                 });
             } else {
                 isDataLoaded = true;
-                uiHelper.hideLoader(100);
-            }
-        });
-
-                fetchWithRetry(GAS_URL + '?action=getAll');
-            } else {
-                if(!hasCache) router.init();
-                isDataLoaded = true;
-                uiHelper.hideLoader(500);
             }
         });
     </script>
