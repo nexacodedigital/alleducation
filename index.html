@@ -575,22 +575,71 @@
             },
             slugify: (text) => (text || '').toString().toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-'),
             getProductSlug: (title) => {
-    const t = (title || '').toLowerCase().trim();
-    // Mapping khusus produk yang sudah ada
-    if (t.includes('education privat')) return 'privat';
-    if (t.includes('english for kids')) return 'englishforkids';
-    if (t.includes('owlkids')) return 'owlkids';
-    if (t.includes('mengaji')) return 'mengaji';
-    if (t.includes('prime')) return 'prime';
-    
-    // Otomatisasi untuk produk baru ke depannya:
-    // Hapus kata "by all education", "all education", "program", lalu gabungkan tanpa spasi
-    return t
-        .replace(/by all education/g, '')
-        .replace(/all education/g, '')
-        .replace(/program/g, '')
-        .replace(/[^a-z0-9]/g, '') || uiHelper.slugify(title);
-},
+                const t = (title || '').toLowerCase().trim();
+                if (t.includes('education privat')) return 'privat';
+                if (t.includes('english for kids')) return 'englishforkids';
+                if (t.includes('owlkids')) return 'owlkids';
+                if (t.includes('mengaji')) return 'mengaji';
+                if (t.includes('prime')) return 'prime';
+                return t
+                    .replace(/by all education/g, '')
+                    .replace(/all education/g, '')
+                    .replace(/program/g, '')
+                    .replace(/[^a-z0-9]/g, '') || uiHelper.slugify(title);
+            },
+            formatArticleBody: (rawText) => {
+                if (!rawText) return '';
+                return rawText.split('\n').filter(p => p.trim()).map(line => {
+                    const t = line.trim();
+                    if (t.startsWith('[GAMBAR:') && t.endsWith(']')) {
+                        const inner = t.slice(8, -1).split('|');
+                        const url = (inner[0] || '').trim();
+                        const cap = (inner[1] || '').trim();
+                        return `<figure class="my-8 text-center"><img src="${url}" alt="${cap||'Ilustrasi Materi'}" class="w-full rounded-2xl shadow-md mx-auto object-cover max-h-[480px] border border-gray-100">${cap ? `<figcaption class="text-xs text-gray-500 italic mt-2.5">${cap}</figcaption>` : ''}</figure>`;
+                    }
+                    if (t.startsWith('## ')) {
+                        return `<h2 class="text-xl md:text-2xl font-black text-rg-blue-dark mt-8 mb-3 leading-snug">${t.replace('## ', '')}</h2>`;
+                    }
+                    if (t.startsWith('### ')) {
+                        return `<h3 class="text-lg md:text-xl font-extrabold text-rg-blue-dark mt-6 mb-2 leading-snug">${t.replace('### ', '')}</h3>`;
+                    }
+                    if (t.startsWith('- ') || t.startsWith('* ')) {
+                        return `<div class="flex items-start gap-2.5 ml-2 mb-2 text-gray-700"><span class="text-rg-primary font-black mt-0.5">•</span><span class="flex-1">${t.slice(2)}</span></div>`;
+                    }
+                    let formatted = t
+                        .replace(/\*\*(.*?)\*\*/g, '<b class="text-gray-900 font-bold">$1</b>')
+                        .replace(/\*(.*?)\*/g, '<i>$1</i>');
+                    return `<p class="mb-4 text-gray-700 leading-relaxed text-justify">${formatted}</p>`;
+                }).join('');
+            },
+            updateArticleSEO: (art, slug) => {
+                const url = `https://alleducenter.com/baca/${slug}`;
+                document.title = `${art.title} | All Education`;
+                const descMeta = document.querySelector('meta[name="description"]');
+                if (descMeta) descMeta.setAttribute('content', (art.content || '').slice(0, 155).replace(/\n/g, ' ') + '...');
+                
+                let scriptSchema = document.getElementById('dynamic-article-schema');
+                if (!scriptSchema) {
+                    scriptSchema = document.createElement('script');
+                    scriptSchema.id = 'dynamic-article-schema';
+                    scriptSchema.type = 'application/ld+json';
+                    document.head.appendChild(scriptSchema);
+                }
+                scriptSchema.text = JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "Article",
+                    "headline": art.title,
+                    "image": [art.img || "https://iili.io/CMttawP.md.png"],
+                    "datePublished": art.date || new Date().toISOString().split('T')[0],
+                    "author": [{ "@type": "Person", "name": art.author || "Tim Edukasi All Education" }],
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "All Education",
+                        "logo": { "@type": "ImageObject", "url": "https://iili.io/CMttawP.md.png" }
+                    },
+                    "mainEntityOfPage": { "@type": "WebPage", "@id": url }
+                });
+            },
             forceFaviconUpdate: (url) => {
                 let link = document.querySelector("link[rel~='icon']");
                 if (!link) {
@@ -818,38 +867,167 @@ if (!isDataLoaded && (!staticRoutes.includes(path) || path.startsWith('/baca/'))
     return;
 }
                 
-                if (path.startsWith('/baca/')) {
-                    const slug = path.split('/')[2]; const art = (APP_DATA.Articles||[]).find(a => uiHelper.slugify(a.title) === slug);
+               if (path.startsWith('/baca/')) {
+                    const slug = path.split('/')[2]; 
+                    const art = (APP_DATA.Articles||[]).find(a => uiHelper.slugify(a.title) === slug);
                     if(art) {
-                        const tagsHtml = (art.tags||'').split(',').filter(x=>x.trim()).map(x=>`<span class="bg-cyan-50 text-rg-primary border border-cyan-100 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">${x.trim()}</span>`).join('');
-                        const related = (APP_DATA.Articles||[]).filter(a => a.title !== art.title).slice(0, 4);
-                        let relatedHtml = related.map(a => `
-                            <div onclick="router.navigate('/baca/${uiHelper.slugify(a.title)}')" class="bg-white rounded-3xl overflow-hidden shadow-sm cursor-pointer hover:shadow-xl transition border border-gray-100 min-w-[280px] flex flex-col snap-start group">
-                                <img src="${a.img||'https://placehold.co/400x200/0C2B5A/FFFFFF'}" class="w-full h-40 object-cover group-hover:scale-105 transition duration-500">
-                                <div class="p-5 flex-1 flex flex-col bg-white z-10"><p class="text-[9px] text-gray-400 font-black uppercase mb-2 tracking-widest">${uiHelper.formatDate(a.date)}</p><h3 class="font-black text-rg-blue-dark text-base line-clamp-2 leading-snug group-hover:text-rg-primary transition">${a.title}</h3></div>
+                        uiHelper.updateArticleSEO(art, slug);
+
+                        const tagList = (art.tags||'Konsep Pelajaran, Materi Sekolah').split(',').map(x=>x.trim()).filter(Boolean);
+                        const firstTag = tagList[0] || 'Ruang Baca';
+                        
+                        // Badge Tag Atas & Bawah seperti Ruangguru
+                        const topTagsHtml = tagList.map(x=>`<span onclick="router.navigate('/artikel')" class="bg-[#129496] hover:bg-rg-blue-dark cursor-pointer text-white text-[11px] font-bold px-3 py-1 rounded-md transition">${x}</span>`).join('');
+                        const bottomTagsHtml = tagList.map(x=>`<span onclick="router.navigate('/artikel')" class="bg-cyan-50 hover:bg-cyan-100 cursor-pointer text-rg-primary font-bold text-xs px-4 py-1.5 rounded-full transition">${x}</span>`).join('');
+
+                        // Hitung estimasi waktu baca otomatis (Rata-rata 180 kata/menit)
+                        const wordCount = (art.content || '').split(/\s+/).length;
+                        const readMin = Math.max(2, Math.ceil(wordCount / 180));
+
+                        // URL Share Sosial Media
+                        const shareUrl = encodeURIComponent(`https://alleducenter.com/baca/${slug}`);
+                        const shareTitle = encodeURIComponent(art.title);
+
+                        // Sidebar Artikel Terbaru (Kanan)
+                        const latestArticles = (APP_DATA.Articles||[]).filter(a => a.title !== art.title).slice(0, 5);
+                        const sidebarLatestHtml = latestArticles.map(a => `
+                            <div onclick="router.navigate('/baca/${uiHelper.slugify(a.title)}')" class="flex gap-3.5 items-start cursor-pointer group py-3 border-b border-gray-100 last:border-0">
+                                <img src="${a.img||'https://placehold.co/200x140/0C2B5A/FFFFFF'}" class="w-24 h-16 rounded-xl object-cover shrink-0 bg-gray-100 group-hover:scale-105 transition duration-300 border border-gray-100">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-extrabold text-gray-800 text-xs md:text-sm line-clamp-2 leading-snug group-hover:text-rg-primary transition">${a.title}</h4>
+                                    <p class="text-[10px] text-gray-400 font-semibold mt-1">${uiHelper.formatDate(a.date)}</p>
+                                </div>
                             </div>`).join('');
 
+                        // Banner Promo di Sidebar Kanan
+                        const sideBanner = (APP_DATA.Banners && APP_DATA.Banners[0]) ? APP_DATA.Banners[0] : null;
+                        const sideBannerHtml = sideBanner 
+                            ? `<div onclick="window.open('${sideBanner.link||CONFIG.promoUrl||'#'}', '_blank')" class="cursor-pointer rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition mb-8 border border-gray-100"><img src="${sideBanner.img}" class="w-full h-auto object-cover"></div>`
+                            : `<div onclick="window.open('${CONFIG.promoUrl||'#'}', '_blank')" class="cursor-pointer rounded-2xl bg-gradient-to-br from-rg-blue-dark via-[#113a75] to-rg-primary p-6 text-white shadow-lg mb-8 relative overflow-hidden group">
+                                <span class="bg-accent-orange text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">🔥 PROMO SPESIAL</span>
+                                <h4 class="text-xl font-black mt-2 mb-1 leading-tight">Diskon Belajar s.d. 60%!</h4>
+                                <p class="text-xs text-cyan-100 mb-4">Siap hadapi ujian & raih PTN impian bersama tutor terbaik All Education.</p>
+                                <span class="inline-block bg-white text-rg-blue-dark font-black text-xs px-4 py-2 rounded-full group-hover:scale-105 transition">Klaim Sekarang &rarr;</span>
+                               </div>`;
+
+                        // Grid "Artikel Lainnya" di Bawah (3 Kolom lengkap dengan estimasi waktu baca)
+                        const bottomRelated = (APP_DATA.Articles||[]).filter(a => a.title !== art.title).slice(0, 3);
+                        const bottomRelatedHtml = bottomRelated.map(a => {
+                            const wCount = (a.content || '').split(/\s+/).length;
+                            const rMin = Math.max(2, Math.ceil(wCount / 180));
+                            return `
+                            <div onclick="router.navigate('/baca/${uiHelper.slugify(a.title)}')" class="bg-white rounded-2xl overflow-hidden cursor-pointer group flex flex-col">
+                                <div class="w-full aspect-[16/10] rounded-2xl overflow-hidden mb-4 bg-gray-100 border border-gray-100">
+                                    <img src="${a.img||'https://placehold.co/600x400/0C2B5A/FFFFFF'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                </div>
+                                <h3 class="font-extrabold text-gray-900 text-base md:text-lg line-clamp-2 leading-snug group-hover:text-rg-primary transition mb-2">${a.title}</h3>
+                                <p class="text-xs text-gray-500 font-medium mt-auto">${uiHelper.formatDate(a.date)} • ${rMin} minutes read</p>
+                            </div>`;
+                        }).join('');
+
                         h = `
-                        <div class="max-w-3xl mx-auto py-12 md:py-20 px-4 reveal-up active">
-                            <button onclick="router.navigate('/artikel')" class="text-rg-primary font-bold text-sm mb-8 flex items-center gap-2 transition bg-cyan-50 border border-cyan-100 px-4 py-2 rounded-full w-fit hover:bg-cyan-100"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Kembali ke Artikel</button>
-                            ${tagsHtml ? `<div class="flex gap-2 flex-wrap mb-5">${tagsHtml}</div>` : ''}
-                            <h1 class="text-3xl md:text-5xl font-black text-rg-blue-dark leading-tight mb-6 tracking-tight">${art.title}</h1>
-                            <div class="flex items-center gap-4 mb-10 pb-6 border-b border-gray-200">
-                                <div class="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-rg-primary font-black text-lg">${(art.author||'A').charAt(0)}</div>
-                                <div><p class="font-bold text-gray-800 text-sm">${art.author||'Tim Edukasi AE'}</p><p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">${uiHelper.formatDate(art.date)}</p></div>
+                        <div class="max-w-[1200px] mx-auto pt-8 md:pt-12 pb-16 px-4 md:px-8">
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                                
+                                <!-- KOLOM KIRI: KONTEN UTAMA ARTIKEL (8 KOLOM) -->
+                                <article class="lg:col-span-8 lg:pr-6 lg:border-r border-gray-200/80">
+                                    <!-- Breadcrumb ala Ruangguru -->
+                                    <nav class="text-xs md:text-sm font-medium text-rg-primary mb-4 flex flex-wrap items-center gap-1.5">
+                                        <a href="javascript:void(0)" onclick="router.navigate('/')" class="hover:underline">Home</a>
+                                        <span class="text-gray-400">/</span>
+                                        <a href="javascript:void(0)" onclick="router.navigate('/artikel')" class="hover:underline">Blog</a>
+                                        <span class="text-gray-400">/</span>
+                                        <span class="text-rg-primary font-semibold truncate max-w-[240px] sm:max-w-md">${firstTag}</span>
+                                    </nav>
+
+                                    <!-- Judul Utama Artikel -->
+                                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 leading-tight mb-4 tracking-tight">${art.title}</h1>
+
+                                    <!-- Info Penulis, Tanggal & Waktu Baca -->
+                                    <div class="mb-4">
+                                        <p class="font-extrabold text-rg-primary text-sm">${art.author||'Tim Edukasi All Education'}</p>
+                                        <p class="text-xs text-gray-500 font-medium mt-0.5">${uiHelper.formatDate(art.date)} • ${readMin} minutes read</p>
+                                    </div>
+
+                                    <!-- Tag Kategori Atas -->
+                                    <div class="flex gap-1.5 flex-wrap pb-6 mb-6 border-b border-gray-200">${topTagsHtml}</div>
+
+                                    <!-- Gambar Utama (Featured Image) -->
+                                    ${art.img ? `<figure class="mb-8"><img src="${art.img}" alt="${art.title}" class="w-full rounded-2xl shadow-sm object-cover max-h-[460px] border border-gray-100"></figure>` : ''}
+
+                                    <!-- Isi Materi Artikel (Mendukung Gambar Tengah, Subjudul, Bold, & Rumus Matematika) -->
+                                    <div class="prose-custom text-gray-700 text-base md:text-[17px] leading-relaxed" id="article-body">
+                                        ${uiHelper.formatArticleBody(art.content)}
+                                    </div>
+
+                                    <!-- Referensi / Sumber -->
+                                    ${art.reference ? `
+                                    <div class="mt-10 pt-6 border-t border-gray-200">
+                                        <h4 class="font-extrabold text-sm text-gray-900 mb-2">Referensi:</h4>
+                                        <p class="text-xs md:text-sm text-gray-600 leading-relaxed whitespace-pre-line">${art.reference}</p>
+                                    </div>` : ''}
+
+                                    <!-- Tag Pills Bawah -->
+                                    <div class="flex gap-2 flex-wrap mt-8 mb-6">${bottomTagsHtml}</div>
+
+                                    <!-- Kotak Profil Penulis ala Ruangguru -->
+                                    <div class="bg-[#EBF5FF] rounded-2xl p-5 flex items-center gap-4 mb-6 border border-blue-100">
+                                        <div class="w-14 h-14 rounded-full bg-sky-200 text-rg-blue-dark flex items-center justify-center font-black text-2xl shrink-0 border-2 border-white shadow-sm">
+                                            ${(art.author||'A').charAt(0)}
+                                        </div>
+                                        <div>
+                                            <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Ditulis oleh</p>
+                                            <h4 class="font-extrabold text-gray-900 text-base">${art.author||'Tim Edukasi All Education'}</h4>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tombol Bagikan Artikel Ini -->
+                                    <div class="flex items-center gap-3 py-4">
+                                        <span class="font-extrabold text-gray-900 text-sm md:text-base mr-1">Bagikan artikel ini:</span>
+                                        <a href="https://api.whatsapp.com/send?text=${shareTitle}%20-%20${shareUrl}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-[#25D366] text-white flex items-center justify-center hover:scale-110 transition shadow-sm" title="Share ke WhatsApp">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771z"/></svg>
+                                        </a>
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:scale-110 transition shadow-sm" title="Share ke Facebook">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                                        </a>
+                                        <a href="https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareUrl}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-[#1DA1F2] text-white flex items-center justify-center hover:scale-110 transition shadow-sm" title="Share ke X / Twitter">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                                        </a>
+                                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-[#0A66C2] text-white flex items-center justify-center hover:scale-110 transition shadow-sm" title="Share ke LinkedIn">
+                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg>
+                                        </a>
+                                        <button onclick="navigator.clipboard.writeText(window.location.href); uiHelper.showToast('Link artikel berhasil disalin!')" class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center hover:scale-110 transition shadow-sm" title="Salin Link">
+                                            🔗
+                                        </button>
+                                    </div>
+                                </article>
+
+                                <!-- KOLOM KANAN: SIDEBAR BANNER & ARTIKEL TERBARU (4 KOLOM) -->
+                                <aside class="lg:col-span-4">
+                                    <div class="sticky top-28">
+                                        ${sideBannerHtml}
+                                        <h3 class="text-xl font-black text-gray-900 mb-4 pb-2 border-b border-gray-200">Artikel Terbaru</h3>
+                                        <div class="divide-y divide-gray-100">
+                                            ${sidebarLatestHtml || '<p class="text-gray-400 text-sm">Belum ada artikel terbaru.</p>'}
+                                        </div>
+                                    </div>
+                                </aside>
+
                             </div>
-                            ${art.img ? `<img src="${art.img}" class="w-full rounded-3xl shadow-lg mb-12 object-cover max-h-[450px]">` : ''}
-                            <div class="prose-custom space-y-6 text-gray-600 text-base md:text-lg leading-relaxed font-medium" id="article-body">${(art.content||'').split('\n').filter(p=>p.trim()).map(p => `<p class="mb-4">${p}</p>`).join('')}</div>
-                            
-                            ${art.reference ? `<div class="mt-12 p-6 bg-gray-50 rounded-2xl border border-gray-200"><h4 class="font-black text-sm text-gray-500 uppercase tracking-widest mb-2">Referensi / Sumber:</h4><p class="text-sm font-medium text-gray-600 break-all">${art.reference}</p></div>` : ''}
-                        </div>
-                        <div class="bg-bg-soft py-16 border-t border-gray-200 mt-10 reveal">
-                            <div class="max-w-[1200px] mx-auto px-4 md:px-8"><div class="flex justify-between items-end mb-8"><h3 class="text-2xl font-black text-rg-blue-dark">Baca Artikel Lainnya</h3><button onclick="router.navigate('/artikel')" class="text-rg-primary font-bold text-sm hover:underline">Lihat Semua</button></div><div class="flex gap-6 overflow-x-auto hide-scroll snap-x pb-6">${relatedHtml || '<p class="text-gray-400 font-medium">Belum ada artikel lain.</p>'}</div></div>
+
+                            <!-- BAGIAN BAWAH: ARTIKEL LAINNYA (3 KOLOM SEPERTI RUANGGURU) -->
+                            <div class="mt-14 pt-10 border-t border-gray-200">
+                                <h3 class="text-2xl font-black text-gray-900 mb-6">Artikel Lainnya</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    ${bottomRelatedHtml || '<p class="text-gray-400 font-medium">Belum ada artikel lain.</p>'}
+                                </div>
+                            </div>
                         </div>`;
-                        c.innerHTML = h; if(window.renderMathInElement) renderMathInElement(document.getElementById('article-body'), {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]}); return;
+                        c.innerHTML = h; 
+                        if(window.renderMathInElement) renderMathInElement(document.getElementById('article-body'), {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]}); 
+                        return;
                     }
                 }
-                
              const cleanSlug = path.startsWith('/produk/') ? path.split('/')[2] : path.replace(/^\/+|\/+$/g, '');
 const p = (APP_DATA.Products||[]).find(x => uiHelper.getProductSlug(x.title) === cleanSlug || uiHelper.slugify(x.title) === cleanSlug);
 
