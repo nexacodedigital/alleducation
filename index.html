@@ -2651,7 +2651,8 @@ if (p) {
                             
                             uiHelper.renderFAQ(APP_DATA.FAQ||[], 'prod-faq-container', 'faq-prod');
                         }, 100); return;
-    // === MULAI KODE HALAMAN COMPANY PROFILE (alleducenter.com/company) ===
+                }
+                // === MULAI KODE HALAMAN COMPANY PROFILE (alleducenter.com/company) ===
                 if (path === '/company') {
                     // 1. Update SEO Metadata & Schema Organization sesuai dokumen Company Profile
                     document.title = "About All Education Indonesia | Company Profile";
@@ -3237,7 +3238,6 @@ if (p) {
                     return;
                 }
                 // === AKHIR KODE HALAMAN COMPANY PROFILE ===
-                }
                 // === MULAI KODE HALAMAN S&K DAN KEBIJAKAN PRIVASI FULL 17 POIN ===
                 if (path === '/sk' || path === '/privasi') {
                     const isSK = path === '/sk';
