@@ -19,32 +19,33 @@
     <meta property="og:type" content="website">
     <meta name="description" content="All Education Indonesia - Bimbel privat, kelas online, persiapan UTBK-SNBT, Calistung OwlKids, English for Kids, dan Privat Mengaji terbaik.">
 
-    <!-- Schema.org JSON-LD Lengkap dengan alternateName & Organization Logo -->
+    <!-- Schema.org JSON-LD Site Name & Organization -->
     <script type="application/ld+json">
-    [
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "@id": "https://alleducenter.com/#website",
-        "name": "All Education",
-        "alternateName": ["All Education Indonesia", "AllEduCenter", "alleducenter.com"],
-        "url": "https://alleducenter.com/"
-      },
-      {
-        "@context": "https://schema.org",
-        "@type": "EducationalOrganization",
-        "@id": "https://alleducenter.com/#organization",
-        "name": "All Education",
-        "legalName": "PT All Education Indonesia",
-        "url": "https://alleducenter.com/",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://iili.io/CMttawP.md.png",
-          "width": 512,
-          "height": 512
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://alleducenter.com/#website",
+          "name": "All Education",
+          "alternateName": "All Education Indonesia",
+          "url": "https://alleducenter.com/"
+        },
+        {
+          "@type": "EducationalOrganization",
+          "@id": "https://alleducenter.com/#organization",
+          "name": "All Education",
+          "legalName": "PT All Education Indonesia",
+          "url": "https://alleducenter.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://iili.io/CMttawP.md.png",
+            "width": 512,
+            "height": 512
+          }
         }
-      }
-    ]
+      ]
+    }
     </script>
     <!-- DNS Prefetch untuk kecepatan ekstra -->
     <link rel="preconnect" href="https://all-education-db-default-rtdb.asia-southeast1.firebasedatabase.app" crossorigin>
@@ -204,13 +205,13 @@
                 <div class="relative group h-full flex items-center">
                     <button class="text-white font-bold hover:text-gray-200 flex items-center gap-1 transition">Produk <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
                     <div class="mega-menu absolute top-full left-0 w-[850px] bg-white shadow-2xl rounded-2xl p-6 z-50 border border-gray-100 grid grid-cols-2 gap-x-8 gap-y-4" id="nav-mega-grid"></div>
-                </div>
-                <a href="javascript:void(0)" onclick="router.navigate('/program')" class="text-white font-bold hover:text-gray-200 transition">Program</a>
-                <a href="javascript:void(0)" onclick="window.open(CONFIG.promoUrl||'#', '_blank')" class="text-white font-bold hover:text-gray-200 transition">Promo</a>
-                <a href="javascript:void(0)" onclick="router.navigate('/event')" class="text-white font-bold hover:text-gray-200 transition">Event</a>
-                <a href="javascript:void(0)" onclick="router.navigate('/testimoni')" class="text-white font-bold hover:text-gray-200 transition">Testimoni</a>
-                <a href="javascript:void(0)" onclick="router.navigate('/artikel')" class="text-white font-bold hover:text-gray-200 transition">Artikel</a>
-                <a href="javascript:void(0)" onclick="window.open(CONFIG.karierUrl||'#', '_blank')" class="text-white font-bold hover:text-gray-200 transition">Karier</a>
+               </div>
+                <a href="/program" onclick="event.preventDefault(); router.navigate('/program')" class="text-white font-bold hover:text-gray-200 transition">Program</a>
+                <a href="#promo" onclick="event.preventDefault(); window.open(CONFIG.promoUrl||'#', '_blank')" class="text-white font-bold hover:text-gray-200 transition">Promo</a>
+                <a href="/event" onclick="event.preventDefault(); router.navigate('/event')" class="text-white font-bold hover:text-gray-200 transition">Event</a>
+                <a href="/testimoni" onclick="event.preventDefault(); router.navigate('/testimoni')" class="text-white font-bold hover:text-gray-200 transition">Testimoni</a>
+                <a href="/artikel" onclick="event.preventDefault(); router.navigate('/artikel')" class="text-white font-bold hover:text-gray-200 transition">Artikel</a>
+                <a href="#karier" onclick="event.preventDefault(); window.open(CONFIG.karierUrl||'#', '_blank')" class="text-white font-bold hover:text-gray-200 transition">Karier</a>
             </div>
 
             <!-- TOMBOL KANAN DESKTOP -->
@@ -506,10 +507,10 @@
                 <div>
                     <h4 class="font-black text-lg mb-6 text-white tracking-wide">Bantuan & Panduan</h4>
                     <ul class="space-y-4 text-sm font-medium text-gray-400">
-                       <li><a href="javascript:void(0)" onclick="router.navigate('/company')" class="hover:text-white transition">Tentang Kami (Company Profile)</a></li>
-                        <li><a href="javascript:void(0)" onclick="router.navigate('/program')" class="hover:text-white transition">Program Belajar</a></li>
-                       <li><a href="javascript:void(0)" onclick="router.navigate('/sk')" class="hover:text-white transition">Syarat & Ketentuan</a></li>
-                       <li><a href="javascript:void(0)" onclick="router.navigate('/privasi')" class="hover:text-white transition">Kebijakan Privasi</a></li>
+                       <li><a href="/company" onclick="event.preventDefault(); router.navigate('/company')" class="hover:text-white transition">Tentang Kami (Company Profile)</a></li>
+                       <li><a href="/program" onclick="event.preventDefault(); router.navigate('/program')" class="hover:text-white transition">Program Belajar</a></li>
+                       <li><a href="/sk" onclick="event.preventDefault(); router.navigate('/sk')" class="hover:text-white transition">Syarat & Ketentuan</a></li>
+                       <li><a href="/privasi" onclick="event.preventDefault(); router.navigate('/privasi')" class="hover:text-white transition">Kebijakan Privasi</a></li>
                     </ul>
                 </div>
                 <div>
