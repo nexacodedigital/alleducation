@@ -288,15 +288,14 @@
                             <button onclick="window.open(CONFIG.promoUrl||'#', '_blank')" class="bg-accent-orange text-white font-black rounded-full px-2 sm:px-4 md:px-7 py-1.5 md:py-3.5 hover:bg-orange-600 transition whitespace-nowrap text-[7.5px] sm:text-xs md:text-sm shadow-lg hover:shadow-orange-500/50">Dapatkan Diskon ></button>
                         </div>
                     </div>
-                    
-                    <!-- KOLOM KANAN: FOTO CANDID + ANIMASI MOTION GRAPHICS HIDUP -->
-                    <div class="w-[46%] sm:w-[48%] md:w-[50%] flex justify-center items-end reveal-right active z-10 relative">
-                        <div class="relative w-full max-w-[260px] sm:max-w-[390px] md:max-w-[590px] flex items-end justify-center">
+                    <!-- KOLOM KANAN: FOTO CANDID + ANIMASI MOTION GRAPHICS TERPUSAT & RAPI -->
+                    <div class="w-[46%] sm:w-[48%] md:w-[50%] flex justify-center items-center reveal-right active z-10 relative pb-6 sm:pb-10 md:pb-14">
+                        <div class="relative w-full max-w-[260px] sm:max-w-[390px] md:max-w-[570px] flex items-center justify-center">
                             
                             <!-- 1. ANIMASI PITA CAHAYA (SWOOSH) DI BELAKANG SISWA -->
-                            <svg class="absolute inset-0 w-full h-full z-0 pointer-events-none scale-110 animate-pulse" viewBox="0 0 500 380" fill="none">
-                                <path d="M35 280 C 10 170, 120 40, 270 55 C 400 68, 480 170, 445 290" stroke="url(#aeSwoosh1)" stroke-width="18" stroke-linecap="round" opacity="0.85"/>
-                                <path d="M60 310 C 160 355, 360 340, 465 220" stroke="url(#aeSwoosh2)" stroke-width="12" stroke-linecap="round" opacity="0.75"/>
+                            <svg class="absolute inset-0 w-full h-full z-0 pointer-events-none scale-105 animate-pulse" viewBox="0 0 500 380" fill="none">
+                                <path d="M35 265 C 15 155, 125 32, 275 48 C 405 62, 478 160, 445 275" stroke="url(#aeSwoosh1)" stroke-width="18" stroke-linecap="round" opacity="0.85"/>
+                                <path d="M60 295 C 160 340, 355 325, 465 205" stroke="url(#aeSwoosh2)" stroke-width="12" stroke-linecap="round" opacity="0.75"/>
                                 <defs>
                                     <linearGradient id="aeSwoosh1" x1="0" y1="0" x2="500" y2="300" gradientUnits="userSpaceOnUse">
                                         <stop stop-color="#FBBF24"/>
@@ -310,32 +309,31 @@
                                 </defs>
                             </svg>
 
-                            <!-- 2. ANIMASI BOHLAM IDE MENYALA -->
-                            <div class="animate-owl-float absolute -top-3 sm:top-0 left-[38%] z-20 pointer-events-none">
+                            <!-- 2. ANIMASI BOHLAM IDE MENYALA (PAS DI ATAS KEPALA) -->
+                            <div class="animate-owl-float absolute top-0 sm:top-1 left-[42%] z-20 pointer-events-none">
                                 <div class="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full bg-amber-300/25 backdrop-blur-sm border border-amber-200/60 flex items-center justify-center shadow-[0_0_25px_rgba(251,191,36,0.65)]">
                                     <span class="text-base sm:text-2xl md:text-3xl drop-shadow">💡</span>
                                 </div>
                             </div>
 
                             <!-- 3. ANIMASI BINTANG / SPARKLE BERKEDIP -->
-                            <span class="absolute top-6 left-4 sm:left-8 z-20 text-amber-300 text-sm sm:text-xl md:text-2xl animate-ping pointer-events-none">✦</span>
-                            <span class="absolute top-12 right-4 sm:right-8 z-20 text-cyan-200 text-xs sm:text-lg md:text-xl animate-bounce pointer-events-none">✨</span>
+                            <span class="absolute top-5 left-3 sm:left-6 z-20 text-amber-300 text-sm sm:text-xl md:text-2xl animate-ping pointer-events-none">✦</span>
+                            <span class="absolute top-10 right-3 sm:right-6 z-20 text-cyan-200 text-xs sm:text-lg md:text-xl animate-bounce pointer-events-none">✨</span>
 
-                            <!-- 4. ANIMASI BUBBLE 'ABCD' MELAYANG -->
-                            <div class="animate-utbk-badge absolute top-2 sm:top-6 left-0 sm:left-2 z-20 bg-white text-[#0C2B5A] font-black text-[7px] sm:text-[10px] md:text-xs px-2 sm:px-3 py-1 sm:py-1.5 rounded-2xl rounded-bl-none shadow-lg border-2 border-cyan-300 pointer-events-none">
+                            <!-- 4. ANIMASI BUBBLE 'ABCD' MELAYANG (SEJAJAR KEPALA KIRI) -->
+                            <div class="animate-utbk-badge absolute top-6 sm:top-10 left-0 sm:left-2 z-20 bg-white text-[#0C2B5A] font-black text-[7px] sm:text-[10px] md:text-xs px-2 sm:px-3 py-1 sm:py-1.5 rounded-2xl rounded-bl-none shadow-lg border-2 border-cyan-300 pointer-events-none">
                                 A <span class="bg-[#0CB4B6] text-white px-1 rounded-full">B</span> C D
                             </div>
 
-                            <!-- 5. ANIMASI BADGE NILAI '100' GOYANG -->
-                            <div class="animate-wa-wiggle absolute bottom-6 sm:bottom-10 right-0 sm:right-2 z-20 bg-gradient-to-br from-[#F06822] to-amber-500 text-white font-black text-[9px] sm:text-sm md:text-lg px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-2xl shadow-xl border-2 border-white transform rotate-6 pointer-events-none">
+                            <!-- 5. ANIMASI BADGE NILAI '100' NAIK AMAN DI ATAS WAVE -->
+                            <div class="animate-wa-wiggle absolute bottom-10 sm:bottom-14 md:bottom-16 right-1 sm:right-3 z-20 bg-gradient-to-br from-[#F06822] to-amber-500 text-white font-black text-[9px] sm:text-sm md:text-lg px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-2xl shadow-xl border-2 border-white transform rotate-6 pointer-events-none">
                                 100! ✓
                             </div>
 
-                            <!-- FOTO SISWA CANDID PNG TRANSPARAN -->
-                            <img id="dyn-hero-img" src="https://placehold.co/600x450" alt="Siswa All Education SD SMP SMA UTBK" class="w-full h-auto object-contain relative z-10 scale-[1.08] sm:scale-[1.12] origin-bottom drop-shadow-[0_14px_24px_rgba(0,0,0,0.3)]" style="-webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%); mask-image: linear-gradient(to bottom, black 85%, transparent 100%);">
+                            <!-- FOTO SISWA CANDID PNG TRANSPARAN (POSISI NAIK & MEMUDAR HALUS DI BAWAH) -->
+                            <img id="dyn-hero-img" src="https://placehold.co/600x450" alt="Siswa All Education SD SMP SMA UTBK" class="w-full h-auto object-contain relative z-10 -translate-y-2 sm:-translate-y-4 md:-translate-y-5 drop-shadow-[0_14px_24px_rgba(0,0,0,0.3)]" style="-webkit-mask-image: linear-gradient(to bottom, black 78%, transparent 100%); mask-image: linear-gradient(to bottom, black 78%, transparent 100%);">
                         </div>
                     </div>
-
                 </div>
                 
                 <svg class="absolute bottom-0 left-0 w-full h-8 sm:h-14 md:h-20 text-bg-soft z-20 pointer-events-none" viewBox="0 0 1440 120" fill="currentColor" preserveAspectRatio="none"><path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,42.7C1120,32,1280,32,1360,32L1440,32L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path></svg>
