@@ -1132,7 +1132,16 @@
 
        const router = {
             init: () => { window.addEventListener('popstate', () => router.loadRoute(window.location.pathname || '/')); router.loadRoute(window.location.pathname || '/'); },
-            navigate: (path) => { window.history.pushState({}, '', path); router.loadRoute(path); window.scrollTo(0,0); },
+            navigate: (path) => {
+    const mega = document.getElementById('nav-mega-grid');
+    if (mega) {
+        mega.style.display = 'none';
+        setTimeout(() => { mega.style.display = ''; }, 300);
+    }
+    window.history.pushState({}, '', path);
+    router.loadRoute(path);
+    window.scrollTo(0, 0);
+},
             loadRoute: (path) => {
                 document.querySelectorAll('.view-section').forEach(el => { el.classList.remove('active'); el.classList.add('hidden'); });
                 if(path === '/' || path === '') { 
