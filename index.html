@@ -399,12 +399,13 @@
                             <div class="w-20 h-20 bg-cyan-50 text-rg-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7z"></path></svg></div>
                             <h2 class="text-3xl font-black text-rg-blue-dark mb-2">Portal Admin CMS</h2>
                             <p class="text-sm text-gray-500 mb-8">Login untuk mengelola konten web All Education.</p>
-                            <form onsubmit="adminAuth.login(event)" class="space-y-5">
-                                <input type="text" id="admin-user" placeholder="Username" required class="w-full px-5 py-4 rounded-xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-rg-primary outline-none font-medium transition">
-                                <input type="password" id="admin-pass" placeholder="Password" required class="w-full px-5 py-4 rounded-xl border-2 border-gray-100 bg-gray-50 focus:bg-white focus:border-rg-primary outline-none font-medium transition">
-                                <p id="login-error" class="text-red-500 text-sm font-bold hidden py-1 animate-pulse"></p>
-                                <button type="submit" id="btn-login" class="w-full py-4 bg-rg-primary text-white font-black text-lg rounded-xl shadow-lg hover:bg-rg-blue-dark hover:shadow-xl transition transform hover:-translate-y-0.5 mt-2">Masuk Dashboard</button>
-                            </form>
+                            <div class="space-y-4">
+                                <p id="login-error" class="text-red-500 text-sm font-bold hidden py-1"></p>
+                                <button type="button" id="btn-login" onclick="adminAuth.loginWithGoogle()" class="w-full py-4 px-5 bg-white border-2 border-gray-200 hover:border-rg-primary hover:bg-cyan-50/40 text-rg-blue-dark font-black text-base rounded-xl shadow-md transition flex items-center justify-center gap-3 cursor-pointer">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.565 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.69 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+                                    <span>Masuk dengan Google Admin</span>
+                                </button>
+                            </div>
                             <div class="mt-8 flex items-center justify-between pt-4 border-t border-gray-100">
                                 <button type="button" onclick="uiHelper.toggleAuthFlip(false)" class="text-xs font-bold text-rg-primary hover:underline flex items-center gap-1">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -4035,44 +4036,69 @@ if (p) {
 
       const toArray = (val) => Array.isArray(val) ? val.filter(Boolean) : (val && typeof val === 'object' ? Object.values(val).filter(Boolean) : []);
 
-        const adminAuth = {
-            login: (e) => {
-                e.preventDefault(); const err = document.getElementById('login-error');
-                const u = document.getElementById('admin-user').value.trim(); const p = document.getElementById('admin-pass').value.trim();
+      const adminAuth = {
+            loginWithGoogle: () => {
+                const err = document.getElementById('login-error');
+                const btn = document.getElementById('btn-login');
                 err.classList.add('hidden');
-                if(!FIREBASE_URL) { err.innerText="Error: FIREBASE_URL Kosong di Kode HTML!"; err.classList.remove('hidden'); return; }
-                const btn = document.getElementById('btn-login'); btn.innerText = "Verifikasi Server..."; btn.disabled = true;
-                
-                fetch(`${FIREBASE_URL}/admins.json`)
-                .then(r => r.json())
-                .then(res => {
-                    const admins = toArray(res);
-                    const match = admins.some(a => String(a.username) === u && String(a.password) === p);
-                    if(match) {
-                        sessionStorage.setItem('ae_admin', 'true');
+                btn.disabled = true;
+                btn.innerHTML = "Menghubungkan ke Google...";
+
+                const provider = new firebase.auth.GoogleAuthProvider();
+                provider.setCustomParameters({ prompt: 'select_account' });
+
+                firebase.auth().signInWithPopup(provider)
+                .then(result => {
+                    const user = result.user;
+                    if (user && user.email.toLowerCase() === ALLOWED_ADMIN_EMAIL.toLowerCase()) {
                         adminAuth.check();
-                        uiHelper.showToast("Login Berhasil!");
+                        uiHelper.showToast("Login Admin Berhasil!");
                     } else {
-                        err.innerText = "Username / Password Salah!";
+                        firebase.auth().signOut();
+                        err.innerText = "Akses Ditolak! Email ini bukan Admin terdaftar.";
                         err.classList.remove('hidden');
-                        btn.innerText = "Masuk Dashboard";
-                        btn.disabled = false;
+                        adminAuth.resetBtn();
                     }
                 })
-                .catch(e => {
-                    err.innerText = "Koneksi Firebase gagal.";
+                .catch(error => {
+                    err.innerText = "Login dibatalkan atau gagal.";
                     err.classList.remove('hidden');
-                    btn.innerText = "Masuk Dashboard";
-                    btn.disabled = false;
+                    adminAuth.resetBtn();
                 });
             },
-            logout: () => { sessionStorage.removeItem('ae_admin'); adminAuth.check(); uiHelper.showToast("Logout Berhasil."); },
+            resetBtn: () => {
+                const btn = document.getElementById('btn-login');
+                if(btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.565 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.69 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg><span>Masuk dengan Google Admin</span>`;
+                }
+            },
+            logout: () => {
+                firebase.auth().signOut().then(() => {
+                    adminAuth.check();
+                    uiHelper.showToast("Logout Berhasil.");
+                });
+            },
             check: () => {
-                const l=document.getElementById('admin-login-box'); const d=document.getElementById('admin-dashboard-container'); 
-                if(!l||!d) return;
-                if(sessionStorage.getItem('ae_admin')==='true') { l.classList.add('hidden'); d.classList.remove('hidden'); cmsAdmin.init(); } else { l.classList.remove('hidden'); d.classList.add('hidden'); document.getElementById('btn-login').innerText="Masuk Dashboard"; document.getElementById('btn-login').disabled=false; }
+                const l = document.getElementById('admin-login-box');
+                const d = document.getElementById('admin-dashboard-container');
+                if(!l || !d) return;
+                const user = firebase.auth().currentUser;
+                if(user && user.email.toLowerCase() === ALLOWED_ADMIN_EMAIL.toLowerCase()) {
+                    l.classList.add('hidden');
+                    d.classList.remove('hidden');
+                    cmsAdmin.init();
+                } else {
+                    l.classList.remove('hidden');
+                    d.classList.add('hidden');
+                    adminAuth.resetBtn();
+                }
             }
         };
+
+        firebase.auth().onAuthStateChanged(() => {
+            if (window.location.pathname === '/admin') adminAuth.check();
+        });
 
         const cmsAdmin = {
             tab: 'Config', editIdx: -1,
