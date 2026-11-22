@@ -165,6 +165,8 @@
             animation: badgeFloat 2.8s ease-in-out infinite;
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
 <body class="font-sans text-gray-800">
 
@@ -595,14 +597,15 @@
     </div>
 
     <script>
-        // KONFIGURASI APLIKASI
-        const FIREBASE_URL = "https://all-education-db-default-rtdb.asia-southeast1.firebasedatabase.app";
-        const ALLOWED_ADMIN_EMAIL = "office.alleducenter@gmail.com";
+       const ALLOWED_ADMIN_EMAIL = "office.alleducenter@gmail.com";
         firebase.initializeApp({
-            apiKey: "PASTE_WEB_API_KEY_KAMU_DISINI",
+            apiKey: "AIzaSyDKSClDAgRVLNDXx54Wj8cptayQ5kfxTZE",
             authDomain: "all-education-db.firebaseapp.com",
-            databaseURL: FIREBASE_URL,
-            projectId: "all-education-db"
+            databaseURL: "https://all-education-db-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "all-education-db",
+            storageBucket: "all-education-db.firebasestorage.app",
+            messagingSenderId: "854181288642",
+            appId: "1:854181288642:web:a9ad3020126f088076b95b"
         });
         let APP_DATA = { Config:{}, Products:[], Pills:[], Packages:[], Banners:[], Testimonials:[], Teachers:[], Articles:[], Events:[], FAQ:[] };
         let CONFIG = {};
