@@ -1876,142 +1876,274 @@ if (p) {
                                 </div>
                             </div>`;
                         }
-                        // =========================================================================
-                        // 3. TAMPILAN KHUSUS LANDING PAGE: ALL EDUCATION PRIVAT (CORPORATE UI & HP = DESKTOP)
+                       // =========================================================================
+                        // 3. TAMPILAN KHUSUS LANDING PAGE: ALL EDUCATION PRIVAT (CLEAN CORPORATE + TIMELINE)
                         // =========================================================================
                         else if (isPrivat) {
-                            const privTags = ['TUTOR ELITE', 'CUSTOM TARGET', '1-ON-1 INTENSIF', 'EVALUASI BERKALA', 'WAKTU FLEKSIBEL', 'SEMUA BIDANG', 'KURIKULUM UPDATE', 'TERPERCAYA'];
-
-                            // Render Keunggulan dengan gaya Corporate Executive Numbered Cards (2 Kolom di HP & Desktop)
                             const privFeats = (p.keunggulan||'').split('\n').filter(x=>x.trim()).map((x, idx) => {
-                                const num = idx < 9 ? `0${idx+1}` : `${idx+1}`;
-                                const tag = privTags[idx % privTags.length];
+                                const parts = x.split(/—|–| - /);
+                                const featTitle = parts.length > 1 ? parts[0].trim() : `Keunggulan 0${idx+1}`;
+                                const featDesc = parts.length > 1 ? parts.slice(1).join(' — ').trim() : x.trim();
                                 return `
-                                <div class="bg-white rounded-xl md:rounded-2xl p-2.5 sm:p-5 md:p-7 shadow-[0_4px_20px_rgba(12,43,90,0.03)] border border-slate-200/90 hover:border-[#0CB4B6] transition-all duration-300 relative overflow-hidden group flex items-start gap-2 sm:gap-4 md:gap-5 h-full">
-                                    <div class="w-1 h-full bg-[#0C2B5A] group-hover:bg-[#0CB4B6] transition-colors absolute left-0 top-0"></div>
-                                    <div class="w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-slate-50 border border-slate-200 text-[#0C2B5A] group-hover:bg-[#0C2B5A] group-hover:text-white font-black text-[8px] sm:text-xs md:text-sm flex items-center justify-center shrink-0 transition">
-                                        ${num}
+                                <div class="group bg-white p-4 sm:p-6 md:p-7 rounded-2xl border border-slate-200/80 hover:border-[#0CB4B6]/60 hover:shadow-[0_12px_32px_rgba(12,43,90,0.06)] transition-all duration-300 flex items-start gap-3.5 sm:gap-5 h-full">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-slate-50 border border-slate-200 text-[#0C2B5A] group-hover:bg-[#0C2B5A] group-hover:text-white group-hover:border-[#0C2B5A] font-black text-xs sm:text-sm flex items-center justify-center shrink-0 transition-colors duration-300">
+                                        0${idx+1}
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <span class="text-[6px] sm:text-[8px] md:text-[9px] font-bold uppercase tracking-widest px-1.5 sm:px-2.5 py-0.5 rounded bg-slate-100 text-slate-600 inline-block mb-1">${tag}</span>
-                                        <h4 class="font-bold text-slate-800 text-[8.5px] sm:text-xs md:text-base leading-snug group-hover:text-[#0C2B5A] transition">${x}</h4>
+                                        <h4 class="font-extrabold text-[#0C2B5A] text-xs sm:text-base md:text-lg mb-1 leading-snug">${featTitle}</h4>
+                                        <p class="text-[10px] sm:text-xs md:text-sm text-slate-600 leading-relaxed font-normal">${featDesc}</p>
                                     </div>
                                 </div>`;
                             }).join('');
 
-                            // Render Fasilitas dengan gaya Clean Privilege Grid (4 Kolom Sejajar di HP & Desktop)
-                            const fasilLabels = ['MODE BELAJAR', 'KURIKULUM', 'PREFERENSI TUTOR', 'CAKUPAN MAPEL', 'SEMUA JENJANG', 'JADWAL BELAJAR', 'MODUL & LAPORAN', 'KONSULTASI'];
-                            const privFasil = (p.fasilitas||'').split('\n').filter(x=>x.trim()).map((x, idx) => {
-                                const lbl = fasilLabels[idx % fasilLabels.length];
-                                return `
-                                <div class="bg-white/5 hover:bg-white/10 backdrop-blur-sm p-2.5 sm:p-5 md:p-6 rounded-xl md:rounded-2xl border border-white/15 hover:border-cyan-300/50 transition-all duration-300 flex flex-col justify-between group h-full">
-                                    <div>
-                                        <div class="flex items-center justify-between gap-1 mb-2 sm:mb-4">
-                                            <div class="w-6 h-6 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-lg bg-white/10 border border-white/15 text-cyan-300 flex items-center justify-center shrink-0">
-                                                <svg class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            const privFasil = (p.fasilitas||'').split('\n').filter(x=>x.trim()).map(x => `
+                                <div class="flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.11] border border-white/10 hover:border-cyan-400/40 transition-all duration-200">
+                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#0CB4B6]/20 border border-[#0CB4B6]/40 text-cyan-300 flex items-center justify-center shrink-0">
+                                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                    <span class="font-semibold text-white/95 text-[10px] sm:text-xs md:text-sm leading-snug">${x}</span>
+                                </div>`).join('');
+
+                            const timelineStages = {
+                                sd: {
+                                    step: '01',
+                                    badge: 'KELAS 1 – 6 SD',
+                                    title: 'Privat Jenjang SD',
+                                    subtitle: 'Membangun fondasi konsep dasar, kebiasaan belajar mandiri, serta pendampingan tugas & ujian sekolah.',
+                                    curr: 'Kurikulum Merdeka • K13 • Cambridge / IB',
+                                    focus: 'Pendampingan PR & tugas harian, penguatan konsep dasar, persiapan PTS/PAS/US, hingga bimbingan olimpiade.',
+                                    subjects: [
+                                        { name: 'Matematika SD', detail: 'Operasi hitung, pecahan, pengukuran, bangun datar & ruang, soal cerita.' },
+                                        { name: 'IPAS / Sains Dasar', detail: 'Makhluk hidup, ekosistem, gaya & energi, tata surya, eksperimen sederhana.' },
+                                        { name: 'Bahasa Indonesia', detail: 'Membaca pemahaman, menyusun paragraf, kosakata, ringkasan cerita.' },
+                                        { name: 'Bahasa Inggris SD', detail: 'Vocabulary, grammar dasar, percakapan harian, reading & writing.' },
+                                        { name: 'PKN & IPS Terpadu', detail: 'Nilai kewarganegaraan, peta & lingkungan, aktivitas ekonomi dasar.' },
+                                        { name: 'Persiapan TKA & Ujian Sekolah', detail: 'Latihan soal tipe analisis dan pemantapan materi akhir jenjang SD.' }
+                                    ]
+                                },
+                                smp: {
+                                    step: '02',
+                                    badge: 'KELAS 7 – 9 SMP',
+                                    title: 'Privat Jenjang SMP',
+                                    subtitle: 'Pendalaman konsep eksakta dan analitik, peningkatan nilai rapor, serta persiapan masuk SMA unggulan.',
+                                    curr: 'Kurikulum Merdeka • K13 • IGCSE',
+                                    focus: 'Pemahaman materi mendalam, penyelesaian soal bertingkat, persiapan penilaian sekolah, dan seleksi SMA favorit.',
+                                    subjects: [
+                                        { name: 'Matematika SMP', detail: 'Aljabar, persamaan & pertidaksamaan, fungsi, geometri, statistika & peluang.' },
+                                        { name: 'Fisika SMP', detail: 'Besaran & satuan, gerak & gaya, energi, kalor, getaran, gelombang & optika.' },
+                                        { name: 'Biologi SMP', detail: 'Klasifikasi makhluk hidup, sistem organ tubuh manusia, genetika & lingkungan.' },
+                                        { name: 'Kimia Dasar / IPA Terpadu', detail: 'Atom, zat & perubahannya, larutan, reaksi sederhana.' },
+                                        { name: 'Bahasa Inggris & Bahasa Indonesia', detail: 'Teks analitik, struktur kalimat, reading comprehension, penulisan.' },
+                                        { name: 'Persiapan TKA SMP & Seleksi SMA', detail: 'Simulasi soal penalaran dan penguatan materi inti kelas 7–9.' }
+                                    ]
+                                },
+                                sma: {
+                                    step: '03',
+                                    badge: 'KELAS 10 – 12 SMA',
+                                    title: 'Privat Jenjang SMA (MIPA & IPS)',
+                                    subtitle: 'Pendampingan mapel peminatan, optimalisasi nilai rapor jalur SNBP, dan persiapan TKA SMA.',
+                                    curr: 'Kurikulum Merdeka • K13 • IB / A-Level',
+                                    focus: 'Penguasaan konsep lanjutan sesuai jurusan, strategi menjaga nilai rapor stabil, dan latihan soal HOTS.',
+                                    subjects: [
+                                        { name: 'Matematika Wajib & Tingkat Lanjut', detail: 'Fungsi, trigonometri, matriks, vektor, limit, turunan, integral & kombinatorika.' },
+                                        { name: 'Fisika SMA', detail: 'Mekanika, fluida, termodinamika, listrik magnet, gelombang cahaya & fisika modern.' },
+                                        { name: 'Kimia SMA', detail: 'Stoikiometri, ikatan kimia, termokimia, kesetimbangan, larutan & kimia organik.' },
+                                        { name: 'Biologi SMA', detail: 'Sel & metabolisme, genetika & pewarisan sifat, evolusi, bioteknologi & fisiologi.' },
+                                        { name: 'Ekonomi & Akuntansi', detail: 'Mikroekonomi, makroekonomi, kebijakan fiskal/moneter, siklus akuntansi & jurnal.' },
+                                        { name: 'Sosiologi, Geografi & Bahasa Inggris', detail: 'Interaksi & perubahan sosial, kebumian & pemetaan, academic reading & writing.' }
+                                    ]
+                                },
+                                ptn: {
+                                    step: '04',
+                                    badge: 'PERSIAPAN MASUK PTN & KEDINASAN',
+                                    title: 'Privat Seleksi Perguruan Tinggi',
+                                    subtitle: 'Strategi intensif 1-on-1 untuk UTBK-SNBT, Ujian Mandiri PTN, sekolah kedinasan, dan kelas internasional (IUP).',
+                                    curr: 'SNBT • SIMAK UI • UTUL UGM • SMUP • Kedinasan',
+                                    focus: 'Bedah pola soal, manajemen waktu pengerjaan, evaluasi kelemahan subtes, dan rasionalisasi target prodi.',
+                                    subjects: [
+                                        { name: 'Penalaran Umum (PU)', detail: 'Penalaran induktif, deduktif, dan kuantitatif berbasis konteks.' },
+                                        { name: 'Pengetahuan & Pemahaman Umum (PPU)', detail: 'Makna kata, relasi antar-kalimat, gagasan utama & kebahasaan.' },
+                                        { name: 'Pemahaman Bacaan & Menulis (PBM)', detail: 'Ejaan, tanda baca, kalimat efektif, koherensi & struktur paragraf.' },
+                                        { name: 'Pengetahuan Kuantitatif (PK)', detail: 'Konsep matematika terapan, aljabar, geometri, data & logika angka.' },
+                                        { name: 'Penalaran Matematika (PM)', detail: 'Pemodelan masalah nyata, analisis grafik, dan pemecahan soal cerita HOTS.' },
+                                        { name: 'Literasi B. Indonesia, B. Inggris & Ujian Mandiri', detail: 'Pemahaman teks panjang, akademik Inggris, serta pendalaman mapel Mandiri/Kedinasan.' }
+                                    ]
+                                },
+                                kuliah: {
+                                    step: '05',
+                                    badge: 'MAHASISWA & UMUM',
+                                    title: 'Privat Mata Kuliah & Ujian Kampus',
+                                    subtitle: 'Bimbingan personal sesuai silabus mata kuliah untuk pemahaman konsep, persiapan UTS/UAS, dan sertifikasi.',
+                                    curr: 'Silabus Universitas • S1 / Vokasi / Umum',
+                                    focus: 'Pendampingan materi perkuliahan yang menantang, pembahasan latihan/tugas kuliah, pengolahan data, dan ujian.',
+                                    subjects: [
+                                        { name: 'Kalkulus, Aljabar Linear & Statistika', detail: 'Turunan/integral multivariabel, matriks/vektor, probabilitas & uji statistik.' },
+                                        { name: 'Pemrograman, Algoritma & Basis Data', detail: 'Logika pemrograman, struktur data, SQL, Python/Java/web & analisis sistem.' },
+                                        { name: 'Akuntansi, Keuangan & Ekonomi Lanjutan', detail: 'Akuntansi keuangan/manajemen, analisis laporan keuangan, ekonometrika.' },
+                                        { name: 'Mekanika Teknik, Rangkaian & Kimia/Biologi Kampus', detail: 'Statika/dinamika, rangkaian listrik, termodinamika, biokimia & mikrobiologi.' },
+                                        { name: 'Metode Penelitian & Pengolahan Data', detail: 'Penyusunan kerangka analisis, SPSS/R/Excel/Python, interpretasi hasil.' },
+                                        { name: 'TOEFL / IELTS & Bahasa Asing Akademik', detail: 'Struktur & listening TOEFL/IELTS, academic writing, dan persiapan presentasi.' }
+                                    ]
+                                }
+                            };
+
+                            window.selectPrivatStage = (stageKey) => {
+                                const data = timelineStages[stageKey];
+                                if (!data) return;
+
+                                document.querySelectorAll('.priv-tl-btn').forEach(btn => {
+                                    const isActive = btn.getAttribute('data-stage') === stageKey;
+                                    btn.className = isActive
+                                        ? 'priv-tl-btn flex-1 min-w-[130px] text-left p-3.5 sm:p-4 rounded-2xl bg-[#0C2B5A] text-white shadow-lg border border-[#0C2B5A] transition-all cursor-pointer'
+                                        : 'priv-tl-btn flex-1 min-w-[130px] text-left p-3.5 sm:p-4 rounded-2xl bg-slate-50 hover:bg-cyan-50/60 text-[#0C2B5A] border border-slate-200/80 hover:border-[#0CB4B6] transition-all cursor-pointer';
+
+                                    const stepEl = btn.querySelector('.tl-step');
+                                    const subEl = btn.querySelector('.tl-sub');
+                                    if (stepEl) {
+                                        stepEl.className = isActive
+                                            ? 'tl-step text-[10px] font-black uppercase tracking-widest text-cyan-300 block mb-0.5'
+                                            : 'tl-step text-[10px] font-black uppercase tracking-widest text-[#0CB4B6] block mb-0.5';
+                                    }
+                                    if (subEl) {
+                                        subEl.className = isActive
+                                            ? 'tl-sub text-[10px] text-slate-300 line-clamp-1 mt-0.5'
+                                            : 'tl-sub text-[10px] text-slate-500 line-clamp-1 mt-0.5';
+                                    }
+                                });
+
+                                const detailBox = document.getElementById('privat-timeline-detail');
+                                if (!detailBox) return;
+
+                                detailBox.innerHTML = `
+                                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+                                        <div class="lg:col-span-4 bg-slate-50/90 rounded-2xl p-5 sm:p-6 border border-slate-200/80">
+                                            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-cyan-50 text-[#0C2B5A] border border-cyan-200/70 mb-3">${data.badge}</span>
+                                            <h4 class="text-lg sm:text-xl font-black text-[#0C2B5A] mb-2">${data.title}</h4>
+                                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">${data.subtitle}</p>
+                                            <div class="space-y-3 pt-3 border-t border-slate-200/70 text-xs">
+                                                <div>
+                                                    <p class="font-bold text-slate-400 uppercase text-[10px] tracking-wider">Kurikulum / Acuan</p>
+                                                    <p class="font-bold text-[#0C2B5A] mt-0.5">${data.curr}</p>
+                                                </div>
+                                                <div>
+                                                    <p class="font-bold text-slate-400 uppercase text-[10px] tracking-wider">Fokus Pendampingan</p>
+                                                    <p class="text-slate-600 leading-relaxed mt-0.5">${data.focus}</p>
+                                                </div>
                                             </div>
-                                            <span class="text-[5.5px] sm:text-[8px] md:text-[9px] font-bold uppercase tracking-wider px-1.5 sm:px-2 py-0.5 rounded bg-white/10 text-cyan-200 truncate">${lbl}</span>
+                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="mt-5 w-full py-3 px-4 bg-[#F06822] hover:bg-orange-600 text-white font-bold text-xs rounded-xl shadow-md transition">
+                                                Konsultasi & Daftar ${data.title} &rarr;
+                                            </button>
                                         </div>
-                                        <p class="font-bold text-white text-[7.5px] sm:text-xs md:text-sm leading-snug md:leading-relaxed">${x}</p>
+
+                                        <div class="lg:col-span-8">
+                                            <div class="flex items-center justify-between mb-4">
+                                                <h5 class="text-sm sm:text-base font-extrabold text-[#0C2B5A]">Mata Pelajaran & Materi yang Didampingi (${data.badge})</h5>
+                                                <span class="text-[11px] font-semibold text-[#0CB4B6]">1-on-1 Personal</span>
+                                            </div>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                                ${data.subjects.map((s, i) => `
+                                                    <div class="p-4 rounded-xl bg-white border border-slate-200/80 hover:border-[#0CB4B6] transition">
+                                                        <div class="flex items-center gap-2 mb-1">
+                                                            <span class="text-[10px] font-black text-[#0CB4B6]">0${i+1}</span>
+                                                            <h6 class="font-extrabold text-xs sm:text-sm text-[#0C2B5A]">${s.name}</h6>
+                                                        </div>
+                                                        <p class="text-[11px] sm:text-xs text-slate-600 leading-relaxed">${s.detail}</p>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="mt-2.5 sm:mt-4 pt-2 border-t border-white/10 flex items-center justify-between text-[6px] sm:text-[9px] md:text-[10px] font-semibold text-slate-300">
-                                        <span>Standar Layanan</span>
-                                        <span class="text-cyan-300 font-bold">1-on-1</span>
-                                    </div>
-                                </div>`;
-                            }).join('');
+                                `;
+                            };
 
                             h = `
-                            <!-- HERO SECTION: ALL EDUCATION PRIVAT (2 KOLOM KIRI-KANAN SAMA PERSIS DI HP & DESKTOP) -->
-                            <section class="relative bg-[#07162C] bg-gradient-to-br from-[#061224] via-[#0C2B5A] to-[#0A3656] text-white pt-6 sm:pt-12 md:pt-24 pb-14 sm:pb-20 md:pb-32 px-2.5 sm:px-4 md:px-8 overflow-hidden border-b border-white/10">
-                                <div class="absolute inset-0 z-0 opacity-10">
-                                    <img src="${bgImg}" class="w-full h-full object-cover mix-blend-luminosity">
-                                </div>
+                            <!-- HERO SECTION: ALL EDUCATION PRIVAT (TANPA GAMBAR - CLEAN CORPORATE) -->
+                            <section class="relative bg-[#07162C] bg-gradient-to-br from-[#061224] via-[#0C2B5A] to-[#0A3656] text-white pt-8 sm:pt-14 md:pt-20 pb-16 sm:pb-24 md:pb-32 px-3 sm:px-6 md:px-8 overflow-hidden border-b border-white/10">
+                                <div class="absolute top-0 right-1/4 w-[480px] h-[480px] bg-[#0CB4B6]/15 rounded-full blur-[120px] pointer-events-none"></div>
 
-                                <div class="relative z-10 max-w-[1200px] mx-auto grid grid-cols-12 gap-2.5 sm:gap-6 md:gap-12 items-center">
-                                    <!-- Kolom Kiri (7 Kolom di HP & Desktop) -->
-                                    <div class="col-span-7 text-left flex flex-col items-start reveal-left active">
-                                        <div class="inline-flex items-center gap-1.5 sm:gap-2.5 bg-white/10 border border-white/20 px-2 sm:px-3.5 py-0.5 sm:py-1.5 rounded-full mb-2 sm:mb-4 md:mb-6 backdrop-blur-sm">
-                                            <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#0CB4B6]"></span>
-                                            <span class="text-[6px] sm:text-[9px] md:text-[11px] font-bold uppercase tracking-wider text-cyan-200">EXCLUSIVE 1-ON-1 PERSONAL TUTORING</span>
+                                <div class="relative z-10 max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+                                    <!-- Kolom Kiri (7 Kolom) -->
+                                    <div class="lg:col-span-7 text-left flex flex-col items-start reveal-left active">
+                                        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3.5 py-1 rounded-full mb-4 backdrop-blur-sm">
+                                            <span class="w-2 h-2 rounded-full bg-[#0CB4B6]"></span>
+                                            <span class="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-cyan-200">EXCLUSIVE 1-ON-1 PERSONAL TUTORING</span>
                                         </div>
 
-                                        <h1 class="text-[13px] min-[400px]:text-[15px] sm:text-3xl md:text-5xl lg:text-[52px] font-black text-white tracking-tight leading-[1.15] mb-2 sm:mb-4 md:mb-5">
+                                        <h1 class="text-2xl sm:text-4xl lg:text-[50px] font-black text-white tracking-tight leading-[1.15] mb-4">
                                             Pendampingan Personal,<br/>
                                             <span class="text-cyan-300">Prestasi Optimal</span> di Setiap Jenjang.
                                         </h1>
 
-                                        <p class="text-slate-200 text-[8px] min-[400px]:text-[9px] sm:text-xs md:text-lg leading-snug md:leading-relaxed mb-3 sm:mb-6 md:mb-8 max-w-2xl font-normal">
+                                        <p class="text-slate-200 text-xs sm:text-base md:text-lg leading-relaxed mb-7 max-w-2xl font-normal">
                                             ${p.desc || 'All Education Privat menghadirkan layanan bimbingan belajar 1-on-1 secara tatap muka (Home Visit) maupun daring (Online) dengan pendekatan One Student One Learning Strategy yang disesuaikan sepenuhnya dengan target akademik siswa.'}
                                         </p>
 
-                                        <!-- 3 Metrik Utama Sejajar -->
-                                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 w-full max-w-xl mb-3 sm:mb-6 md:mb-8 text-left">
-                                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg md:rounded-xl p-1.5 sm:p-3">
-                                                <p class="text-[6px] sm:text-[9px] md:text-[10px] text-cyan-300 font-bold uppercase tracking-wider">Mode Belajar</p>
-                                                <p class="text-[7.5px] sm:text-xs md:text-sm font-extrabold text-white mt-0.5 leading-tight">Home Visit & Online</p>
+                                        <div class="grid grid-cols-3 gap-2.5 sm:gap-4 w-full max-w-xl mb-7 text-left">
+                                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3">
+                                                <p class="text-[9px] sm:text-[10px] text-cyan-300 font-bold uppercase tracking-wider">Mode Belajar</p>
+                                                <p class="text-xs sm:text-sm font-extrabold text-white mt-0.5 leading-tight">Home Visit & Online</p>
                                             </div>
-                                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg md:rounded-xl p-1.5 sm:p-3">
-                                                <p class="text-[6px] sm:text-[9px] md:text-[10px] text-cyan-300 font-bold uppercase tracking-wider">Cakupan</p>
-                                                <p class="text-[7.5px] sm:text-xs md:text-sm font-extrabold text-white mt-0.5 leading-tight">SD–SMA, PTN & Kuliah</p>
+                                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3">
+                                                <p class="text-[9px] sm:text-[10px] text-cyan-300 font-bold uppercase tracking-wider">Cakupan</p>
+                                                <p class="text-xs sm:text-sm font-extrabold text-white mt-0.5 leading-tight">SD–SMA, PTN & Kuliah</p>
                                             </div>
-                                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg md:rounded-xl p-1.5 sm:p-3">
-                                                <p class="text-[6px] sm:text-[9px] md:text-[10px] text-cyan-300 font-bold uppercase tracking-wider">Kurikulum</p>
-                                                <p class="text-[7.5px] sm:text-xs md:text-sm font-extrabold text-white mt-0.5 leading-tight">Nasional & Internasional</p>
+                                            <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3">
+                                                <p class="text-[9px] sm:text-[10px] text-cyan-300 font-bold uppercase tracking-wider">Kurikulum</p>
+                                                <p class="text-xs sm:text-sm font-extrabold text-white mt-0.5 leading-tight">Nasional & Internasional</p>
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-row gap-1.5 sm:gap-3 w-full sm:w-auto">
-                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="px-2.5 sm:px-6 md:px-8 py-1.5 sm:py-3 md:py-4 bg-[#F06822] hover:bg-orange-600 text-white font-bold text-[7.5px] sm:text-xs md:text-base rounded-lg md:rounded-xl shadow-lg transition flex items-center justify-center gap-1 sm:gap-2 whitespace-nowrap">
+                                        <div class="flex flex-wrap gap-3">
+                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="px-6 sm:px-8 py-3.5 bg-[#F06822] hover:bg-orange-600 text-white font-bold text-xs sm:text-sm md:text-base rounded-xl shadow-lg transition flex items-center gap-2">
                                                 <span>Reservasi Tutor Privat</span>
-                                                <svg class="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                                             </button>
-                                            <button onclick="document.getElementById('privat-levels').scrollIntoView({behavior:'smooth'})" class="px-2.5 sm:px-5 md:px-7 py-1.5 sm:py-3 md:py-4 bg-white/10 hover:bg-white/20 text-white border border-white/25 font-semibold text-[7.5px] sm:text-xs md:text-base rounded-lg md:rounded-xl backdrop-blur-sm transition whitespace-nowrap">
-                                                Cakupan Program &darr;
+                                            <button onclick="document.getElementById('privat-levels').scrollIntoView({behavior:'smooth'})" class="px-6 sm:px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/25 font-semibold text-xs sm:text-sm md:text-base rounded-xl backdrop-blur-sm transition">
+                                                Jelajahi Jenjang & Mapel &darr;
                                             </button>
                                         </div>
                                     </div>
 
-                                    <!-- Kolom Kanan: Kartu Metodologi One Student One Strategy (5 Kolom di HP & Desktop) -->
-                                    <div class="col-span-5 reveal-right active">
-                                        <div class="bg-white rounded-xl sm:rounded-2xl p-2.5 sm:p-5 md:p-7 shadow-[0_25px_60px_rgba(0,0,0,0.35)] border border-slate-200 text-slate-800">
-                                            <div class="flex items-center justify-between border-b border-slate-100 pb-2 sm:pb-4 md:pb-5 mb-2.5 sm:mb-4 md:mb-5">
-                                                <div class="flex items-center gap-1.5 sm:gap-3">
-                                                    ${p.img ? `<img src="${p.img}" alt="All Education Privat" class="w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg object-contain bg-slate-50 p-1 border border-slate-200">` : `<div class="w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg bg-[#0C2B5A] text-white font-black text-[7px] sm:text-xs flex items-center justify-center">PRIVAT</div>`}
+                                    <!-- Kolom Kanan: Kartu Metodologi One Student One Strategy (5 Kolom) -->
+                                    <div class="lg:col-span-5 reveal-right active">
+                                        <div class="bg-white rounded-2xl p-5 sm:p-7 shadow-[0_25px_60px_rgba(0,0,0,0.35)] border border-slate-200 text-slate-800">
+                                            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+                                                <div class="flex items-center gap-3">
+                                                    ${p.img ? `<img src="${p.img}" alt="All Education Privat" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-contain bg-slate-50 p-1 border border-slate-200">` : `<div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#0C2B5A] text-white font-black text-xs flex items-center justify-center">PRIVAT</div>`}
                                                     <div>
-                                                        <span class="text-[5.5px] sm:text-[8px] md:text-[10px] font-bold uppercase tracking-widest text-[#0CB4B6] block">Methodology Framework</span>
-                                                        <h3 class="font-extrabold text-[8px] sm:text-xs md:text-base text-[#0C2B5A] leading-tight">One Student One Strategy</h3>
+                                                        <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-[#0CB4B6] block">Methodology Framework</span>
+                                                        <h3 class="font-extrabold text-sm sm:text-base text-[#0C2B5A] leading-tight">One Student One Strategy</h3>
                                                     </div>
                                                 </div>
-                                                <span class="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[5.5px] sm:text-[8px] md:text-[10px] font-bold uppercase shrink-0">Terverifikasi</span>
+                                                <span class="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] sm:text-[10px] font-bold uppercase shrink-0">Terverifikasi</span>
                                             </div>
 
-                                            <div class="space-y-1.5 sm:space-y-3 mb-2.5 sm:mb-5">
-                                                <div class="bg-slate-50 border border-slate-200/70 rounded-lg sm:rounded-xl p-2 sm:p-3.5 flex items-start gap-2 sm:gap-3">
-                                                    <div class="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-md bg-[#0C2B5A] text-white flex items-center justify-center font-bold text-[7px] sm:text-xs shrink-0 mt-0.5">01</div>
+                                            <div class="space-y-3 mb-5">
+                                                <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-3.5 flex items-start gap-3">
+                                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-[#0C2B5A] text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">01</div>
                                                     <div>
-                                                        <p class="text-[7.5px] sm:text-xs md:text-sm font-extrabold text-[#0C2B5A] leading-tight">Diagnostic & Target Mapping</p>
-                                                        <p class="text-[6.5px] sm:text-[10px] md:text-xs text-slate-600 mt-0.5 leading-snug">Pemetaan gaya belajar, analisis kebutuhan materi, dan penetapan target akademik siswa.</p>
+                                                        <p class="text-xs sm:text-sm font-extrabold text-[#0C2B5A] leading-tight">Diagnostic & Target Mapping</p>
+                                                        <p class="text-[11px] sm:text-xs text-slate-600 mt-0.5 leading-snug">Pemetaan gaya belajar, analisis kebutuhan materi, dan penetapan target akademik siswa.</p>
                                                     </div>
                                                 </div>
-                                                <div class="bg-slate-50 border border-slate-200/70 rounded-lg sm:rounded-xl p-2 sm:p-3.5 flex items-start gap-2 sm:gap-3">
-                                                    <div class="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-md bg-[#0CB4B6] text-white flex items-center justify-center font-bold text-[7px] sm:text-xs shrink-0 mt-0.5">02</div>
+                                                <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-3.5 flex items-start gap-3">
+                                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-[#0CB4B6] text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">02</div>
                                                     <div>
-                                                        <p class="text-[7.5px] sm:text-xs md:text-sm font-extrabold text-[#0C2B5A] leading-tight">Precision Tutor Matching</p>
-                                                        <p class="text-[6.5px] sm:text-[10px] md:text-xs text-slate-600 mt-0.5 leading-snug">Penugasan tutor terseleksi lulusan PTN unggulan sesuai bidang studi dan karakter siswa.</p>
+                                                        <p class="text-xs sm:text-sm font-extrabold text-[#0C2B5A] leading-tight">Precision Tutor Matching</p>
+                                                        <p class="text-[11px] sm:text-xs text-slate-600 mt-0.5 leading-snug">Penugasan tutor terseleksi lulusan PTN unggulan sesuai bidang studi dan karakter siswa.</p>
                                                     </div>
                                                 </div>
-                                                <div class="bg-slate-50 border border-slate-200/70 rounded-lg sm:rounded-xl p-2 sm:p-3.5 flex items-start gap-2 sm:gap-3">
-                                                    <div class="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-md bg-[#F06822] text-white flex items-center justify-center font-bold text-[7px] sm:text-xs shrink-0 mt-0.5">03</div>
+                                                <div class="bg-slate-50 border border-slate-200/70 rounded-xl p-3.5 flex items-start gap-3">
+                                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-[#F06822] text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">03</div>
                                                     <div>
-                                                        <p class="text-[7.5px] sm:text-xs md:text-sm font-extrabold text-[#0C2B5A] leading-tight">Progress Tracking & Assurance</p>
-                                                        <p class="text-[6.5px] sm:text-[10px] md:text-xs text-slate-600 mt-0.5 leading-snug">Laporan evaluasi berkala bagi orang tua serta jaminan kecocokan pengajar.</p>
+                                                        <p class="text-xs sm:text-sm font-extrabold text-[#0C2B5A] leading-tight">Progress Tracking & Assurance</p>
+                                                        <p class="text-[11px] sm:text-xs text-slate-600 mt-0.5 leading-snug">Laporan evaluasi berkala bagi orang tua serta jaminan kecocokan pengajar.</p>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="bg-cyan-50/70 border border-cyan-200/80 rounded-lg sm:rounded-xl p-2 sm:p-3 text-center">
-                                                <p class="text-[6.5px] sm:text-[10px] md:text-xs font-bold text-[#0C2B5A]">Mendukung Kurikulum Nasional (Merdeka / K13) & Internasional (Cambridge / IB)</p>
+                                            <div class="bg-cyan-50/70 border border-cyan-200/80 rounded-xl p-3 text-center">
+                                                <p class="text-[10px] sm:text-xs font-bold text-[#0C2B5A]">Mendukung Kurikulum Nasional (Merdeka / K13) & Internasional (Cambridge / IB)</p>
                                             </div>
                                         </div>
                                     </div>
@@ -2019,177 +2151,120 @@ if (p) {
                             </section>
 
                             <!-- MAIN CONTENT ALL EDUCATION PRIVAT -->
-                            <div class="bg-[#F8FAFC] relative z-20 pt-8 sm:pt-14 pb-14 md:pb-20">
-                                <div class="max-w-[1200px] mx-auto px-2.5 sm:px-4 md:px-8">
+                            <div class="bg-[#F8FAFC] relative z-20 pt-12 sm:pt-16 pb-16 md:pb-24">
+                                <div class="max-w-[1200px] mx-auto px-3 sm:px-6 md:px-8">
 
-                                    <!-- SEKSI CAKUPAN SEMUA JENJANG (BENTO 6 KOLOM: 3 ATAS & 2 BAWAH SAMA PERSIS DI HP & DESKTOP) -->
-                                    <div id="privat-levels" class="mb-14 sm:mb-20 md:mb-24 reveal">
-                                        <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-10 md:mb-12">
-                                            <span class="text-[7px] sm:text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-[#0CB4B6]">Academic Coverage</span>
-                                            <h2 class="text-sm sm:text-2xl md:text-4xl font-extrabold text-[#0C2B5A] mt-0.5 leading-tight">Cakupan Jenjang Pendidikan & Mata Kuliah</h2>
-                                            <p class="text-slate-600 text-[8px] sm:text-xs md:text-base mt-1 font-normal">Pendampingan intensif seluruh mata pelajaran sekolah, seleksi perguruan tinggi, hingga mata kuliah universitas.</p>
+                                    <!-- SEKSI CAKUPAN JENJANG PENDIDIKAN & MATA KULIAH (TIMELINE INTERAKTIF) -->
+                                    <div id="privat-levels" class="mb-16 sm:mb-24 reveal">
+                                        <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
+                                            <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-[#0CB4B6]">Interactive Academic Timeline</span>
+                                            <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-[#0C2B5A] mt-1 leading-tight">Cakupan Jenjang Pendidikan & Mata Kuliah</h2>
+                                            <p class="text-slate-600 text-xs sm:text-sm md:text-base mt-2">Klik jenjang pada alur perjalanan belajar di bawah untuk melihat rincian mata pelajaran dan materi pendampingan.</p>
                                         </div>
 
-                                        <div class="grid grid-cols-6 gap-2 sm:gap-4 md:gap-6">
-                                            <!-- 1. Jenjang SD (2 dari 6 Kolom) -->
-                                            <div class="col-span-2 bg-white rounded-xl md:rounded-2xl p-2.5 sm:p-5 md:p-7 shadow-sm border-t-4 border-emerald-600 border-x border-b border-slate-200/80 flex flex-col justify-between">
-                                                <div>
-                                                    <div class="flex items-center justify-between gap-1 mb-2 sm:mb-4">
-                                                        <span class="bg-emerald-50 text-emerald-800 text-[6px] sm:text-[9px] md:text-[10px] font-bold px-1.5 sm:px-2.5 py-0.5 rounded uppercase border border-emerald-200">KELAS 1 – 6 SD</span>
-                                                        <span class="text-[7px] sm:text-xs font-black text-slate-300">01</span>
-                                                    </div>
-                                                    <h3 class="text-[9px] sm:text-base md:text-xl font-extrabold text-[#0C2B5A] mb-1 sm:mb-2 leading-tight">Privat Jenjang SD</h3>
-                                                    <p class="text-[7px] sm:text-xs text-slate-600 leading-snug md:leading-relaxed mb-2.5 sm:mb-4">Pendampingan tugas harian, penguatan konsep dasar, hingga persiapan ujian sekolah dan olimpiade.</p>
-                                                    <div class="flex flex-wrap gap-1 sm:gap-1.5 mb-2.5 sm:mb-4">
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">Matematika</span>
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">IPAS / Sains</span>
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">B. Inggris</span>
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">TKA SD</span>
-                                                    </div>
-                                                </div>
-                                                <div class="pt-2 sm:pt-3 border-t border-slate-100 text-[6.5px] sm:text-[10px] md:text-[11px] font-bold text-emerald-700 flex items-center justify-between">
-                                                    <span class="truncate">Nasional & Cambridge</span>
-                                                    <span class="shrink-0">1-on-1</span>
-                                                </div>
+                                        <div class="bg-white rounded-2xl md:rounded-3xl border border-slate-200/80 shadow-[0_10px_35px_rgba(12,43,90,0.05)] p-4 sm:p-7 md:p-9">
+                                            <!-- Bar Timeline 5 Tahap -->
+                                            <div class="flex flex-col md:flex-row items-stretch md:items-center gap-2 sm:gap-3 mb-7 pb-6 border-b border-slate-100">
+                                                <button type="button" data-stage="sd" onclick="selectPrivatStage('sd')" class="priv-tl-btn flex-1 min-w-[130px] text-left p-3.5 sm:p-4 rounded-2xl bg-[#0C2B5A] text-white shadow-lg border border-[#0C2B5A] transition-all cursor-pointer">
+                                                    <span class="tl-step text-[10px] font-black uppercase tracking-widest text-cyan-300 block mb-0.5">01 • SD</span>
+                                                    <div class="font-extrabold text-xs sm:text-sm">Jenjang SD</div>
+                                                    <p class="tl-sub text-[10px] text-slate-300 line-clamp-1 mt-0.5">Kelas 1–6 & TKA</p>
+                                                </button>
+
+                                                <div class="hidden md:flex text-slate-300 font-black shrink-0">&rarr;</div>
+
+                                                <button type="button" data-stage="smp" onclick="selectPrivatStage('smp')" class="priv-tl-btn flex-1 min-w-[130px] text-left p-3.5 sm:p-4 rounded-2xl bg-slate-50 hover:bg-cyan-50/60 text-[#0C2B5A] border border-slate-200/80 hover:border-[#0CB4B6] transition-all cursor-pointer">
+                                                    <span class="tl-step text-[10px] font-black uppercase tracking-widest text-[#0CB4B6] block mb-0.5">02 • SMP</span>
+                                                    <div class="font-extrabold text-xs sm:text-sm">Jenjang SMP</div>
+                                                    <p class="tl-sub text-[10px] text-slate-500 line-clamp-1 mt-0.5">Kelas 7–9 & TKA</p>
+                                                </button>
+
+                                                <div class="hidden md:flex text-slate-300 font-black shrink-0">&rarr;</div>
+
+                                                <button type="button" data-stage="sma" onclick="selectPrivatStage('sma')" class="priv-tl-btn flex-1 min-w-[130px] text-left p-3.5 sm:p-4 rounded-2xl bg-slate-50 hover:bg-cyan-50/60 text-[#0C2B5A] border border-slate-200/80 hover:border-[#0CB4B6] transition-all cursor-pointer">
+                                                    <span class="tl-step text-[10px] font-black uppercase tracking-widest text-[#0CB4B6] block mb-0.5">03 • SMA</span>
+                                                    <div class="font-extrabold text-xs sm:text-sm">Jenjang SMA</div>
+                                                    <p class="tl-sub text-[10px] text-slate-500 line-clamp-1 mt-0.5">MIPA, IPS & TKA</p>
+                                                </button>
+
+                                                <div class="hidden md:flex text-slate-300 font-black shrink-0">&rarr;</div>
+
+                                                <button type="button" data-stage="ptn" onclick="selectPrivatStage('ptn')" class="priv-tl-btn flex-1 min-w-[130px] text-left p-3.5 sm:p-4 rounded-2xl bg-slate-50 hover:bg-cyan-50/60 text-[#0C2B5A] border border-slate-200/80 hover:border-[#0CB4B6] transition-all cursor-pointer">
+                                                    <span class="tl-step text-[10px] font-black uppercase tracking-widest text-[#0CB4B6] block mb-0.5">04 • PTN</span>
+                                                    <div class="font-extrabold text-xs sm:text-sm">Masuk PTN</div>
+                                                    <p class="tl-sub text-[10px] text-slate-500 line-clamp-1 mt-0.5">SNBT, Mandiri & Kedinasan</p>
+                                                </button>
+
+                                                <div class="hidden md:flex text-slate-300 font-black shrink-0">&rarr;</div>
+
+                                                <button type="button" data-stage="kuliah" onclick="selectPrivatStage('kuliah')" class="priv-tl-btn flex-1 min-w-[130px] text-left p-3.5 sm:p-4 rounded-2xl bg-slate-50 hover:bg-cyan-50/60 text-[#0C2B5A] border border-slate-200/80 hover:border-[#0CB4B6] transition-all cursor-pointer">
+                                                    <span class="tl-step text-[10px] font-black uppercase tracking-widest text-[#0CB4B6] block mb-0.5">05 • KULIAH</span>
+                                                    <div class="font-extrabold text-xs sm:text-sm">Mata Kuliah</div>
+                                                    <p class="tl-sub text-[10px] text-slate-500 line-clamp-1 mt-0.5">Mahasiswa & Umum</p>
+                                                </button>
                                             </div>
 
-                                            <!-- 2. Jenjang SMP (2 dari 6 Kolom) -->
-                                            <div class="col-span-2 bg-white rounded-xl md:rounded-2xl p-2.5 sm:p-5 md:p-7 shadow-sm border-t-4 border-[#0CB4B6] border-x border-b border-slate-200/80 flex flex-col justify-between">
-                                                <div>
-                                                    <div class="flex items-center justify-between gap-1 mb-2 sm:mb-4">
-                                                        <span class="bg-cyan-50 text-cyan-800 text-[6px] sm:text-[9px] md:text-[10px] font-bold px-1.5 sm:px-2.5 py-0.5 rounded uppercase border border-cyan-200">KELAS 7 – 9 SMP</span>
-                                                        <span class="text-[7px] sm:text-xs font-black text-slate-300">02</span>
-                                                    </div>
-                                                    <h3 class="text-[9px] sm:text-base md:text-xl font-extrabold text-[#0C2B5A] mb-1 sm:mb-2 leading-tight">Privat Jenjang SMP</h3>
-                                                    <p class="text-[7px] sm:text-xs text-slate-600 leading-snug md:leading-relaxed mb-2.5 sm:mb-4">Peningkatan capaian nilai rapor, penguasaan konsep eksakta, dan persiapan seleksi SMA unggulan.</p>
-                                                    <div class="flex flex-wrap gap-1 sm:gap-1.5 mb-2.5 sm:mb-4">
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">Matematika</span>
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">Fisika & Biologi</span>
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">B. Inggris</span>
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">TKA SMP</span>
-                                                    </div>
-                                                </div>
-                                                <div class="pt-2 sm:pt-3 border-t border-slate-100 text-[6.5px] sm:text-[10px] md:text-[11px] font-bold text-[#0CB4B6] flex items-center justify-between">
-                                                    <span class="truncate">Merdeka, K13 & IGCSE</span>
-                                                    <span class="shrink-0">1-on-1</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- 3. Jenjang SMA (2 dari 6 Kolom) -->
-                                            <div class="col-span-2 bg-white rounded-xl md:rounded-2xl p-2.5 sm:p-5 md:p-7 shadow-sm border-t-4 border-[#0C2B5A] border-x border-b border-slate-200/80 flex flex-col justify-between">
-                                                <div>
-                                                    <div class="flex items-center justify-between gap-1 mb-2 sm:mb-4">
-                                                        <span class="bg-slate-100 text-[#0C2B5A] text-[6px] sm:text-[9px] md:text-[10px] font-bold px-1.5 sm:px-2.5 py-0.5 rounded uppercase border border-slate-200">KELAS 10 – 12 SMA</span>
-                                                        <span class="text-[7px] sm:text-xs font-black text-slate-300">03</span>
-                                                    </div>
-                                                    <h3 class="text-[9px] sm:text-base md:text-xl font-extrabold text-[#0C2B5A] mb-1 sm:mb-2 leading-tight">Privat SMA (MIPA/IPS)</h3>
-                                                    <p class="text-[7px] sm:text-xs text-slate-600 leading-snug md:leading-relaxed mb-2.5 sm:mb-4">Pendalaman mata pelajaran peminatan SMA, optimalisasi nilai rapor jalur SNBP, serta persiapan TKA SMA.</p>
-                                                    <div class="flex flex-wrap gap-1 sm:gap-1.5 mb-2.5 sm:mb-4">
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">Matematika Lanjut</span>
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">Fisika & Kimia</span>
-                                                        <span class="bg-slate-100 text-slate-700 text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-1.5 sm:px-2.5 py-0.5 rounded">Ekonomi</span>
-                                                    </div>
-                                                </div>
-                                                <div class="pt-2 sm:pt-3 border-t border-slate-100 text-[6.5px] sm:text-[10px] md:text-[11px] font-bold text-[#0C2B5A] flex items-center justify-between">
-                                                    <span class="truncate">Nasional, IB & A-Level</span>
-                                                    <span class="shrink-0">1-on-1</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- 4. Persiapan Masuk PTN (3 dari 6 Kolom) -->
-                                            <div class="col-span-3 bg-[#0C2B5A] text-white rounded-xl md:rounded-2xl p-3 sm:p-6 md:p-8 shadow-md flex flex-col justify-between">
-                                                <div>
-                                                    <div class="flex items-center justify-between gap-1 mb-2 sm:mb-4">
-                                                        <span class="bg-amber-400 text-slate-950 text-[6px] sm:text-[9px] md:text-[10px] font-extrabold px-2 sm:px-3 py-0.5 rounded uppercase">04 • SELEKSI PERGURUAN TINGGI</span>
-                                                        <span class="text-[6.5px] sm:text-xs font-bold text-cyan-300">UTBK & Mandiri</span>
-                                                    </div>
-                                                    <h3 class="text-[10px] sm:text-lg md:text-2xl font-extrabold mb-1 sm:mb-2 leading-tight">Privat Persiapan Masuk PTN & Kedinasan</h3>
-                                                    <p class="text-[7px] sm:text-xs md:text-sm text-slate-200 leading-snug md:leading-relaxed mb-2.5 sm:mb-5">Pendampingan 1-on-1 bedah soal HOTS UTBK-SNBT, Ujian Mandiri (SIMAK UI, UTUL UGM, SMUP Unpad), serta kelas internasional (IUP).</p>
-                                                    <div class="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-5">
-                                                        <span class="bg-white/10 border border-white/15 text-white text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded">TPS & Penalaran Umum</span>
-                                                        <span class="bg-white/10 border border-white/15 text-white text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded">Penalaran Matematika</span>
-                                                        <span class="bg-white/10 border border-white/15 text-white text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded">Literasi B. Indo & Inggris</span>
-                                                    </div>
-                                                </div>
-                                                <div class="pt-2 sm:pt-4 border-t border-white/15 flex items-center justify-between text-[6.5px] sm:text-xs font-bold text-amber-300">
-                                                    <span>Pengajar Alumni PTN Terbaik</span>
-                                                    <span>Program Intensif &rarr;</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- 5. Privat Mata Kuliah Mahasiswa (3 dari 6 Kolom) -->
-                                            <div class="col-span-3 bg-[#112A46] text-white rounded-xl md:rounded-2xl p-3 sm:p-6 md:p-8 shadow-md flex flex-col justify-between border border-slate-700">
-                                                <div>
-                                                    <div class="flex items-center justify-between gap-1 mb-2 sm:mb-4">
-                                                        <span class="bg-[#0CB4B6] text-white text-[6px] sm:text-[9px] md:text-[10px] font-extrabold px-2 sm:px-3 py-0.5 rounded uppercase">05 • MAHASISWA & UMUM</span>
-                                                        <span class="text-[6.5px] sm:text-xs font-bold text-cyan-300">Higher Education</span>
-                                                    </div>
-                                                    <h3 class="text-[10px] sm:text-lg md:text-2xl font-extrabold mb-1 sm:mb-2 leading-tight">Privat Mata Kuliah & Persiapan Ujian Kampus</h3>
-                                                    <p class="text-[7px] sm:text-xs md:text-sm text-slate-200 leading-snug md:leading-relaxed mb-2.5 sm:mb-5">Pendampingan khusus mahasiswa untuk penguasaan materi perkuliahan, persiapan UTS/UAS, pengolahan data, serta bahasa asing bersama akademisi/praktisi.</p>
-                                                    <div class="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-5">
-                                                        <span class="bg-white/10 border border-white/15 text-white text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded">Kalkulus & Statistika</span>
-                                                        <span class="bg-white/10 border border-white/15 text-white text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded">Pemrograman / IT</span>
-                                                        <span class="bg-white/10 border border-white/15 text-white text-[6px] sm:text-[9px] md:text-[10px] font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded">Akuntansi & TOEFL/IELTS</span>
-                                                    </div>
-                                                </div>
-                                                <div class="pt-2 sm:pt-4 border-t border-white/15 flex items-center justify-between text-[6.5px] sm:text-xs font-bold text-cyan-300">
-                                                    <span>Menyesuaikan Silabus Universitas</span>
-                                                    <span>1-on-1 Mentoring &rarr;</span>
-                                                </div>
-                                            </div>
+                                            <!-- Konten Detail Mapel Interaktif -->
+                                            <div id="privat-timeline-detail"></div>
                                         </div>
                                     </div>
 
-                                    <!-- KENAPA MEMILIH ALL EDUCATION PRIVAT (2 KOLOM SEJAJAR DI HP & DESKTOP) -->
+                                    <!-- KEUNGGULAN LAYANAN ALL EDUCATION PRIVAT -->
                                     ${privFeats ? `
-                                    <div class="mb-14 sm:mb-20 md:mb-24 reveal">
-                                        <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-10 md:mb-12">
-                                            <span class="text-[7px] sm:text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-[#0CB4B6]">Key Advantages</span>
-                                            <h2 class="text-sm sm:text-2xl md:text-4xl font-extrabold text-[#0C2B5A] mt-0.5 leading-tight">Keunggulan Layanan All Education Privat</h2>
-                                            <p class="text-slate-600 text-[8px] sm:text-xs md:text-sm mt-1">Standar pendampingan akademik personal yang dirancang untuk kenyamanan dan efektivitas belajar.</p>
+                                    <div class="mb-16 sm:mb-24 reveal">
+                                        <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+                                            <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-[#0CB4B6]">Key Advantages</span>
+                                            <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-[#0C2B5A] mt-1 leading-tight">Keunggulan Layanan All Education Privat</h2>
+                                            <p class="text-slate-600 text-xs sm:text-sm mt-1">Standar pendampingan akademik personal yang dirancang untuk kenyamanan dan efektivitas belajar.</p>
                                         </div>
-                                        <div class="grid grid-cols-2 gap-2 sm:gap-4 md:gap-5 max-w-5xl mx-auto items-stretch">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 max-w-5xl mx-auto items-stretch">
                                             ${privFeats}
                                         </div>
                                     </div>` : ''}
 
-                                    <!-- FASILITAS YANG DIDAPATKAN (4 KOLOM SEJAJAR DI HP & DESKTOP) -->
+                                    <!-- FASILITAS PEMBELAJARAN PESERTA -->
                                     ${privFasil ? `
-                                    <div class="mb-14 sm:mb-20 md:mb-24 bg-[#0C2B5A] rounded-2xl md:rounded-3xl p-4 sm:p-8 md:p-14 shadow-xl relative overflow-hidden reveal">
-                                        <div class="relative z-10 text-center max-w-3xl mx-auto mb-6 sm:mb-10 md:mb-12">
-                                            <span class="text-[7px] sm:text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-cyan-300">Program Privileges</span>
-                                            <h2 class="text-sm sm:text-2xl md:text-4xl font-extrabold text-white mt-0.5 leading-tight">Fasilitas Pembelajaran Peserta</h2>
-                                            <p class="text-slate-300 text-[8px] sm:text-xs md:text-sm mt-1">Layanan menyeluruh mulai dari pemilihan pengajar, fleksibilitas jadwal, hingga evaluasi berkala.</p>
+                                    <div class="mb-16 sm:mb-24 bg-[#0C2B5A] rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-12 shadow-xl relative overflow-hidden reveal">
+                                        <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between mb-8 gap-3">
+                                            <div>
+                                                <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-cyan-300">Program Privileges</span>
+                                                <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-white mt-1 leading-tight">Fasilitas Pembelajaran Peserta</h2>
+                                            </div>
+                                            <p class="text-slate-300 text-xs sm:text-sm max-w-md">Layanan menyeluruh mulai dari pemilihan pengajar, fleksibilitas jadwal, hingga evaluasi berkala.</p>
                                         </div>
 
-                                        <div class="relative z-10 grid grid-cols-4 gap-2 sm:gap-4 md:gap-5 items-stretch">
+                                        <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 items-stretch">
                                             ${privFasil}
                                         </div>
                                     </div>` : ''}
 
-                                    ${gals ? `<div class="mb-14 md:mb-24 reveal-up"><h2 class="text-base sm:text-2xl md:text-3xl font-extrabold text-[#0C2B5A] mb-6 md:mb-10 text-center">Dokumentasi Sesi Privat</h2><div class="flex gap-4 overflow-x-auto hide-scroll snap-x pb-6 px-4 -mx-4">${gals}</div></div>` : ''}
+                                    ${gals ? `<div class="mb-16 md:mb-24 reveal-up"><h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-[#0C2B5A] mb-8 text-center">Dokumentasi Sesi Privat</h2><div class="flex gap-4 overflow-x-auto hide-scroll snap-x pb-6 px-4 -mx-4">${gals}</div></div>` : ''}
 
                                     <!-- CORPORATE CTA BANNER -->
-                                    <div class="mb-14 md:mb-24 bg-gradient-to-r from-[#07162C] via-[#0C2B5A] to-[#0A3656] rounded-2xl p-5 sm:p-8 md:p-14 text-white text-center shadow-xl reveal border border-slate-700">
+                                    <div class="mb-16 md:mb-24 bg-gradient-to-r from-[#07162C] via-[#0C2B5A] to-[#0A3656] rounded-2xl md:rounded-3xl p-6 sm:p-10 md:p-14 text-white text-center shadow-xl reveal border border-slate-700">
                                         <div class="max-w-3xl mx-auto">
-                                            <span class="text-[7px] sm:text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-cyan-300">Academic Consultation & Registration</span>
-                                            <h2 class="text-sm sm:text-2xl md:text-4xl font-extrabold mt-1 mb-2 md:mb-4 leading-tight">Mulai Pendampingan Privat Bersama Pengajar Terbaik</h2>
-                                            <p class="text-slate-300 text-[8px] sm:text-xs md:text-base mb-4 md:mb-8 leading-relaxed">
+                                            <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-cyan-300">Academic Consultation & Registration</span>
+                                            <h2 class="text-lg sm:text-2xl md:text-4xl font-extrabold mt-1.5 mb-3 leading-tight">Mulai Pendampingan Privat Bersama Pengajar Terbaik</h2>
+                                            <p class="text-slate-300 text-xs sm:text-sm md:text-base mb-6 md:mb-8 leading-relaxed">
                                                 Konsultasikan kebutuhan mata pelajaran, jadwal belajar, maupun kriteria pengajar yang sesuai. Tim Akademik kami siap menyusun program belajar personal untuk Anda.
                                             </p>
-                                            <div class="flex flex-row gap-2.5 sm:gap-4 justify-center">
-                                                <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-[#F06822] hover:bg-orange-600 text-white font-bold px-5 sm:px-10 py-2.5 sm:py-4 rounded-xl text-[8px] sm:text-sm md:text-base shadow-lg transition">
-                                                    Daftar & Pilih Tutor Sekarang
-                                                </button>
-                                            </div>
+                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-[#F06822] hover:bg-orange-600 text-white font-bold px-6 sm:px-10 py-3.5 rounded-xl text-xs sm:text-sm md:text-base shadow-lg transition">
+                                                Daftar & Pilih Tutor Sekarang
+                                            </button>
                                         </div>
                                     </div>
 
-                                    <div class="mb-14 md:mb-24 reveal-up"><div class="flex justify-between items-end mb-6 md:mb-8"><h2 class="text-base sm:text-2xl md:text-3xl font-extrabold text-[#0C2B5A]">Rekomendasi Paket Belajar</h2></div><div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 snap-x" id="prod-promo-container"></div></div>
-                                    <div class="mb-14 md:mb-24 reveal-up"><div class="flex justify-between items-end mb-6 md:mb-8"><h2 class="text-base sm:text-2xl md:text-3xl font-extrabold text-[#0C2B5A]">Testimoni Siswa & Mahasiswa</h2></div><div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll snap-x pb-8" id="prod-testi-container"></div></div>
-                                    <div class="max-w-3xl mx-auto reveal-up"><h2 class="text-base sm:text-2xl md:text-3xl font-extrabold text-[#0C2B5A] mb-6 md:mb-10 text-center">Pertanyaan Umum</h2><div class="space-y-3 md:space-y-4" id="prod-faq-container"></div></div>
+                                    <div class="mb-16 md:mb-24 reveal-up"><div class="flex justify-between items-end mb-6 md:mb-8"><h2 class="text-lg sm:text-2xl md:text-3xl font-extrabold text-[#0C2B5A]">Rekomendasi Paket Belajar</h2></div><div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 snap-x" id="prod-promo-container"></div></div>
+                                    <div class="mb-16 md:mb-24 reveal-up"><div class="flex justify-between items-end mb-6 md:mb-8"><h2 class="text-lg sm:text-2xl md:text-3xl font-extrabold text-[#0C2B5A]">Testimoni Siswa & Mahasiswa</h2></div><div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll snap-x pb-8" id="prod-testi-container"></div></div>
+                                    <div class="max-w-3xl mx-auto reveal-up"><h2 class="text-lg sm:text-2xl md:text-3xl font-extrabold text-[#0C2B5A] mb-6 md:mb-10 text-center">Pertanyaan Umum</h2><div class="space-y-3 md:space-y-4" id="prod-faq-container"></div></div>
                                 </div>
                             </div>`;
+
+                            setTimeout(() => {
+                                if (typeof window.selectPrivatStage === 'function') {
+                                    window.selectPrivatStage('sd');
+                                }
+                            }, 0);
                         }
                        // =========================================================================
                         // 4. TAMPILAN KHUSUS LANDING PAGE: ENGLISH FOR KIDS (POP-ART BILINGUAL)
