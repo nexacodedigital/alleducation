@@ -597,7 +597,13 @@
     <script>
         // KONFIGURASI APLIKASI
         const FIREBASE_URL = "https://all-education-db-default-rtdb.asia-southeast1.firebasedatabase.app";
-        
+        const ALLOWED_ADMIN_EMAIL = "office.alleducenter@gmail.com";
+        firebase.initializeApp({
+            apiKey: "PASTE_WEB_API_KEY_KAMU_DISINI",
+            authDomain: "all-education-db.firebaseapp.com",
+            databaseURL: FIREBASE_URL,
+            projectId: "all-education-db"
+        });
         let APP_DATA = { Config:{}, Products:[], Pills:[], Packages:[], Banners:[], Testimonials:[], Teachers:[], Articles:[], Events:[], FAQ:[] };
         let CONFIG = {};
         let autoScrollIntervals = {};
