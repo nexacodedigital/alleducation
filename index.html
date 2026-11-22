@@ -1133,6 +1133,16 @@
        const router = {
             init: () => { window.addEventListener('popstate', () => router.loadRoute(window.location.pathname || '/')); router.loadRoute(window.location.pathname || '/'); },
             navigate: (path) => {
+                const mega = document.getElementById('nav-mega-grid');
+                if (mega) {
+                    mega.style.display = 'none';
+                    setTimeout(() => { mega.style.display = ''; }, 300);
+                }
+                window.history.pushState({}, '', path);
+                router.loadRoute(path);
+                window.scrollTo(0, 0);
+            },
+            loadRoute: (path) => {
     const mega = document.getElementById('nav-mega-grid');
     if (mega) {
         mega.style.display = 'none';
