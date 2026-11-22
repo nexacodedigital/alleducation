@@ -274,32 +274,72 @@
     <main id="app-content" class="min-h-screen">
         <div id="view-home" class="view-section active">
             
-            <section class="bg-gradient-to-br from-rg-primary to-rg-blue-dark text-white pt-8 pb-16 md:pt-20 md:pb-32 overflow-hidden relative">
-                <div class="max-w-[1200px] mx-auto px-4 md:px-8 flex flex-row items-center justify-between gap-3 md:gap-12 relative z-10">
-                    <div class="w-[58%] md:w-[55%] text-left reveal-left active z-20">
-                        <h1 class="text-[14px] min-[400px]:text-[16px] sm:text-3xl md:text-5xl lg:text-[54px] font-black leading-tight mb-2 md:mb-6 drop-shadow-lg tracking-tight">Belajar Tanpa Batas,<br/><span class="text-cyan-200">Raih Prestasi</span> Bersama<br/>All Education Indonesia</h1>
-                        <p class="text-[9px] min-[400px]:text-[10px] sm:text-base md:text-lg text-cyan-50 mb-3 md:mb-8 font-medium leading-snug md:leading-relaxed max-w-lg mx-0">All Education Indonesia adalah perusahaan EdTech yang menyediakan layanan les privat, kelas online, persiapan UTBK-SNBT, program Calistung, pendidikan K-12, pelatihan, Learning Management System (LMS) terbaik.</p>
+            <section class="bg-gradient-to-br from-rg-primary to-rg-blue-dark text-white pt-6 sm:pt-10 md:pt-16 pb-0 overflow-hidden relative">
+                <div class="max-w-[1200px] mx-auto px-3 sm:px-6 md:px-8 flex flex-row items-end justify-between gap-2 sm:gap-6 md:gap-10 relative z-10">
+                    
+                    <!-- KOLOM KIRI: TEKS & FORM -->
+                    <div class="w-[54%] sm:w-[52%] md:w-[50%] text-left reveal-left active z-20 pb-12 sm:pb-16 md:pb-28 pt-2 md:pt-6">
+                        <h1 class="text-[14px] min-[400px]:text-[16px] sm:text-3xl md:text-5xl lg:text-[52px] font-black leading-[1.15] mb-2 md:mb-5 drop-shadow-lg tracking-tight">Belajar Tanpa Batas,<br/><span class="text-cyan-200">Raih Prestasi</span> Bersama<br/>All Education Indonesia</h1>
+                        <p class="text-[8.5px] min-[400px]:text-[10px] sm:text-sm md:text-base lg:text-lg text-cyan-50 mb-3 md:mb-7 font-medium leading-snug md:leading-relaxed max-w-lg mx-0">All Education Indonesia adalah perusahaan EdTech yang menyediakan layanan les privat, kelas online, persiapan UTBK-SNBT, program Calistung, pendidikan K-12, pelatihan, Learning Management System (LMS) terbaik.</p>
                         
                         <div class="flex flex-row max-w-md mx-0 bg-white rounded-full p-1 md:p-2 shadow-2xl items-center w-full focus-within:ring-4 ring-cyan-400/30 transition">
-                            <span class="text-gray-600 font-bold px-2 md:px-5 border-r border-gray-200 text-[9px] sm:text-xs md:text-base">+62</span>
-                            <input type="tel" placeholder="Nomor HP" class="flex-1 px-2 md:px-5 py-1.5 md:py-3 outline-none text-gray-800 bg-transparent text-[9px] sm:text-xs md:text-base w-full min-w-[20px] font-medium">
-                            <button onclick="window.open(CONFIG.promoUrl||'#', '_blank')" class="bg-accent-orange text-white font-black rounded-full px-2.5 md:px-8 py-1.5 md:py-3.5 hover:bg-orange-600 transition whitespace-nowrap text-[8px] sm:text-xs md:text-base shadow-lg hover:shadow-orange-500/50">Dapatkan Diskon ></button>
+                            <span class="text-gray-600 font-bold px-1.5 sm:px-3 md:px-5 border-r border-gray-200 text-[8.5px] sm:text-xs md:text-base">+62</span>
+                            <input type="tel" placeholder="Nomor HP" class="flex-1 px-1.5 sm:px-3 md:text-base py-1 md:py-3 outline-none text-gray-800 bg-transparent text-[8.5px] sm:text-xs w-full min-w-[20px] font-medium">
+                            <button onclick="window.open(CONFIG.promoUrl||'#', '_blank')" class="bg-accent-orange text-white font-black rounded-full px-2 sm:px-4 md:px-7 py-1.5 md:py-3.5 hover:bg-orange-600 transition whitespace-nowrap text-[7.5px] sm:text-xs md:text-sm shadow-lg hover:shadow-orange-500/50">Dapatkan Diskon ></button>
                         </div>
                     </div>
                     
-                   <div class="w-[42%] md:w-[48%] flex justify-end reveal-right active z-10 mt-0">
-                        <div class="relative w-full max-w-[360px] md:max-w-[560px]">
-                            <!-- Efek Cahaya Halus di Belakang Siswa -->
-                            <div class="absolute inset-0 bg-cyan-300 blur-3xl opacity-25 rounded-full scale-90"></div>
-                            <!-- Gambar Tanpa Bingkai Putih + Animasi Melayang Halus -->
-                            <img id="dyn-hero-img" src="https://placehold.co/600x450" alt="Siswa All Education SD SMP SMA UTBK" class="w-full h-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.28)] relative z-10 animate-owl-float">
+                    <!-- KOLOM KANAN: FOTO CANDID + ANIMASI MOTION GRAPHICS HIDUP -->
+                    <div class="w-[46%] sm:w-[48%] md:w-[50%] flex justify-center items-end reveal-right active z-10 relative">
+                        <div class="relative w-full max-w-[260px] sm:max-w-[390px] md:max-w-[590px] flex items-end justify-center">
+                            
+                            <!-- 1. ANIMASI PITA CAHAYA (SWOOSH) DI BELAKANG SISWA -->
+                            <svg class="absolute inset-0 w-full h-full z-0 pointer-events-none scale-110 animate-pulse" viewBox="0 0 500 380" fill="none">
+                                <path d="M35 280 C 10 170, 120 40, 270 55 C 400 68, 480 170, 445 290" stroke="url(#aeSwoosh1)" stroke-width="18" stroke-linecap="round" opacity="0.85"/>
+                                <path d="M60 310 C 160 355, 360 340, 465 220" stroke="url(#aeSwoosh2)" stroke-width="12" stroke-linecap="round" opacity="0.75"/>
+                                <defs>
+                                    <linearGradient id="aeSwoosh1" x1="0" y1="0" x2="500" y2="300" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#FBBF24"/>
+                                        <stop offset="0.5" stop-color="#F06822"/>
+                                        <stop offset="1" stop-color="#38BDF8"/>
+                                    </linearGradient>
+                                    <linearGradient id="aeSwoosh2" x1="60" y1="310" x2="465" y2="220" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#34D399"/>
+                                        <stop offset="1" stop-color="#FDE047"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+
+                            <!-- 2. ANIMASI BOHLAM IDE MENYALA -->
+                            <div class="animate-owl-float absolute -top-3 sm:top-0 left-[38%] z-20 pointer-events-none">
+                                <div class="w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 rounded-full bg-amber-300/25 backdrop-blur-sm border border-amber-200/60 flex items-center justify-center shadow-[0_0_25px_rgba(251,191,36,0.65)]">
+                                    <span class="text-base sm:text-2xl md:text-3xl drop-shadow">💡</span>
+                                </div>
+                            </div>
+
+                            <!-- 3. ANIMASI BINTANG / SPARKLE BERKEDIP -->
+                            <span class="absolute top-6 left-4 sm:left-8 z-20 text-amber-300 text-sm sm:text-xl md:text-2xl animate-ping pointer-events-none">✦</span>
+                            <span class="absolute top-12 right-4 sm:right-8 z-20 text-cyan-200 text-xs sm:text-lg md:text-xl animate-bounce pointer-events-none">✨</span>
+
+                            <!-- 4. ANIMASI BUBBLE 'ABCD' MELAYANG -->
+                            <div class="animate-utbk-badge absolute top-2 sm:top-6 left-0 sm:left-2 z-20 bg-white text-[#0C2B5A] font-black text-[7px] sm:text-[10px] md:text-xs px-2 sm:px-3 py-1 sm:py-1.5 rounded-2xl rounded-bl-none shadow-lg border-2 border-cyan-300 pointer-events-none">
+                                A <span class="bg-[#0CB4B6] text-white px-1 rounded-full">B</span> C D
+                            </div>
+
+                            <!-- 5. ANIMASI BADGE NILAI '100' GOYANG -->
+                            <div class="animate-wa-wiggle absolute bottom-6 sm:bottom-10 right-0 sm:right-2 z-20 bg-gradient-to-br from-[#F06822] to-amber-500 text-white font-black text-[9px] sm:text-sm md:text-lg px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-2xl shadow-xl border-2 border-white transform rotate-6 pointer-events-none">
+                                100! ✓
+                            </div>
+
+                            <!-- FOTO SISWA CANDID PNG TRANSPARAN -->
+                            <img id="dyn-hero-img" src="https://placehold.co/600x450" alt="Siswa All Education SD SMP SMA UTBK" class="w-full h-auto object-contain relative z-10 scale-[1.08] sm:scale-[1.12] origin-bottom drop-shadow-[0_14px_24px_rgba(0,0,0,0.3)]" style="-webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%); mask-image: linear-gradient(to bottom, black 85%, transparent 100%);">
                         </div>
                     </div>
+
                 </div>
                 
-                <svg class="absolute bottom-0 left-0 w-full h-auto text-bg-soft" viewBox="0 0 1440 120" fill="currentColor" preserveAspectRatio="none"><path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,42.7C1120,32,1280,32,1360,32L1440,32L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path></svg>
+                <svg class="absolute bottom-0 left-0 w-full h-8 sm:h-14 md:h-20 text-bg-soft z-20 pointer-events-none" viewBox="0 0 1440 120" fill="currentColor" preserveAspectRatio="none"><path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,42.7C1120,32,1280,32,1360,32L1440,32L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path></svg>
             </section>
-
             <section class="max-w-[1200px] mx-auto px-4 md:px-8 -mt-8 md:-mt-12 relative z-30 reveal-up">
                 <div class="bg-white rounded-2xl shadow-xl p-3 md:p-4 flex gap-3 overflow-x-auto hide-scroll items-center border border-gray-100" id="pill-menu-container"></div>
             </section>
