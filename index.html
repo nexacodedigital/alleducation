@@ -1617,168 +1617,96 @@ if (p) {
                             </div>`;
                         }
                        // =========================================================================
-                        // 2. TAMPILAN KHUSUS LANDING PAGE: OWLKIDS (STORYBOOK & TACTILE BLOCKS UI - HP = DESKTOP)
+                        // 2. TAMPILAN KHUSUS LANDING PAGE: OWLKIDS (CLEAN WARM PREMIUM ACADEMY)
                         // =========================================================================
                         else if (isOwlKids) {
-                            const owlBlockThemes = [
-                                { border: 'border-orange-300', bg: 'bg-orange-50', badge: 'bg-orange-500 text-white', numBg: 'bg-[#EA580C]', shadow: 'shadow-[0_6px_0_#FDBA74]', tag: 'METODE CERITA & BERMAIN' },
-                                { border: 'border-emerald-300', bg: 'bg-emerald-50', badge: 'bg-emerald-600 text-white', numBg: 'bg-[#059669]', shadow: 'shadow-[0_6px_0_#6EE7B7]', tag: 'TANPA PAKSAAN MENGEJA' },
-                                { border: 'border-amber-300', bg: 'bg-amber-50', badge: 'bg-amber-500 text-slate-950', numBg: 'bg-[#D97706]', shadow: 'shadow-[0_6px_0_#FCD34D]', tag: 'STIMULASI MOTORIK' },
-                                { border: 'border-rose-300', bg: 'bg-rose-50', badge: 'bg-rose-500 text-white', numBg: 'bg-[#E11D48]', shadow: 'shadow-[0_6px_0_#FDA4AF]', tag: 'GURU SPESIALIS ANAK' },
-                                { border: 'border-teal-300', bg: 'bg-teal-50', badge: 'bg-teal-600 text-white', numBg: 'bg-[#0D9488]', shadow: 'shadow-[0_6px_0_#5EEAD4]', tag: 'SIAP MANDIRI MASUK SD' },
-                                { border: 'border-purple-300', bg: 'bg-purple-50', badge: 'bg-purple-600 text-white', numBg: 'bg-[#7C3AED]', shadow: 'shadow-[0_6px_0_#C4B5FD]', tag: 'JURNAL HARIAN BUNDA' }
-                            ];
-
                             const owlFeats = (p.keunggulan||'').split('\n').filter(x=>x.trim()).map((x, idx) => {
-                                const t = owlBlockThemes[idx % owlBlockThemes.length];
-                                const num = idx < 9 ? `0${idx+1}` : `${idx+1}`;
+                                const parts = x.split(/—|–| - /);
+                                const featTitle = parts.length > 1 ? parts[0].trim() : `Keunggulan 0${idx+1}`;
+                                const featDesc = parts.length > 1 ? parts.slice(1).join(' — ').trim() : x.trim();
                                 return `
-                                <div class="bg-white border-2 ${t.border} ${t.shadow} p-2.5 sm:p-5 md:p-6 rounded-2xl md:rounded-3xl hover:-translate-y-1 transition-all duration-300 flex items-start gap-2 sm:gap-4 h-full">
-                                    <div class="${t.numBg} text-white w-7 h-7 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 font-black text-[9px] sm:text-xs md:text-base shadow-sm">
-                                        ${num}
+                                <div class="group bg-white p-4 sm:p-6 md:p-7 rounded-2xl border border-orange-200/70 hover:border-orange-400 hover:shadow-[0_12px_32px_rgba(234,88,12,0.08)] transition-all duration-300 flex items-start gap-3.5 sm:gap-5 h-full">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-orange-50 border border-orange-200 text-[#C2410C] group-hover:bg-[#EA580C] group-hover:text-white group-hover:border-[#EA580C] font-black text-xs sm:text-sm flex items-center justify-center shrink-0 transition-colors duration-300">
+                                        0${idx+1}
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <span class="text-[5.5px] sm:text-[8px] md:text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${t.badge} mb-1 inline-block">${t.tag}</span>
-                                        <h4 class="font-extrabold text-slate-800 text-[8.5px] sm:text-xs md:text-base leading-snug">${x}</h4>
+                                        <h4 class="font-extrabold text-slate-900 text-xs sm:text-base md:text-lg mb-1 leading-snug">${featTitle}</h4>
+                                        <p class="text-[10px] sm:text-xs md:text-sm text-slate-600 leading-relaxed font-normal">${featDesc}</p>
                                     </div>
                                 </div>`;
                             }).join('');
 
-                            const fasilTags = ['HOME VISIT & ONLINE', 'BUKU CERITA VISUAL', 'BALOK & FLASHCARD', '1-ON-1 PERSONAL', 'JADWAL FLEKSIBEL', 'RAPOR TUMBUH KEMBANG', 'PENDAMPING SABAR', 'EVALUASI BERTAHAP'];
-                            const owlFasil = (p.fasilitas||'').split('\n').filter(x=>x.trim()).map((x, idx) => {
-                                const t = owlBlockThemes[(idx + 1) % owlBlockThemes.length];
-                                const fTag = fasilTags[idx % fasilTags.length];
-                                return `
-                                <div class="bg-white border-2 ${t.border} ${t.shadow} p-2.5 sm:p-5 md:p-6 rounded-2xl md:rounded-3xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full">
-                                    <div>
-                                        <div class="flex items-center justify-between gap-1 mb-2 sm:mb-4">
-                                            <span class="w-6 h-6 sm:w-9 sm:h-9 ${t.numBg} text-white rounded-lg sm:rounded-xl flex items-center justify-center font-black text-[8px] sm:text-xs shrink-0">#${idx+1}</span>
-                                            <span class="text-[5px] sm:text-[7.5px] md:text-[9px] font-black uppercase tracking-wider px-1.5 sm:px-2 py-0.5 rounded ${t.bg} text-slate-700 border ${t.border} truncate">${fTag}</span>
-                                        </div>
-                                        <p class="font-extrabold text-slate-800 text-[7.5px] sm:text-xs md:text-sm leading-snug md:leading-relaxed">${x}</p>
+                            const owlFasil = (p.fasilitas||'').split('\n').filter(x=>x.trim()).map(x => `
+                                <div class="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] border border-white/15 hover:border-amber-300/50 transition-all duration-200">
+                                    <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-amber-400/20 border border-amber-300/40 text-amber-300 flex items-center justify-center shrink-0">
+                                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                                     </div>
-                                    <div class="mt-2 sm:mt-4 pt-1.5 sm:pt-2.5 border-t border-dashed border-slate-200 flex items-center justify-between text-[6px] sm:text-[9px] font-extrabold text-orange-600">
-                                        <span>OwlKids Kit</span>
-                                        <span>★ Lengkap</span>
-                                    </div>
-                                </div>`;
-                            }).join('');
+                                    <span class="font-semibold text-white/95 text-[10px] sm:text-xs md:text-sm leading-snug">${x}</span>
+                                </div>`).join('');
 
                             h = `
-                            <!-- HERO SECTION OWLKIDS: WARM CORAL-ORANGE & SUNSHINE STORYBOOK THEME -->
-                            <section class="relative bg-gradient-to-br from-[#EA580C] via-[#F97316] to-[#FBBF24] text-white pt-6 sm:pt-12 md:pt-20 pb-16 sm:pb-24 md:pb-36 px-2.5 sm:px-4 md:px-8 overflow-hidden">
-                                <div class="absolute -top-20 -left-20 w-80 h-80 bg-yellow-200/30 rounded-full blur-3xl pointer-events-none"></div>
-                                <div class="absolute bottom-0 right-1/3 w-96 h-96 bg-rose-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                            <!-- HERO SECTION OWLKIDS: WARM EDITORIAL GRADIENT + FOTO ANAK BELAJAR -->
+                            <section class="relative bg-[#C2410C] bg-gradient-to-r from-[#B83B0A] via-[#DF5614] to-[#F28C18] text-white pt-8 sm:pt-14 md:pt-20 pb-16 sm:pb-24 md:pb-32 px-3 sm:px-6 md:px-8 overflow-hidden">
+                                <!-- Subtle Warm Ambient Glow -->
+                                <div class="absolute top-0 right-1/4 w-[480px] h-[480px] bg-amber-300/20 rounded-full blur-[120px] pointer-events-none"></div>
+                                <div class="absolute bottom-0 left-0 w-[380px] h-[380px] bg-orange-950/20 rounded-full blur-[100px] pointer-events-none"></div>
 
-                                <div class="max-w-[1200px] mx-auto relative z-10 grid grid-cols-12 gap-2.5 sm:gap-6 md:gap-10 items-center">
+                                <div class="max-w-[1200px] mx-auto relative z-10 grid grid-cols-12 gap-4 sm:gap-8 md:gap-12 items-center">
                                     
-                                    <!-- Kolom Kiri (7 Kolom di HP & Desktop) -->
-                                    <div class="col-span-7 text-left flex flex-col items-start reveal-left active">
-                                        <div class="inline-flex items-center gap-1.5 sm:gap-2 bg-white text-orange-700 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full mb-2 sm:mb-4 md:mb-6 shadow-md">
-                                            <span class="w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
-                                            <span class="text-[6px] sm:text-[9px] md:text-xs font-black uppercase tracking-wider">GOLDEN AGE ACADEMY • USIA 4–6 TAHUN</span>
+                                    <!-- Kolom Kiri (6 Kolom di Desktop, 7 di HP) -->
+                                    <div class="col-span-7 lg:col-span-6 text-left flex flex-col items-start reveal-left active">
+                                        <div class="inline-flex items-center gap-2 bg-white/15 border border-white/25 px-3 py-1 rounded-full mb-3 sm:mb-5 backdrop-blur-sm">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-200"></span>
+                                            <span class="text-[7px] sm:text-[10px] md:text-[11px] font-bold uppercase tracking-[0.14em] text-amber-50">GOLDEN AGE ACADEMY • USIA 4–6 TAHUN</span>
                                         </div>
 
-                                        <h1 class="text-[13px] min-[400px]:text-[15px] sm:text-3xl md:text-5xl lg:text-[52px] font-black text-white tracking-tight leading-[1.14] mb-2 sm:mb-4 md:mb-5 drop-shadow-sm">
-                                            Petualangan <span class="bg-white text-orange-600 px-2 sm:px-3 py-0.5 rounded-xl inline-block shadow">Calistung</span> Lewat Cerita, Garis & Balok Angka!
+                                        <h1 class="text-[15px] min-[400px]:text-[18px] sm:text-3xl md:text-5xl font-black text-white tracking-tight leading-[1.13] mb-3 sm:mb-5">
+                                            Belajar <span class="text-amber-200">Calistung</span> Tanpa Tekanan, Siap Mandiri Masuk SD.
                                         </h1>
 
-                                        <p class="text-orange-50 text-[8px] min-[400px]:text-[9px] sm:text-xs md:text-lg leading-snug md:leading-relaxed mb-3 sm:mb-6 md:mb-7 max-w-2xl font-medium">
-                                            ${p.desc || 'OwlKids by All Education dirancang khusus untuk anak usia prasekolah (4–6 tahun). Kami mengubah belajar Membaca, Menulis, dan Berhitung menjadi aktivitas bercerita, menggambar pola, dan bermain logika yang dinantikan anak setiap hari.'}
+                                        <p class="text-orange-50/95 text-[9px] min-[400px]:text-[10px] sm:text-sm md:text-base leading-relaxed mb-5 sm:mb-8 max-w-xl font-normal">
+                                            ${p.desc || 'OwlKids by All Education dirancang khusus untuk anak usia prasekolah (4–6 tahun) sebagai bekal memasuki Sekolah Dasar melalui metode membaca, menulis, dan berhitung yang interaktif dan menyenangkan.'}
                                         </p>
 
-                                        <!-- 3 Balok Tactile Ceria -->
-                                        <div class="grid grid-cols-3 gap-1.5 sm:gap-3 w-full max-w-xl mb-3 sm:mb-6 md:mb-8">
-                                            <div class="bg-[#FFFBEB] text-slate-900 rounded-xl sm:rounded-2xl p-1.5 sm:p-3 shadow-[0_5px_0_#B45309] border-2 border-white">
-                                                <span class="inline-block bg-orange-500 text-white font-black text-[5.5px] sm:text-[8px] px-1.5 py-0.5 rounded mb-0.5">MEMBACA (CA)</span>
-                                                <p class="text-[7.5px] sm:text-xs md:text-sm font-black text-slate-900 leading-tight">Cerita & Suku Kata</p>
-                                            </div>
-                                            <div class="bg-[#FFFBEB] text-slate-900 rounded-xl sm:rounded-2xl p-1.5 sm:p-3 shadow-[0_5px_0_#B45309] border-2 border-white">
-                                                <span class="inline-block bg-emerald-600 text-white font-black text-[5.5px] sm:text-[8px] px-1.5 py-0.5 rounded mb-0.5">MENULIS (LIS)</span>
-                                                <p class="text-[7.5px] sm:text-xs md:text-sm font-black text-slate-900 leading-tight">Tracing & Motorik</p>
-                                            </div>
-                                            <div class="bg-[#FFFBEB] text-slate-900 rounded-xl sm:rounded-2xl p-1.5 sm:p-3 shadow-[0_5px_0_#B45309] border-2 border-white">
-                                                <span class="inline-block bg-purple-600 text-white font-black text-[5.5px] sm:text-[8px] px-1.5 py-0.5 rounded mb-0.5">BERHITUNG (TUNG)</span>
-                                                <p class="text-[7.5px] sm:text-xs md:text-sm font-black text-slate-900 leading-tight">Balok & Sempoa Visual</p>
-                                            </div>
+                                        <div class="flex flex-row gap-2 sm:gap-3.5 w-full sm:w-auto mb-6 sm:mb-10">
+                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="px-3.5 sm:px-6 md:px-7 py-2 sm:py-3.5 bg-[#064E3B] hover:bg-emerald-950 text-white font-bold text-[8px] sm:text-xs md:text-sm rounded-xl shadow-[0_8px_24px_rgba(6,78,59,0.35)] transition flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                                                <span>Daftar Kelas OwlKids</span>
+                                                <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                            </button>
+                                            <button onclick="document.getElementById('owl-pillars').scrollIntoView({behavior:'smooth'})" class="px-3.5 sm:px-6 md:px-7 py-2 sm:py-3.5 bg-white/15 hover:bg-white/25 text-white border border-white/30 font-semibold text-[8px] sm:text-xs md:text-sm rounded-xl backdrop-blur-sm transition whitespace-nowrap">
+                                                Lihat Kurikulum &darr;
+                                            </button>
                                         </div>
 
-                                        <div class="flex flex-row gap-1.5 sm:gap-3 w-full sm:w-auto">
-                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="px-3 sm:px-6 md:px-9 py-2 sm:py-3.5 md:py-4 bg-[#064E3B] hover:bg-emerald-950 text-amber-300 font-black text-[7.5px] sm:text-xs md:text-base rounded-2xl shadow-[0_6px_0_#022C22] hover:translate-y-0.5 transition-all flex items-center justify-center gap-1 sm:gap-2 border-2 border-amber-300 whitespace-nowrap">
-                                                <span>Daftar Kelas OwlKids</span>
-                                                <svg class="w-2.5 h-2.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                            </button>
-                                            <button onclick="document.getElementById('owl-pillars').scrollIntoView({behavior:'smooth'})" class="px-2.5 sm:px-5 md:px-7 py-2 sm:py-3.5 md:py-4 bg-white/25 hover:bg-white/35 text-white border-2 border-white font-extrabold text-[7.5px] sm:text-xs md:text-base rounded-2xl backdrop-blur-sm transition whitespace-nowrap">
-                                                Kurikulum &darr;
-                                            </button>
+                                        <!-- 3 Pilar Ringkas Tanpa Kotak Tebal -->
+                                        <div class="grid grid-cols-3 gap-3 sm:gap-6 pt-4 sm:pt-6 border-t border-white/20 w-full max-w-lg text-left">
+                                            <div>
+                                                <p class="text-[6.5px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-200">Membaca (CA)</p>
+                                                <p class="text-[8px] sm:text-xs md:text-sm font-bold text-white mt-0.5">Phonics & Suku Kata</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[6.5px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-200">Menulis (LIS)</p>
+                                                <p class="text-[8px] sm:text-xs md:text-sm font-bold text-white mt-0.5">Tracing & Motorik</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[6.5px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-200">Berhitung (TUNG)</p>
+                                                <p class="text-[8px] sm:text-xs md:text-sm font-bold text-white mt-0.5">Logika & Visual</p>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <!-- Kolom Kanan: BUKU CERITA & KANVAS TRACING INTERAKTIF (KHAS OWLKIDS!) -->
-                                    <div class="col-span-5 reveal-right active">
-                                        <div class="bg-[#FFFDF9] rounded-2xl sm:rounded-[2rem] p-2.5 sm:p-5 md:p-6 shadow-[0_20px_50px_rgba(154,52,18,0.35)] border-4 border-white text-slate-800 relative">
-                                            <!-- Binding Spiral Buku di Atas -->
-                                            <div class="flex justify-center gap-2 sm:gap-4 -mt-4 sm:-mt-7 mb-2 sm:mb-3">
-                                                <span class="w-2.5 h-4 sm:w-3.5 sm:h-6 rounded-full bg-orange-600 border-2 border-white shadow"></span>
-                                                <span class="w-2.5 h-4 sm:w-3.5 sm:h-6 rounded-full bg-amber-500 border-2 border-white shadow"></span>
-                                                <span class="w-2.5 h-4 sm:w-3.5 sm:h-6 rounded-full bg-emerald-500 border-2 border-white shadow"></span>
-                                                <span class="w-2.5 h-4 sm:w-3.5 sm:h-6 rounded-full bg-rose-500 border-2 border-white shadow"></span>
-                                            </div>
+                                    <!-- Kolom Kanan: FOTO ANAK-ANAK BELAJAR (MENYATU HALUS DENGAN LATAR) -->
+                                    <div class="col-span-5 lg:col-span-6 reveal-right active flex items-center justify-center">
+                                        <div class="relative w-full max-w-[540px]">
+                                            <!-- GANTI LINK FOTO ANAK BELAJAR KAMU DI SINI -->
+                                            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1000&q=80" alt="Anak-anak Belajar Calistung di OwlKids" class="w-full h-auto aspect-[4/3] object-cover block rounded-2xl sm:rounded-3xl shadow-[0_24px_50px_rgba(124,45,18,0.35)] border-2 border-white/30" style="-webkit-mask-image: radial-gradient(ellipse 96% 96% at 50% 50%, black 80%, transparent 100%); mask-image: radial-gradient(ellipse 96% 96% at 50% 50%, black 80%, transparent 100%);">
 
-                                            <div class="flex items-center justify-between pb-2 sm:pb-3 mb-2 sm:mb-3.5 border-b-2 border-orange-100">
-                                                <div class="flex items-center gap-1.5 sm:gap-2.5">
-                                                    ${p.img ? `<img src="${p.img}" alt="OwlKids" class="w-6 h-6 sm:w-10 sm:h-10 rounded-xl object-contain bg-orange-50 p-1 border border-orange-200">` : `<div class="w-6 h-6 sm:w-10 sm:h-10 rounded-xl bg-orange-500 text-white font-black text-[7px] sm:text-xs flex items-center justify-center">OWL</div>`}
-                                                    <div>
-                                                        <span class="text-[5.5px] sm:text-[8px] md:text-[9px] font-black uppercase tracking-wider text-orange-600 block">My First Activity Book</span>
-                                                        <h3 class="text-[8px] sm:text-xs md:text-sm font-black text-slate-900 leading-tight">Lembar Eksplorasi Calistung</h3>
-                                                    </div>
-                                                </div>
-                                                <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 font-black text-[5.5px] sm:text-[8px] px-1.5 sm:px-2 py-0.5 rounded-md">Level TK A & B</span>
-                                            </div>
-
-                                            <!-- Aktivitas 1: Membaca Suku Kata Berirama -->
-                                            <div class="bg-orange-50/80 border-2 border-orange-200 rounded-xl p-2 sm:p-3 mb-2 sm:mb-3">
-                                                <p class="text-[6px] sm:text-[9px] font-black uppercase text-orange-800 mb-1">A. Membaca Suku Kata Tanpa Mengeja</p>
-                                                <div class="flex items-center justify-between gap-1 bg-white p-1.5 sm:p-2 rounded-lg border border-orange-200">
-                                                    <span class="px-2 py-1 rounded bg-orange-500 text-white font-black text-[8px] sm:text-xs">BO</span>
-                                                    <span class="text-orange-400 font-black text-[8px] sm:text-xs">+</span>
-                                                    <span class="px-2 py-1 rounded bg-amber-400 text-slate-900 font-black text-[8px] sm:text-xs">LA</span>
-                                                    <span class="text-slate-300 font-black text-[8px] sm:text-xs">&rarr;</span>
-                                                    <span class="px-2 sm:px-3 py-1 rounded bg-emerald-600 text-white font-black text-[8px] sm:text-xs tracking-wide">"BOLA"</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- Aktivitas 2: Kanvas Tracing Menulis (Garis Putus-Putus) -->
-                                            <div class="bg-emerald-50/80 border-2 border-emerald-200 rounded-xl p-2 sm:p-3 mb-2 sm:mb-3">
-                                                <div class="flex justify-between items-center mb-1">
-                                                    <p class="text-[6px] sm:text-[9px] font-black uppercase text-emerald-900">B. Latihan Garis & Menulis Huruf</p>
-                                                    <span class="text-[5.5px] sm:text-[8px] font-bold text-emerald-700">Motorik Halus</span>
-                                                </div>
-                                                <div class="bg-white border-2 border-dashed border-emerald-300 rounded-lg py-1.5 sm:py-2 px-3 flex items-center justify-around font-mono font-black text-[10px] sm:text-base md:text-lg text-emerald-700 tracking-widest">
-                                                    <span>A</span>
-                                                    <span class="text-slate-300 border-b-2 border-dashed border-slate-300">a</span>
-                                                    <span>B</span>
-                                                    <span class="text-slate-300 border-b-2 border-dashed border-slate-300">b</span>
-                                                    <span>1 2 3</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- Aktivitas 3: Sempoa Manik Berhitung -->
-                                            <div class="bg-amber-50 border-2 border-amber-200 rounded-xl p-2 sm:p-3 flex items-center justify-between">
-                                                <div>
-                                                    <p class="text-[6px] sm:text-[9px] font-black uppercase text-amber-900">C. Manik Hitung Visual</p>
-                                                    <div class="flex items-center gap-1 mt-1">
-                                                        <span class="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-rose-500 inline-block"></span>
-                                                        <span class="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-rose-500 inline-block"></span>
-                                                        <span class="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-rose-500 inline-block"></span>
-                                                        <span class="text-[7px] sm:text-xs font-black text-slate-600 mx-0.5">+</span>
-                                                        <span class="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-emerald-500 inline-block"></span>
-                                                        <span class="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-emerald-500 inline-block"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="bg-white border-2 border-amber-400 px-2.5 sm:px-3.5 py-1 rounded-xl text-center">
-                                                    <p class="text-[5.5px] sm:text-[8px] font-bold text-slate-400 uppercase">Jumlah</p>
-                                                    <p class="text-[10px] sm:text-base font-black text-orange-600">5 Manik</p>
+                                            <!-- Subtle Floating Pill di Kiri Bawah Foto -->
+                                            <div class="hidden sm:flex absolute -bottom-4 left-4 bg-white/95 backdrop-blur-md text-slate-900 px-4 py-2.5 rounded-2xl shadow-xl border border-orange-100 items-center gap-3">
+                                                <div class="w-8 h-8 rounded-xl bg-orange-100 text-[#EA580C] flex items-center justify-center font-black text-sm">✓</div>
+                                                <div class="text-left leading-tight">
+                                                    <p class="text-[11px] font-extrabold text-slate-900">Pendampingan 1-on-1</p>
+                                                    <p class="text-[10px] font-medium text-slate-500">Home Visit & Online Interaktif</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -1787,152 +1715,135 @@ if (p) {
                                 </div>
                             </section>
 
-                            <!-- MAIN CONTENT OWLKIDS (LATAR WARM CREAM) -->
-                            <div class="bg-[#FFFBF5] relative z-20 pt-8 sm:pt-14 pb-14 md:pb-20">
-                                <div class="max-w-[1200px] mx-auto px-2.5 sm:px-4 md:px-8">
+                            <!-- MAIN CONTENT OWLKIDS (LATAR WARM CREAM BERSIH) -->
+                            <div class="bg-[#FFFBF7] relative z-20 pb-16 md:pb-24">
+                                <div class="max-w-[1200px] mx-auto px-3 sm:px-6 md:px-8">
 
-                                    <!-- 3 PILAR UTAMA CALISTUNG (3 KOLOM SEJAJAR DI HP & DESKTOP) -->
-                                    <div id="owl-pillars" class="mb-14 sm:mb-20 md:mb-24 reveal">
-                                        <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-10 md:mb-12">
-                                            <span class="bg-orange-100 text-orange-800 border border-orange-300 text-[6.5px] sm:text-[10px] md:text-xs font-black px-2.5 sm:px-4 py-1 rounded-full uppercase tracking-widest">METODE BELAJAR TANPA TEKANAN</span>
-                                            <h2 class="text-sm sm:text-2xl md:text-4xl font-black text-slate-900 mt-2 leading-tight">3 Pilar Pondasi <span class="text-orange-600">Calistung OwlKids</span></h2>
+                                    <!-- 3 PILAR UTAMA CALISTUNG (CLEAN ARCHITECTURAL CARDS) -->
+                                    <div id="owl-pillars" class="grid grid-cols-3 gap-2.5 sm:gap-5 md:gap-6 -mt-8 sm:-mt-12 md:-mt-16 mb-14 sm:mb-20 md:mb-24 relative z-30">
+                                        <div class="bg-white rounded-xl md:rounded-2xl p-3 sm:p-6 md:p-8 shadow-[0_10px_30px_rgba(194,65,12,0.06)] border border-orange-100 border-t-[3px] border-t-[#EA580C] flex flex-col justify-between">
+                                            <div>
+                                                <div class="flex items-center justify-between mb-3 sm:mb-5">
+                                                    <span class="px-2.5 py-1 rounded-lg bg-orange-50 text-[#C2410C] font-black text-[9px] sm:text-xs">CA</span>
+                                                    <span class="text-[7px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-400">01 / MEMBACA</span>
+                                                </div>
+                                                <h3 class="text-[10px] sm:text-base md:text-lg font-extrabold text-slate-900 mb-1.5 leading-snug">Membaca Tanpa Mengeja</h3>
+                                                <p class="text-[7.5px] sm:text-xs md:text-sm text-slate-600 leading-relaxed mb-4">Mengenal bunyi huruf (phonics) dan suku kata berirama lewat kartu cerita agar anak cepat paham bacaan.</p>
+                                            </div>
+                                            <div class="pt-3 border-t border-slate-100 text-[7px] sm:text-xs font-semibold text-[#C2410C]">Bunyi Huruf • Suku Kata • Cerita</div>
                                         </div>
 
-                                        <div class="grid grid-cols-3 gap-2 sm:gap-5 md:gap-8">
-                                            <div class="bg-white border-2 border-orange-300 rounded-2xl md:rounded-3xl p-2.5 sm:p-6 md:p-8 shadow-[0_8px_0_#FDBA74] flex flex-col justify-between">
+                                        <div class="bg-white rounded-xl md:rounded-2xl p-3 sm:p-6 md:p-8 shadow-[0_10px_30px_rgba(194,65,12,0.06)] border border-emerald-100 border-t-[3px] border-t-[#059669] flex flex-col justify-between">
+                                            <div>
+                                                <div class="flex items-center justify-between mb-3 sm:mb-5">
+                                                    <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-[#059669] font-black text-[9px] sm:text-xs">LIS</span>
+                                                    <span class="text-[7px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-400">02 / MENULIS</span>
+                                                </div>
+                                                <h3 class="text-[10px] sm:text-base md:text-lg font-extrabold text-slate-900 mb-1.5 leading-snug">Motorik & Menulis Rapi</h3>
+                                                <p class="text-[7.5px] sm:text-xs md:text-sm text-slate-600 leading-relaxed mb-4">Melatih kelenturan jari, posisi memegang pensil, menebalkan pola (tracing), hingga menulis mandiri.</p>
+                                            </div>
+                                            <div class="pt-3 border-t border-slate-100 text-[7px] sm:text-xs font-semibold text-[#059669]">Motorik Halus • Tracing • Menulis</div>
+                                        </div>
+
+                                        <div class="bg-white rounded-xl md:rounded-2xl p-3 sm:p-6 md:p-8 shadow-[0_10px_30px_rgba(194,65,12,0.06)] border border-amber-100 border-t-[3px] border-t-[#D97706] flex flex-col justify-between">
+                                            <div>
+                                                <div class="flex items-center justify-between mb-3 sm:mb-5">
+                                                    <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-[#B45309] font-black text-[9px] sm:text-xs">TUNG</span>
+                                                    <span class="text-[7px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-400">03 / BERHITUNG</span>
+                                                </div>
+                                                <h3 class="text-[10px] sm:text-base md:text-lg font-extrabold text-slate-900 mb-1.5 leading-snug">Berhitung Logika Visual</h3>
+                                                <p class="text-[7.5px] sm:text-xs md:text-sm text-slate-600 leading-relaxed mb-4">Mengenal konsep jumlah benda, perbandingan, pola urutan, serta penjumlahan dengan alat peraga.</p>
+                                            </div>
+                                            <div class="pt-3 border-t border-slate-100 text-[7px] sm:text-xs font-semibold text-[#B45309]">Bilangan • Penjumlahan • Pola</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- TAHAPAN USIA 4, 5, 6 TAHUN (CLEAN EXECUTIVE EMERALD) -->
+                                    <div class="mb-16 sm:mb-24 bg-[#064E3B] text-white rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-12 shadow-xl reveal">
+                                        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-3">
+                                            <div>
+                                                <span class="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-amber-300">Kurikulum Berjenjang</span>
+                                                <h2 class="text-lg sm:text-2xl md:text-3xl font-extrabold mt-1">Tahapan Belajar Sesuai Usia Anak</h2>
+                                            </div>
+                                            <p class="text-xs sm:text-sm text-emerald-100/80 max-w-md">Materi disesuaikan dengan kesiapan motorik, fokus, dan perkembangan kognitif anak usia 4 hingga 6 tahun.</p>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+                                            <div class="bg-white text-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
                                                 <div>
-                                                    <div class="flex items-center justify-between mb-2 sm:mb-5">
-                                                        <div class="w-8 h-8 sm:w-14 sm:h-14 rounded-xl md:rounded-2xl bg-orange-500 text-white font-black text-[9px] sm:text-lg md:text-2xl flex items-center justify-center shadow">
-                                                            CA
-                                                        </div>
-                                                        <span class="bg-orange-50 text-orange-700 border border-orange-200 text-[5.5px] sm:text-[9px] font-black px-1.5 sm:px-3 py-0.5 rounded-full uppercase">01 • MEMBACA</span>
-                                                    </div>
-                                                    <h3 class="text-[9.5px] sm:text-lg md:text-2xl font-black text-slate-900 mb-1 sm:mb-2.5 leading-tight">Membaca Tanpa Mengeja</h3>
-                                                    <p class="text-[7px] sm:text-xs md:text-sm text-slate-600 leading-snug md:leading-relaxed mb-2.5 sm:mb-5">Mengenal bunyi huruf (phonics) dan suku kata berirama melalui kartu cerita bergambar agar anak cepat paham arti bacaan.</p>
+                                                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#EA580C] bg-orange-50 px-2.5 py-1 rounded-md inline-block mb-3">Usia 4 Tahun</span>
+                                                    <h4 class="font-extrabold text-base md:text-lg text-slate-900 mb-2">Tahap Sensorik & Pra-Baca</h4>
+                                                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Mengenal bunyi huruf, melatih jari memegang pensil, mengenal warna, bentuk, dan membilang benda 1–10.</p>
                                                 </div>
-                                                <div class="bg-orange-50/70 p-2 sm:p-3.5 rounded-xl border border-orange-200 text-[6.5px] sm:text-xs font-bold text-orange-950 space-y-1">
-                                                    <div>• Bunyi Huruf & Vokal</div>
-                                                    <div>• Suku Kata Terbuka & Tertutup</div>
-                                                    <div>• Membaca Buku Cerita Anak</div>
-                                                </div>
+                                                <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-[#EA580C]">Target: Senang & Fokus Belajar</div>
                                             </div>
 
-                                            <div class="bg-white border-2 border-emerald-300 rounded-2xl md:rounded-3xl p-2.5 sm:p-6 md:p-8 shadow-[0_8px_0_#6EE7B7] flex flex-col justify-between">
+                                            <div class="bg-white text-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
                                                 <div>
-                                                    <div class="flex items-center justify-between mb-2 sm:mb-5">
-                                                        <div class="w-8 h-8 sm:w-14 sm:h-14 rounded-xl md:rounded-2xl bg-emerald-600 text-white font-black text-[9px] sm:text-lg md:text-2xl flex items-center justify-center shadow">
-                                                            LIS
-                                                        </div>
-                                                        <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[5.5px] sm:text-[9px] font-black px-1.5 sm:px-3 py-0.5 rounded-full uppercase">02 • MENULIS</span>
-                                                    </div>
-                                                    <h3 class="text-[9.5px] sm:text-lg md:text-2xl font-black text-slate-900 mb-1 sm:mb-2.5 leading-tight">Motorik & Menulis Rapi</h3>
-                                                    <p class="text-[7px] sm:text-xs md:text-sm text-slate-600 leading-snug md:leading-relaxed mb-2.5 sm:mb-5">Melatih kelenturan jari tangan, cara memegang pensil yang benar, menebalkan garis pola (tracing), hingga menulis mandiri.</p>
+                                                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#B45309] bg-amber-50 px-2.5 py-1 rounded-md inline-block mb-3">Usia 5 Tahun</span>
+                                                    <h4 class="font-extrabold text-base md:text-lg text-slate-900 mb-2">Tahap Merangkai Kata</h4>
+                                                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Membaca suku kata terbuka (ba-bi-bu-be-bo), menulis kata sederhana, dan berhitung penjumlahan bergambar.</p>
                                                 </div>
-                                                <div class="bg-emerald-50/70 p-2 sm:p-3.5 rounded-xl border border-emerald-200 text-[6.5px] sm:text-xs font-bold text-emerald-950 space-y-1">
-                                                    <div>• Senam Motorik Jari Tangan</div>
-                                                    <div>• Tracing Garis, Lengkung & Pola</div>
-                                                    <div>• Menulis Kata & Kalimat Pendek</div>
-                                                </div>
+                                                <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-[#B45309]">Target: Lancar Suku Kata</div>
                                             </div>
 
-                                            <div class="bg-white border-2 border-amber-300 rounded-2xl md:rounded-3xl p-2.5 sm:p-6 md:p-8 shadow-[0_8px_0_#FCD34D] flex flex-col justify-between">
+                                            <div class="bg-white text-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
                                                 <div>
-                                                    <div class="flex items-center justify-between mb-2 sm:mb-5">
-                                                        <div class="w-8 h-8 sm:w-14 sm:h-14 rounded-xl md:rounded-2xl bg-amber-500 text-slate-950 font-black text-[9px] sm:text-lg md:text-2xl flex items-center justify-center shadow">
-                                                            TUNG
-                                                        </div>
-                                                        <span class="bg-amber-50 text-amber-800 border border-amber-200 text-[5.5px] sm:text-[9px] font-black px-1.5 sm:px-3 py-0.5 rounded-full uppercase">03 • BERHITUNG</span>
-                                                    </div>
-                                                    <h3 class="text-[9.5px] sm:text-lg md:text-2xl font-black text-slate-900 mb-1 sm:mb-2.5 leading-tight">Berhitung Logika Visual</h3>
-                                                    <p class="text-[7px] sm:text-xs md:text-sm text-slate-600 leading-snug md:leading-relaxed mb-2.5 sm:mb-5">Mengenal konsep jumlah benda, perbandingan ukuran, pola urutan, serta penjumlahan dan pengurangan dengan alat peraga.</p>
+                                                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#059669] bg-emerald-50 px-2.5 py-1 rounded-md inline-block mb-3">Usia 6 Tahun</span>
+                                                    <h4 class="font-extrabold text-base md:text-lg text-slate-900 mb-2">Tahap Siap Masuk SD</h4>
+                                                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Lancar membaca cerita pendek, dikte menulis rapi, berhitung cepat, serta kesiapan kemandirian memasuki SD.</p>
                                                 </div>
-                                                <div class="bg-amber-50/70 p-2 sm:p-3.5 rounded-xl border border-amber-200 text-[6.5px] sm:text-xs font-bold text-amber-950 space-y-1">
-                                                    <div>• Mengenal Lambang Bilangan</div>
-                                                    <div>• Penjumlahan Benda Visual</div>
-                                                    <div>• Mengenal Pola & Bentuk Dasar</div>
-                                                </div>
+                                                <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-[#059669]">Target: Mandiri di Kelas 1 SD</div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- TAHAPAN USIA 4, 5, 6 TAHUN (3 KOLOM SEJAJAR DI HP & DESKTOP) -->
-                                    <div class="mb-14 sm:mb-20 md:mb-24 bg-[#064E3B] text-white rounded-2xl md:rounded-[2.5rem] p-3.5 sm:p-8 md:p-12 shadow-xl reveal border-4 border-amber-300">
-                                        <div class="text-center max-w-2xl mx-auto mb-5 sm:mb-10">
-                                            <span class="bg-amber-400 text-slate-950 text-[6px] sm:text-[9px] md:text-[10px] font-black px-2.5 sm:px-4 py-1 rounded-full uppercase tracking-widest">KURIKULUM BERJENJANG</span>
-                                            <h2 class="text-sm sm:text-2xl md:text-3xl font-black mt-2">Tahapan Belajar Sesuai Usia Anak</h2>
-                                            <p class="text-[7.5px] sm:text-xs md:text-sm text-emerald-100 mt-1">Menyesuaikan kesiapan motorik dan kognitif anak dari usia 4 hingga 6 tahun.</p>
-                                        </div>
-
-                                        <div class="grid grid-cols-3 gap-2 sm:gap-5">
-                                            <div class="bg-white text-slate-800 rounded-xl md:rounded-2xl p-2.5 sm:p-5 md:p-6 border-t-8 border-orange-400 flex flex-col justify-between">
-                                                <div>
-                                                    <span class="bg-orange-100 text-orange-800 font-black text-[6px] sm:text-[10px] px-2 py-0.5 rounded inline-block mb-1.5 sm:mb-3">USIA 4 TAHUN</span>
-                                                    <h4 class="font-black text-[9px] sm:text-base md:text-lg text-slate-900 mb-1 sm:mb-2 leading-tight">Tahap Sensorik & Pra-Baca</h4>
-                                                    <p class="text-[6.5px] sm:text-xs text-slate-600 leading-snug md:leading-relaxed">Mengenal bunyi huruf, melatih jari memegang pensil, mengenal warna, bentuk, dan membilang benda 1–10.</p>
-                                                </div>
-                                                <div class="mt-2 sm:mt-4 pt-1.5 border-t border-slate-100 text-[6px] sm:text-[10px] font-extrabold text-orange-600">Target: Senang & Fokus Belajar</div>
-                                            </div>
-
-                                            <div class="bg-white text-slate-800 rounded-xl md:rounded-2xl p-2.5 sm:p-5 md:p-6 border-t-8 border-amber-400 flex flex-col justify-between">
-                                                <div>
-                                                    <span class="bg-amber-100 text-amber-800 font-black text-[6px] sm:text-[10px] px-2 py-0.5 rounded inline-block mb-1.5 sm:mb-3">USIA 5 TAHUN</span>
-                                                    <h4 class="font-black text-[9px] sm:text-base md:text-lg text-slate-900 mb-1 sm:mb-2 leading-tight">Tahap Merangkai Kata</h4>
-                                                    <p class="text-[6.5px] sm:text-xs text-slate-600 leading-snug md:leading-relaxed">Membaca suku kata terbuka (ba-bi-bu-be-bo), menulis kata sederhana, dan berhitung penjumlahan bergambar.</p>
-                                                </div>
-                                                <div class="mt-2 sm:mt-4 pt-1.5 border-t border-slate-100 text-[6px] sm:text-[10px] font-extrabold text-amber-700">Target: Lancar Suku Kata</div>
-                                            </div>
-
-                                            <div class="bg-white text-slate-800 rounded-xl md:rounded-2xl p-2.5 sm:p-5 md:p-6 border-t-8 border-emerald-500 flex flex-col justify-between">
-                                                <div>
-                                                    <span class="bg-emerald-100 text-emerald-800 font-black text-[6px] sm:text-[10px] px-2 py-0.5 rounded inline-block mb-1.5 sm:mb-3">USIA 6 TAHUN</span>
-                                                    <h4 class="font-black text-[9px] sm:text-base md:text-lg text-slate-900 mb-1 sm:mb-2 leading-tight">Tahap Siap Masuk SD</h4>
-                                                    <p class="text-[6.5px] sm:text-xs text-slate-600 leading-snug md:leading-relaxed">Lancar membaca cerita pendek, dikte menulis rapi, berhitung cepat, serta kesiapan kemandirian memasuki SD.</p>
-                                                </div>
-                                                <div class="mt-2 sm:mt-4 pt-1.5 border-t border-slate-100 text-[6px] sm:text-[10px] font-extrabold text-emerald-700">Target: Mandiri di Kelas 1 SD</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    <!-- KEUNGGULAN OWLKIDS -->
                                     ${owlFeats ? `
-                                    <div class="mb-14 sm:mb-20 md:mb-24 reveal">
-                                        <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-10">
-                                            <span class="bg-orange-100 text-orange-800 border border-orange-200 text-[6.5px] sm:text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">KEUNGGULAN OWLKIDS</span>
-                                            <h2 class="text-sm sm:text-2xl md:text-4xl font-black text-slate-900 mt-2 leading-tight">Kenapa Ayah & Bunda Memilih OwlKids?</h2>
+                                    <div class="mb-16 sm:mb-24 reveal">
+                                        <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+                                            <span class="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-[#EA580C]">Keunggulan OwlKids</span>
+                                            <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 mt-1">Kenapa Ayah & Bunda Memilih OwlKids?</h2>
                                         </div>
-                                        <div class="grid grid-cols-2 gap-2.5 sm:gap-5 max-w-5xl mx-auto items-stretch">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 max-w-5xl mx-auto items-stretch">
                                             ${owlFeats}
                                         </div>
                                     </div>` : ''}
 
+                                    <!-- FASILITAS BELAJAR (DARK EMERALD COMPACT GRID) -->
                                     ${owlFasil ? `
-                                    <div class="mb-14 sm:mb-20 md:mb-24 reveal">
-                                        <div class="text-center max-w-3xl mx-auto mb-6 sm:mb-10">
-                                            <span class="bg-emerald-100 text-emerald-800 border border-emerald-200 text-[6.5px] sm:text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">FASILITAS LENGKAP</span>
-                                            <h2 class="text-sm sm:text-2xl md:text-4xl font-black text-slate-900 mt-2 leading-tight">Fasilitas Belajar Buah Hati</h2>
+                                    <div class="mb-16 sm:mb-24 bg-[#064E3B] rounded-2xl md:rounded-3xl p-6 sm:p-10 md:p-12 shadow-xl reveal">
+                                        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-3">
+                                            <div>
+                                                <span class="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-amber-300">Program Facilities</span>
+                                                <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white mt-1">Fasilitas Belajar Buah Hati</h2>
+                                            </div>
+                                            <p class="text-xs sm:text-sm text-emerald-100/80 max-w-md">Dukungan lengkap mulai dari modul visual, jadwal fleksibel, hingga laporan tumbuh kembang berkala.</p>
                                         </div>
-                                        <div class="grid grid-cols-4 gap-2 sm:gap-5 items-stretch max-w-5xl mx-auto">
+                                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                                             ${owlFasil}
                                         </div>
                                     </div>` : ''}
 
-                                    ${gals ? `<div class="mb-14 md:mb-24 reveal-up"><h2 class="text-base sm:text-2xl md:text-3xl font-black text-slate-900 mb-6 md:mb-10 text-center">Dokumentasi Belajar OwlKids</h2><div class="flex gap-4 overflow-x-auto hide-scroll snap-x pb-6 px-4 -mx-4">${gals}</div></div>` : ''}
+                                    ${gals ? `<div class="mb-16 md:mb-24 reveal-up"><h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 mb-8 text-center">Dokumentasi Belajar OwlKids</h2><div class="flex gap-4 overflow-x-auto hide-scroll snap-x pb-6 px-4 -mx-4">${gals}</div></div>` : ''}
 
-                                    <div class="mb-14 md:mb-24 bg-gradient-to-r from-[#EA580C] via-[#F97316] to-[#FBBF24] rounded-2xl md:rounded-[2.5rem] p-5 sm:p-8 md:p-14 text-white text-center shadow-xl relative overflow-hidden reveal">
-                                        <div class="relative z-10 max-w-3xl mx-auto">
-                                            <span class="bg-white text-orange-600 text-[6.5px] sm:text-[10px] md:text-xs font-black px-3 sm:px-4 py-1 rounded-full uppercase tracking-widest mb-3 inline-block">PENDAFTARAN SISWA BARU OWLKIDS</span>
-                                            <h2 class="text-sm sm:text-2xl md:text-4xl font-black mb-2 md:mb-4 leading-tight">Bangun Kemandirian Membaca, Menulis & Berhitung Anak Sejak Dini</h2>
-                                            <p class="text-white/95 text-[8px] sm:text-xs md:text-base mb-4 md:mb-8 leading-relaxed font-medium">
+                                    <!-- CTA PENUTUP -->
+                                    <div class="mb-16 md:mb-24 bg-gradient-to-r from-[#B83B0A] via-[#DF5614] to-[#F28C18] rounded-2xl md:rounded-3xl p-6 sm:p-10 md:p-14 text-white text-center shadow-xl reveal">
+                                        <div class="max-w-2xl mx-auto">
+                                            <span class="text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-amber-200">Pendaftaran Siswa Baru OwlKids</span>
+                                            <h2 class="text-lg sm:text-2xl md:text-4xl font-extrabold mt-1.5 mb-3 leading-tight">Bangun Kemandirian Membaca, Menulis & Berhitung Anak Sejak Dini</h2>
+                                            <p class="text-orange-50 text-xs sm:text-sm md:text-base mb-6 md:mb-8 leading-relaxed">
                                                 Jadwalkan sesi belajar Calistung buah hati Anda bersama pengajar ramah anak dari OwlKids by All Education.
                                             </p>
-                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-[#064E3B] hover:bg-emerald-950 text-amber-300 font-black px-6 sm:px-10 py-2.5 sm:py-4 rounded-2xl text-[8px] sm:text-sm md:text-base shadow-xl transition border-2 border-amber-300">
+                                            <button onclick="window.open('${p.extLink||CONFIG.payUrl||'#'}', '_blank')" class="bg-[#064E3B] hover:bg-emerald-950 text-white font-bold px-6 sm:px-9 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm md:text-base shadow-lg transition">
                                                 Daftar Program OwlKids Sekarang
                                             </button>
                                         </div>
                                     </div>
 
-                                    <div class="mb-14 md:mb-24 reveal-up"><div class="flex justify-between items-end mb-6 md:mb-8"><h2 class="text-base sm:text-2xl md:text-3xl font-extrabold text-slate-900">Rekomendasi Paket Belajar</h2></div><div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 snap-x" id="prod-promo-container"></div></div>
-                                    <div class="mb-14 md:mb-24 reveal-up"><div class="flex justify-between items-end mb-6 md:mb-8"><h2 class="text-base sm:text-2xl md:text-3xl font-extrabold text-slate-900">Cerita Orang Tua Siswa</h2></div><div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll snap-x pb-8" id="prod-testi-container"></div></div>
-                                    <div class="max-w-3xl mx-auto reveal-up"><h2 class="text-base sm:text-2xl md:text-3xl font-extrabold text-slate-900 mb-6 md:mb-10 text-center">Pertanyaan Umum</h2><div class="space-y-3 md:space-y-4" id="prod-faq-container"></div></div>
+                                    <div class="mb-16 md:mb-24 reveal-up"><div class="flex justify-between items-end mb-6 md:mb-8"><h2 class="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-900">Rekomendasi Paket Belajar</h2></div><div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 snap-x" id="prod-promo-container"></div></div>
+                                    <div class="mb-16 md:mb-24 reveal-up"><div class="flex justify-between items-end mb-6 md:mb-8"><h2 class="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-900">Cerita Orang Tua Siswa</h2></div><div class="flex gap-4 md:gap-6 overflow-x-auto hide-scroll snap-x pb-8" id="prod-testi-container"></div></div>
+                                    <div class="max-w-3xl mx-auto reveal-up"><h2 class="text-lg sm:text-2xl md:text-3xl font-extrabold text-slate-900 mb-6 md:mb-10 text-center">Pertanyaan Umum</h2><div class="space-y-3 md:space-y-4" id="prod-faq-container"></div></div>
                                 </div>
                             </div>`;
                         }
