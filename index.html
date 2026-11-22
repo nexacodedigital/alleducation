@@ -4166,28 +4166,44 @@ if (p) {
                 cmsAdmin.closeForm(); cmsAdmin.renderTbl(); uiHelper.showToast("Data draf tersimpan. Jangan lupa klik Simpan Perubahan ke Web!");
             },
             del: (i) => { if(confirm("Yakin hapus data ini?")) { APP_DATA[cmsAdmin.tab].splice(i,1); cmsAdmin.renderTbl(); uiHelper.showToast("Dihapus (Draf)."); } },
-            saveDataToServer: () => {
-                if(!FIREBASE_URL) { uiHelper.showToast("Gagal! FIREBASE_URL belum diatur.", true); return; }
-                const b = document.getElementById('cms-save-btn'); b.innerText = "⏳ Menyimpan ke Firebase..."; b.disabled = true;
+            saveDataToServer: async () => {
+                const user = firebase.auth().currentUser;
+                if(!user || user.email.toLowerCase() !== ALLOWED_ADMIN_EMAIL.toLowerCase()) {
+                    uiHelper.showToast("Sesi habis, silakan login Google ulang!", true);
+                    adminAuth.logout();
+                    return;
+                }
+                const b = document.getElementById('cms-save-btn');
+                b.innerText = "⏳ Menyimpan ke Firebase...";
+                b.disabled = true;
+
                 if(cmsAdmin.tab === 'Config') {
                     if(!APP_DATA.Config) APP_DATA.Config = {};
                     for(let k in cmsAdmin.schemas.Config) APP_DATA.Config[k] = document.getElementById(`cfg_${k}`).value;
                 }
                 const payload = cmsAdmin.tab === 'Config' ? (APP_DATA.Config || {}) : (APP_DATA[cmsAdmin.tab] || []);
 
-                fetch(`${FIREBASE_URL}/app_data/${cmsAdmin.tab}.json`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                })
-                .then(r => {
+                try {
+                    const token = await user.getIdToken(true);
+                    const r = await fetch(`${FIREBASE_URL}/app_data/${cmsAdmin.tab}.json?auth=${token}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
                     if(r.ok) {
                         uiHelper.showToast("✅ Berhasil disimpan ke Firebase!");
                         localStorage.setItem('AE_CACHE', JSON.stringify(APP_DATA));
                         uiHelper.applyDataToUI();
                     } else {
-                        uiHelper.showToast("Gagal: Cek Rules Firebase!", true);
+                        uiHelper.showToast("Gagal: Akses ditolak oleh Firebase Rules!", true);
                     }
+                } catch (e) {
+                    uiHelper.showToast("Error Koneksi Firebase", true);
+                } finally {
+                    b.innerText = "💾 Simpan Perubahan ke Web";
+                    b.disabled = false;
+                }
+            }
                 })
                 .catch(e => uiHelper.showToast("Error Koneksi Firebase", true))
                 .finally(() => { b.innerText = "💾 Simpan Perubahan ke Web"; b.disabled = false; });
