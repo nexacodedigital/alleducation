@@ -4240,4 +4240,110 @@ if (p) {
             }
         });
     </script>
+    <!-- POPUP PROMO KORPORAT (MUNCUL OTOMATIS + TOMBOL X) -->
+    <div id="promo-popup-modal" onclick="if(event.target === this) promoPopup.close()" class="fixed inset-0 z-[9996] bg-[#061224]/75 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div id="promo-popup-card" class="relative max-w-md w-full bg-white rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.35)] border border-slate-200 overflow-hidden transform scale-90 transition-all duration-300">
+            
+            <!-- Tombol Close (X) -->
+            <button onclick="promoPopup.close()" aria-label="Tutup Promo" class="absolute top-3.5 right-3.5 z-30 w-8 h-8 bg-white/15 hover:bg-white/30 text-white rounded-full flex items-center justify-center transition cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <!-- Header Navy Korporat -->
+            <div class="bg-gradient-to-br from-[#07162C] via-[#0C2B5A] to-[#0A3656] px-6 pt-7 pb-8 text-white text-center relative">
+                <div class="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-cyan-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#0CB4B6]"></span>
+                    PROGRAM PENDAFTARAN SISWA BARU
+                </div>
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Penawaran Khusus Biaya Pendidikan</p>
+                <div class="flex items-baseline justify-center gap-1.5 my-1">
+                    <span class="text-sm font-bold text-amber-300 uppercase">Hemat s.d.</span>
+                    <span class="text-5xl font-black text-white tracking-tight">60%</span>
+                </div>
+                <p class="text-xs text-cyan-100/90 mt-1">Untuk seluruh paket bimbingan reguler & intensif</p>
+            </div>
+
+            <!-- Body Putih Bersih -->
+            <div class="p-6 sm:p-7 bg-white text-center">
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-5">
+                    Berlaku untuk pendaftaran program <b class="text-[#0C2B5A]">All Education Privat, PRIME UTBK-SNBT, OwlKids Calistung, English for Kids,</b> dan <b class="text-[#0C2B5A]">Privat Mengaji</b>.
+                </p>
+
+                <!-- 3 Keunggulan -->
+                <div class="grid grid-cols-3 gap-2 text-[10px] sm:text-xs font-bold text-[#0C2B5A] mb-6 bg-slate-50 p-3 rounded-xl border border-slate-200/80">
+                    <div class="flex items-center justify-center gap-1">
+                        <svg class="w-3.5 h-3.5 text-[#0CB4B6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                        <span>Tutor Terbaik</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-1">
+                        <svg class="w-3.5 h-3.5 text-[#0CB4B6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                        <span>Fleksibel</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-1">
+                        <svg class="w-3.5 h-3.5 text-[#0CB4B6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                        <span>Bergaransi</span>
+                    </div>
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="flex flex-col sm:flex-row gap-2.5">
+                    <button onclick="promoPopup.claim()" class="flex-1 py-3.5 px-5 bg-[#F06822] hover:bg-orange-600 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
+                        <span>Klaim Diskon Sekarang</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                    <button onclick="promoPopup.closeAndScroll()" class="py-3.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm rounded-xl transition cursor-pointer">
+                        Lihat Program
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const promoPopup = {
+            open: () => {
+                // Jangan muncul kalau sedang di halaman /admin
+                if (window.location.pathname.includes('/admin')) return;
+                const modal = document.getElementById('promo-popup-modal');
+                const card = document.getElementById('promo-popup-card');
+                if (!modal || !card) return;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.classList.add('opacity-100');
+                    card.classList.remove('scale-90');
+                    card.classList.add('scale-100');
+                }, 30);
+            },
+            close: () => {
+                const modal = document.getElementById('promo-popup-modal');
+                const card = document.getElementById('promo-popup-card');
+                if (!modal || !card) return;
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0');
+                card.classList.remove('scale-100');
+                card.classList.add('scale-90');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 300);
+            },
+            closeAndScroll: () => {
+                promoPopup.close();
+                const pkg = document.getElementById('popular-packages-container');
+                if (pkg) pkg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            },
+            claim: () => {
+                promoPopup.close();
+                const url = (typeof CONFIG !== 'undefined' && (CONFIG.promoUrl || CONFIG.payUrl)) ? (CONFIG.promoUrl || CONFIG.payUrl) : '#';
+                if (url && url !== '#') window.open(url, '_blank');
+                else promoPopup.closeAndScroll();
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => promoPopup.open(), 800);
+        });
+    </script>
 </body>
