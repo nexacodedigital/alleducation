@@ -47,8 +47,7 @@
     ]
     </script>
     <!-- DNS Prefetch untuk kecepatan ekstra -->
-    <link rel="preconnect" href="https://script.google.com" crossorigin>
-    <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+    <link rel="preconnect" href="https://all-education-db-default-rtdb.asia-southeast1.firebasedatabase.app" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -596,7 +595,7 @@
 
     <script>
         // KONFIGURASI APLIKASI
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbxwf7BMSCb8srGTvoHgPWxThsCdUld7k8eC4BPfUE7uVULOM7rwqJ_vzthMEmxBudWkJQ/exec"; 
+        const FIREBASE_URL = "https://all-education-db-default-rtdb.asia-southeast1.firebasedatabase.app";
         
         let APP_DATA = { Config:{}, Products:[], Pills:[], Packages:[], Banners:[], Testimonials:[], Teachers:[], Articles:[], Events:[], FAQ:[] };
         let CONFIG = {};
@@ -4024,18 +4023,38 @@ if (p) {
             }
         };
 
+      const toArray = (val) => Array.isArray(val) ? val.filter(Boolean) : (val && typeof val === 'object' ? Object.values(val).filter(Boolean) : []);
+
         const adminAuth = {
             login: (e) => {
                 e.preventDefault(); const err = document.getElementById('login-error');
-                const u = document.getElementById('admin-user').value; const p = document.getElementById('admin-pass').value;
-                if(GAS_URL==="URL_DEPLOY_GAS_ANDA_DISINI") { err.innerText="Error: GAS_URL Kosong di Kode HTML!"; err.classList.remove('hidden'); return; }
+                const u = document.getElementById('admin-user').value.trim(); const p = document.getElementById('admin-pass').value.trim();
+                err.classList.add('hidden');
+                if(!FIREBASE_URL) { err.innerText="Error: FIREBASE_URL Kosong di Kode HTML!"; err.classList.remove('hidden'); return; }
                 const btn = document.getElementById('btn-login'); btn.innerText = "Verifikasi Server..."; btn.disabled = true;
                 
-                fetch(GAS_URL, { method:'POST', body:JSON.stringify({action:'login', username:u, password:p}) })
-                .then(r=>r.json()).then(res => {
-                    if(res.status==='success') { sessionStorage.setItem('ae_admin', 'true'); adminAuth.check(); uiHelper.showToast("Login Berhasil!"); } 
-                    else { err.innerText="Username / Password Salah!"; err.classList.remove('hidden'); btn.innerText="Masuk Dashboard"; btn.disabled=false; }
-                }).catch(e=>{ err.innerText="Koneksi server gagal."; err.classList.remove('hidden'); btn.innerText="Masuk Dashboard"; btn.disabled=false; });
+                fetch(`${FIREBASE_URL}/admins.json`)
+                .then(r => r.json())
+                .then(res => {
+                    const admins = toArray(res);
+                    const match = admins.some(a => String(a.username) === u && String(a.password) === p);
+                    if(match) {
+                        sessionStorage.setItem('ae_admin', 'true');
+                        adminAuth.check();
+                        uiHelper.showToast("Login Berhasil!");
+                    } else {
+                        err.innerText = "Username / Password Salah!";
+                        err.classList.remove('hidden');
+                        btn.innerText = "Masuk Dashboard";
+                        btn.disabled = false;
+                    }
+                })
+                .catch(e => {
+                    err.innerText = "Koneksi Firebase gagal.";
+                    err.classList.remove('hidden');
+                    btn.innerText = "Masuk Dashboard";
+                    btn.disabled = false;
+                });
             },
             logout: () => { sessionStorage.removeItem('ae_admin'); adminAuth.check(); uiHelper.showToast("Logout Berhasil."); },
             check: () => {
@@ -4060,7 +4079,7 @@ if (p) {
                 FAQ: { q:'Pertanyaan', a:'Jawaban' }
             },
             init: () => {
-                if(GAS_URL==="URL_DEPLOY_GAS_ANDA_DISINI") document.getElementById('cms-url-warning').classList.remove('hidden');
+                if(!FIREBASE_URL) document.getElementById('cms-url-warning').classList.remove('hidden');
                 document.getElementById('cms-sidebar-menu').innerHTML = Object.keys(cmsAdmin.schemas).map(k => `<button onclick="cmsAdmin.openTab('${k}')" class="cms-tab-btn w-full text-left px-5 py-3.5 rounded-xl text-sm font-bold text-gray-600 hover:bg-cyan-50 transition border border-transparent hover:border-cyan-100 group flex items-center gap-3 ${k==='Config'?'bg-cyan-50 text-rg-blue-dark shadow-sm border-cyan-100':''}"><span class="text-lg group-hover:scale-110 transition">${k==='Config'?'⚙️':'📁'}</span> ${k==='Config'?'Pengaturan Umum': 'Tabel '+k}</button>`).join('');
                 cmsAdmin.openTab('Config');
             },
@@ -4073,7 +4092,7 @@ if (p) {
                 
                 if(t==='Config') { 
                     document.getElementById('cms-table-area').classList.add('hidden'); document.getElementById('cms-add-btn').classList.add('hidden'); document.getElementById('cms-config-area').classList.remove('hidden');
-                    let h=''; for(let k in cmsAdmin.schemas.Config) h+=`<div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition"><label class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-3">${cmsAdmin.schemas.Config[k]}</label><input type="text" id="cfg_${k}" value="${APP_DATA.Config[k]||''}" class="w-full p-3 border-2 border-gray-100 rounded-xl bg-gray-50 text-sm font-medium focus:outline-none focus:border-rg-primary focus:bg-white transition"></div>`;
+                    let h=''; for(let k in cmsAdmin.schemas.Config) h+=`<div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition"><label class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-3">${cmsAdmin.schemas.Config[k]}</label><input type="text" id="cfg_${k}" value="${(APP_DATA.Config && APP_DATA.Config[k])||''}" class="w-full p-3 border-2 border-gray-100 rounded-xl bg-gray-50 text-sm font-medium focus:outline-none focus:border-rg-primary focus:bg-white transition"></div>`;
                     document.getElementById('cms-config-area').innerHTML = h; 
                 } else {
                     document.getElementById('cms-config-area').classList.add('hidden'); document.getElementById('cms-table-area').classList.remove('hidden'); document.getElementById('cms-add-btn').classList.remove('hidden');
@@ -4112,15 +4131,30 @@ if (p) {
             },
             del: (i) => { if(confirm("Yakin hapus data ini?")) { APP_DATA[cmsAdmin.tab].splice(i,1); cmsAdmin.renderTbl(); uiHelper.showToast("Dihapus (Draf)."); } },
             saveDataToServer: () => {
-                if(GAS_URL==="URL_DEPLOY_GAS_ANDA_DISINI") { uiHelper.showToast("Gagal! GAS_URL belum diatur.", true); return; }
-                const b = document.getElementById('cms-save-btn'); b.innerText = "⏳ Mengirim ke Server..."; b.disabled = true;
-                if(cmsAdmin.tab === 'Config') { for(let k in cmsAdmin.schemas.Config) APP_DATA.Config[k] = document.getElementById(`cfg_${k}`).value; }
-                
-                fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'saveSheetData', sheetName: cmsAdmin.tab, data: APP_DATA[cmsAdmin.tab]||[], schema: Object.keys(cmsAdmin.schemas[cmsAdmin.tab]) }) })
-                .then(r=>r.json()).then(j => {
-                    if(j.status === 'success') { uiHelper.showToast("✅ Berhasil disimpan permanen!"); localStorage.setItem('AE_CACHE', JSON.stringify(APP_DATA)); uiHelper.applyDataToUI(); } 
-                    else uiHelper.showToast("Gagal: Database Error", true);
-                }).catch(e => uiHelper.showToast("Error Koneksi", true)).finally(() => { b.innerText = "💾 Simpan Perubahan ke Web"; b.disabled = false; });
+                if(!FIREBASE_URL) { uiHelper.showToast("Gagal! FIREBASE_URL belum diatur.", true); return; }
+                const b = document.getElementById('cms-save-btn'); b.innerText = "⏳ Menyimpan ke Firebase..."; b.disabled = true;
+                if(cmsAdmin.tab === 'Config') {
+                    if(!APP_DATA.Config) APP_DATA.Config = {};
+                    for(let k in cmsAdmin.schemas.Config) APP_DATA.Config[k] = document.getElementById(`cfg_${k}`).value;
+                }
+                const payload = cmsAdmin.tab === 'Config' ? (APP_DATA.Config || {}) : (APP_DATA[cmsAdmin.tab] || []);
+
+                fetch(`${FIREBASE_URL}/app_data/${cmsAdmin.tab}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                .then(r => {
+                    if(r.ok) {
+                        uiHelper.showToast("✅ Berhasil disimpan ke Firebase!");
+                        localStorage.setItem('AE_CACHE', JSON.stringify(APP_DATA));
+                        uiHelper.applyDataToUI();
+                    } else {
+                        uiHelper.showToast("Gagal: Cek Rules Firebase!", true);
+                    }
+                })
+                .catch(e => uiHelper.showToast("Error Koneksi Firebase", true))
+                .finally(() => { b.innerText = "💾 Simpan Perubahan ke Web"; b.disabled = false; });
             }
         };
 
@@ -4131,7 +4165,8 @@ if (p) {
                 document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-up').forEach(el => scrollObserver.observe(el));
             }
         };
-      const cookieManager = {
+
+        const cookieManager = {
             init: () => {
                 const consent = localStorage.getItem('ae_cookie_consent');
                 if (!consent) {
@@ -4148,11 +4183,11 @@ if (p) {
                 uiHelper.showToast(isAccepted ? "Preferensi cookies disimpan" : "Cookies dibatasi");
             }
         };
+
         document.addEventListener('DOMContentLoaded', () => {
             const cache = localStorage.getItem('AE_CACHE');
             let hasCache = false;
 
-            // Langsung sembunyikan loader sejak detik ke-0 (TANPA LOADING)
             uiHelper.hideLoader(0);
             cookieManager.init();
 
@@ -4165,17 +4200,28 @@ if (p) {
                 } catch (e) {}
             }
 
-            // Langsung buka halaman saat itu juga tanpa menunggu server
             router.init();
 
-            // Ambil data Google Sheet secara diam-diam di belakang layar
-            if (GAS_URL !== "URL_DEPLOY_GAS_ANDA_DISINI") {
-                fetch(GAS_URL + '?action=getAll')
+            // Tarik data terbaru dari Firebase Realtime Database (~0.1 detik)
+            if (FIREBASE_URL) {
+                fetch(`${FIREBASE_URL}/app_data.json`)
                 .then(r => r.json())
-                .then(d => {
-                    if (d?.data?.Config) {
-                        const isChanged = JSON.stringify(APP_DATA) !== JSON.stringify(d.data);
-                        APP_DATA = d.data;
+                .then(raw => {
+                    if (raw) {
+                        const freshData = {
+                            Config: raw.Config || {},
+                            Products: toArray(raw.Products),
+                            Pills: toArray(raw.Pills),
+                            Packages: toArray(raw.Packages),
+                            Banners: toArray(raw.Banners),
+                            Testimonials: toArray(raw.Testimonials),
+                            Teachers: toArray(raw.Teachers),
+                            Articles: toArray(raw.Articles),
+                            Events: toArray(raw.Events),
+                            FAQ: toArray(raw.FAQ)
+                        };
+                        const isChanged = JSON.stringify(APP_DATA) !== JSON.stringify(freshData);
+                        APP_DATA = freshData;
                         localStorage.setItem('AE_CACHE', JSON.stringify(APP_DATA));
                         isDataLoaded = true;
 
@@ -4186,7 +4232,7 @@ if (p) {
                     }
                 })
                 .catch(e => {
-                    console.error("Background sync error:", e);
+                    console.error("Firebase sync error:", e);
                     isDataLoaded = true;
                 });
             } else {
@@ -4194,232 +4240,3 @@ if (p) {
             }
         });
     </script>
-   <!-- ================================================================= -->
-    <!-- 1. OVERLAY SAMBUTAN KORPORAT (CLEAN EXECUTIVE WELCOME MODAL)      -->
-    <!-- ================================================================= -->
-    <div id="owl-welcome-overlay" class="fixed inset-0 z-[9995] bg-[#061224]/75 backdrop-blur-sm hidden items-center justify-center p-3.5 sm:p-4 transition-opacity duration-500 opacity-0">
-        <div id="owl-welcome-wrapper" class="max-w-md w-full flex flex-col items-center text-center relative">
-            
-            <!-- Logo Resmi dalam Bingkai Korporat Bersih (Tanpa Emoji Tambahan) -->
-            <div class="relative mb-2 animate-owl-float z-20">
-                <div class="w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-2xl p-3 shadow-[0_12px_30px_rgba(12,43,90,0.25)] border border-slate-200 flex items-center justify-center relative">
-                    <img id="welcome-owl-img" src="https://iili.io/CMttawP.md.png" alt="All Education Indonesia" class="w-full h-full object-contain">
-                </div>
-            </div>
-
-            <!-- Kartu Sambutan Executive -->
-            <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-[0_25px_60px_rgba(0,0,0,0.3)] border border-slate-200/90 relative w-full -mt-5 pt-8 sm:pt-10 z-10 overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#0C2B5A] via-[#0CB4B6] to-[#0C2B5A]"></div>
-
-                <span class="bg-slate-100 text-[#0C2B5A] border border-slate-200 text-[9px] sm:text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.15em] inline-block mb-3">
-                    PT ALL EDUCATION INDONESIA
-                </span>
-                
-                <h2 class="text-xl sm:text-2xl font-extrabold text-[#0C2B5A] leading-snug mb-2">
-                    Selamat Datang di Ekosistem <span class="text-[#0CB4B6]">All Education</span>
-                </h2>
-                
-                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-5">
-                    Temukan solusi pembelajaran terpadu yang dirancang sesuai kebutuhan akademik Anda melalui lima unit layanan utama kami:
-                </p>
-
-                <!-- 5 Unit Layanan Pills Bersih -->
-                <div class="flex flex-wrap justify-center gap-1.5 mb-6">
-                    <span class="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-[10px] sm:text-[11px] font-bold text-[#0C2B5A]">All Education Privat</span>
-                    <span class="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-[10px] sm:text-[11px] font-bold text-[#0C2B5A]">PRIME UTBK & TKA</span>
-                    <span class="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-[10px] sm:text-[11px] font-bold text-[#0C2B5A]">OwlKids Calistung</span>
-                    <span class="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-[10px] sm:text-[11px] font-bold text-[#0C2B5A]">English for Kids</span>
-                    <span class="px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-[10px] sm:text-[11px] font-bold text-[#0C2B5A]">Privat Mengaji</span>
-                </div>
-
-                <!-- Indikator Scroll Minimalis -->
-                <div class="flex items-center justify-center gap-2 mb-5 text-slate-400">
-                    <div class="w-4 h-6 border border-slate-300 rounded-full flex justify-center p-0.5">
-                        <div class="w-1 h-1.5 bg-[#0CB4B6] rounded-full scroll-dot"></div>
-                    </div>
-                    <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500">Eksplorasi Layanan Kami</span>
-                </div>
-
-                <!-- Tombol CTA Korporat Bersih -->
-                <button onclick="welcomeFlow.flyOwlAndShowPromo(true)" class="w-full py-3 sm:py-3.5 px-6 bg-[#0C2B5A] hover:bg-[#0CB4B6] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all duration-300 flex items-center justify-center gap-2">
-                    <span>Mulai Jelajahi Layanan</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================================================================= -->
-    <!-- 2. POPUP PROMO KORPORAT (CLEAN PRIVILEGE VOUCHER MODAL)           -->
-    <!-- ================================================================= -->
-    <div id="promo-popup-modal" class="fixed inset-0 z-[9996] bg-[#061224]/75 backdrop-blur-sm hidden items-center justify-center p-3.5 sm:p-4 transition-opacity duration-300 opacity-0">
-        <div id="promo-popup-card" class="relative max-w-md w-full bg-white rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.35)] border border-slate-200 overflow-hidden transform scale-90 transition-all duration-300">
-            
-            <!-- Tombol Close (X) Minimalis di Kanan Atas -->
-            <button onclick="welcomeFlow.closePromoModal()" aria-label="Tutup Banner Promo" class="absolute top-3.5 right-3.5 z-30 w-8 h-8 bg-white/15 hover:bg-white/30 text-white rounded-full flex items-center justify-center transition">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-
-            <!-- Bagian Atas: Header Navy Korporat -->
-            <div class="bg-gradient-to-br from-[#07162C] via-[#0C2B5A] to-[#0A3656] px-5 pt-6 pb-7 sm:px-7 sm:pt-7 sm:pb-8 text-white text-center relative">
-                <div class="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 text-cyan-300 text-[9px] sm:text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#0CB4B6]"></span>
-                    PROGRAM PENDAFTARAN SISWA BARU
-                </div>
-                <p class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-slate-300 mb-1">Penawaran Khusus Biaya Pendidikan</p>
-                <div class="flex items-baseline justify-center gap-1.5 my-1">
-                    <span class="text-xs sm:text-sm font-bold text-amber-300 uppercase">Hemat s.d.</span>
-                    <span class="text-4xl sm:text-5xl font-black text-white tracking-tight">60%</span>
-                </div>
-                <p class="text-[11px] sm:text-xs text-cyan-100/90 mt-1">Untuk seluruh paket bimbingan reguler & intensif</p>
-            </div>
-
-            <!-- Bagian Bawah: Detail & Tombol Aksi Bersih -->
-            <div class="p-5 sm:p-7 bg-white text-center">
-                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-5">
-                    Berlaku untuk pendaftaran program <b class="text-[#0C2B5A]">All Education Privat, PRIME UTBK-SNBT, OwlKids Calistung, English for Kids,</b> dan <b class="text-[#0C2B5A]">Privat Mengaji</b>.
-                </p>
-
-                <!-- 3 Indikator Keunggulan dengan Ikon SVG Bersih (Tanpa Emoji Kotak Hijau) -->
-                <div class="grid grid-cols-3 gap-2 text-[10px] sm:text-xs font-bold text-[#0C2B5A] mb-6 bg-slate-50 p-3 rounded-xl border border-slate-200/80">
-                    <div class="flex items-center justify-center gap-1">
-                        <svg class="w-3.5 h-3.5 text-[#0CB4B6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                        <span>Tutor Terseleksi</span>
-                    </div>
-                    <div class="flex items-center justify-center gap-1">
-                        <svg class="w-3.5 h-3.5 text-[#0CB4B6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                        <span>Jadwal Fleksibel</span>
-                    </div>
-                    <div class="flex items-center justify-center gap-1">
-                        <svg class="w-3.5 h-3.5 text-[#0CB4B6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                        <span>Garansi Pengajar</span>
-                    </div>
-                </div>
-
-                <!-- Tombol Aksi Proporsional -->
-                <div class="flex flex-col sm:flex-row gap-2.5">
-                    <button onclick="welcomeFlow.claimPromo()" class="flex-1 py-3 sm:py-3.5 px-5 bg-[#F06822] hover:bg-orange-600 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
-                        <span>Klaim Penawaran Sekarang</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </button>
-                    <button onclick="welcomeFlow.closePromoAndScroll()" class="py-3 sm:py-3.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm rounded-xl transition">
-                        Lihat Program
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        const welcomeFlow = {
-            hasTriggered: false,
-            init: () => {
-                setTimeout(() => {
-                    const navLogo = document.getElementById('dynamic-logo');
-                    const owlImg = document.getElementById('welcome-owl-img');
-                    if (navLogo && owlImg && navLogo.src) {
-                        owlImg.src = navLogo.src;
-                    }
-                }, 600);
-
-                setTimeout(() => {
-                    const overlay = document.getElementById('owl-welcome-overlay');
-                    if (!overlay) return;
-                    overlay.classList.remove('hidden');
-                    overlay.classList.add('flex');
-                    setTimeout(() => {
-                        overlay.classList.remove('opacity-0');
-                        overlay.classList.add('opacity-100');
-                    }, 50);
-                }, 900);
-            },
-
-            flyOwlAndShowPromo: (scrollToProducts = false) => {
-                if (welcomeFlow.hasTriggered) return;
-                welcomeFlow.hasTriggered = true;
-
-                const wrapper = document.getElementById('owl-welcome-wrapper');
-                const overlay = document.getElementById('owl-welcome-overlay');
-
-                if (wrapper) wrapper.classList.add('animate-owl-fly-up');
-                
-                setTimeout(() => {
-                    if (overlay) {
-                        overlay.classList.remove('opacity-100');
-                        overlay.classList.add('opacity-0');
-                    }
-                }, 450);
-
-                setTimeout(() => {
-                    if (overlay) {
-                        overlay.classList.add('hidden');
-                        overlay.classList.remove('flex');
-                    }
-                    
-                    if (scrollToProducts) {
-                        const pillSection = document.getElementById('pill-menu-container');
-                        if (pillSection) {
-                            pillSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    }
-
-                    welcomeFlow.openPromoModal();
-                }, 900);
-            },
-
-            openPromoModal: () => {
-                const modal = document.getElementById('promo-popup-modal');
-                const card = document.getElementById('promo-popup-card');
-                if (!modal || !card) return;
-
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    modal.classList.add('opacity-100');
-                    card.classList.remove('scale-90');
-                    card.classList.add('scale-100');
-                }, 50);
-            },
-
-            closePromoModal: () => {
-                const modal = document.getElementById('promo-popup-modal');
-                const card = document.getElementById('promo-popup-card');
-                if (!modal || !card) return;
-
-                modal.classList.remove('opacity-100');
-                modal.classList.add('opacity-0');
-                card.classList.remove('scale-100');
-                card.classList.add('scale-90');
-
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                }, 300);
-            },
-
-            closePromoAndScroll: () => {
-                welcomeFlow.closePromoModal();
-                const pkgSection = document.getElementById('popular-packages-container');
-                if (pkgSection) {
-                    pkgSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            },
-
-            claimPromo: () => {
-                welcomeFlow.closePromoModal();
-                const targetUrl = (typeof CONFIG !== 'undefined' && (CONFIG.promoUrl || CONFIG.payUrl)) ? (CONFIG.promoUrl || CONFIG.payUrl) : '#';
-                if (targetUrl && targetUrl !== '#') {
-                    window.open(targetUrl, '_blank');
-                } else {
-                    const pkgSection = document.getElementById('popular-packages-container');
-                    if (pkgSection) pkgSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            welcomeFlow.init();
-        });
-    </script>
-</body>
-</html>
