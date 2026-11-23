@@ -1131,8 +1131,80 @@
             }
         };
 
-       const router = {
-            init: () => { window.addEventListener('popstate', () => router.loadRoute(window.location.pathname || '/')); router.loadRoute(window.location.pathname || '/'); },
+     const router = {
+            updatePageSEO: (path) => {
+                const clean = (path || '/').toLowerCase().replace(/\/+$/, '') || '/';
+                const seoMap = {
+                    '/': {
+                        title: 'All Education | Platform EduTech & Bimbel Privat Terbaik Indonesia',
+                        desc: 'All Education Indonesia - Bimbel privat, kelas online, persiapan UTBK-SNBT, Calistung OwlKids, English for Kids, dan Privat Mengaji terbaik.'
+                    },
+                    '/privat': {
+                        title: 'All Education Privat | Les Privat 1-on-1 SD, SMP, SMA, UTBK & Kuliah',
+                        desc: 'Layanan les privat 1-on-1 ke rumah (Home Visit) & Online untuk SD, SMP, SMA, UTBK-SNBT, hingga Mahasiswa dengan metode One Student One Strategy.'
+                    },
+                    '/prime': {
+                        title: 'PRIME by All Education | Persiapan UTBK-SNBT & Tryout CBT IRT',
+                        desc: 'Program persiapan UTBK-SNBT, TKA, dan Ujian Mandiri PTN berbasis CBT IRT akurat, Live Class interaktif, dan rasionalisasi peluang PTN.'
+                    },
+                    '/owlkids': {
+                        title: 'OwlKids by All Education | Les Calistung Anak Usia 4–6 Tahun',
+                        desc: 'Program belajar Membaca, Menulis, dan Berhitung (Calistung) tanpa tekanan untuk anak usia 4–6 tahun agar siap mandiri masuk SD.'
+                    },
+                    '/englishforkids': {
+                        title: 'English for Kids by All Education | Kursus Bahasa Inggris Anak',
+                        desc: 'Program kursus Bahasa Inggris interaktif untuk anak usia dini & SD dengan metode Listening, Speaking, Reading, dan Writing yang menyenangkan.'
+                    },
+                    '/mengaji': {
+                        title: 'Privat Mengaji by All Education | Les Ngaji Iqra, Tahsin & Tahfidz',
+                        desc: 'Bimbingan privat mengaji Al-Qur’an (Iqra, Tahsin Tajwid, Tahfidz Juz 30 & Adab Islami) ke rumah atau online bersama Ustadz/Ustadzah ramah anak.'
+                    },
+                    '/program': {
+                        title: 'Program Belajar | All Education Indonesia',
+                        desc: 'Daftar lengkap program belajar All Education Indonesia untuk semua jenjang mulai dari usia dini hingga persiapan PTN.'
+                    },
+                    '/event': {
+                        title: 'Event Edukasi & Tryout | All Education Indonesia',
+                        desc: 'Ikuti berbagai event edukasi, webinar, dan tryout UTBK-SNBT terbaru dari All Education Indonesia.'
+                    },
+                    '/testimoni': {
+                        title: 'Testimoni Alumni & Siswa | All Education Indonesia',
+                        desc: 'Cerita pengalaman dan prestasi siswa serta orang tua yang telah belajar bersama All Education Indonesia.'
+                    },
+                    '/artikel': {
+                        title: 'Artikel & Blog Edukasi | All Education Indonesia',
+                        desc: 'Kumpulan artikel edukasi, rangkuman materi pelajaran, dan tips lolos UTBK-SNBT dari Tim All Education.'
+                    },
+                    '/company': {
+                        title: 'Tentang Kami (Company Profile) | PT All Education Indonesia',
+                        desc: 'Kenali PT All Education Indonesia, perusahaan EdTech yang menghadirkan ekosistem pembelajaran inovatif untuk masa depan.'
+                    },
+                    '/sk': {
+                        title: 'Syarat & Ketentuan | All Education Indonesia',
+                        desc: 'Syarat dan Ketentuan penggunaan website, platform, dan layanan pendidikan PT All Education Indonesia.'
+                    },
+                    '/privasi': {
+                        title: 'Kebijakan Privasi | All Education Indonesia',
+                        desc: 'Kebijakan Privasi dan perlindungan data pribadi pengguna layanan PT All Education Indonesia.'
+                    }
+                };
+
+                const meta = seoMap[clean] || seoMap['/'];
+                document.title = meta.title;
+
+                const descEl = document.querySelector('meta[name="description"]');
+                if (descEl) descEl.setAttribute('content', meta.desc);
+
+                const ogTitle = document.querySelector('meta[property="og:title"]');
+                if (ogTitle) ogTitle.setAttribute('content', meta.title);
+
+                const ogUrl = document.querySelector('meta[property="og:url"]');
+                if (ogUrl) ogUrl.setAttribute('content', `https://alleducenter.com${clean === '/' ? '/' : clean}`);
+            },
+            init: () => {
+                window.addEventListener('popstate', () => router.loadRoute(window.location.pathname || '/'));
+                router.loadRoute(window.location.pathname || '/');
+            },
             navigate: (path) => {
                 const mega = document.getElementById('nav-mega-grid');
                 if (mega) {
@@ -1144,16 +1216,7 @@
                 window.scrollTo(0, 0);
             },
             loadRoute: (path) => {
-    const mega = document.getElementById('nav-mega-grid');
-    if (mega) {
-        mega.style.display = 'none';
-        setTimeout(() => { mega.style.display = ''; }, 300);
-    }
-    window.history.pushState({}, '', path);
-    router.loadRoute(path);
-    window.scrollTo(0, 0);
-},
-            loadRoute: (path) => {
+                router.updatePageSEO(path);
                 document.querySelectorAll('.view-section').forEach(el => { el.classList.remove('active'); el.classList.add('hidden'); });
                 if(path === '/' || path === '') { 
                     document.getElementById('view-home').classList.remove('hidden'); 
@@ -1461,11 +1524,11 @@ if (p) {
                                 </div>
                             </section>
 
-                            <div class="bg-[#F8FAFC] relative z-20 pb-16 md:pb-24">
+                           <div class="bg-[#F8FAFC] relative z-20 pt-8 sm:pt-12 md:pt-14 pb-16 md:pb-24">
                                 <div class="max-w-[1200px] mx-auto px-3 sm:px-6 md:px-8">
 
                                     <!-- 3 PILAR UTAMA: CLEAN ARCHITECTURAL CARDS -->
-                                    <div class="grid grid-cols-3 gap-2.5 sm:gap-5 md:gap-6 -mt-8 sm:-mt-12 md:-mt-16 mb-14 sm:mb-20 md:mb-24 relative z-30">
+                                    <div class="grid grid-cols-3 gap-2.5 sm:gap-5 md:gap-6 mb-14 sm:mb-20 md:mb-24 relative z-30">
                                         <div class="bg-white rounded-xl md:rounded-2xl p-3 sm:p-6 md:p-8 shadow-[0_10px_30px_rgba(12,43,90,0.06)] border border-slate-200/80 border-t-[3px] border-t-[#0C2B5A] flex flex-col justify-between">
                                             <div>
                                                 <div class="flex items-center justify-between mb-3 sm:mb-5">
